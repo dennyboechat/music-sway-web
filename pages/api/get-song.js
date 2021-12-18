@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db'
 import { getNewSong } from '@/lib/utils';
 import { forEach } from 'lodash';
-import { typeDefs } from '../../graphql/type-definitions';
+import { typeDefs } from '@/graphQl/type-definitions';
 
 const resolvers = {
   Query: {

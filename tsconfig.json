@@ -11,6 +11,9 @@
       "@/lib/*": [
         "lib/*"
       ],
+      "@/graphQl/*": [
+        "graphQl/*"
+      ],
     },
     "target": "es6",
     "lib": [
