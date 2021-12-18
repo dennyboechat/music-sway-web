@@ -1,0 +1,78 @@
+.content_container {
+  padding: 5px;
+  margin-bottom: 80px;
+}
+
+.songs_list_skeleton {
+  margin-bottom: 5px;
+}
+
+.songs_list_skeleton_search {
+  margin-left: 15px;
+}
+
+.header_skeleton {
+  height: 56px;
+  padding: 5px;
+  display: flex;
+}
+
+.markdown_text {
+  white-space: pre-line;
+}
+
+.song_card_header {
+  display: flex;
+}
+
+.song_card_title_header {
+  width: 100%;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.edit_song_link {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+.edit_song_link:hover {
+  opacity: 0.8;
+}
+
+.search {
+  position: relative;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.08);
+  max-width: 300px;
+}
+
+.search:hover {
+  background-color: rgb(255, 255, 255, 0.2);
+}
+
+.search_icon {
+  padding: 4px;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.icon_button {
+  height: 100%;
+  position: absolute;
+  right: 0;
+}
+
+.input_root {
+  width: 100%;
+}
+
+.input_input {
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}

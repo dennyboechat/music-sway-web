@@ -1,16 +1,64 @@
-html,
-body {
+.ms-accordion {
+  box-shadow: none;
+  margin-bottom: 3px;
+}
+
+.MuiPaper-root.ms-accordion.single-no-title-entry {
+  background-color: transparent;
+}
+
+.single-no-title-entry .MuiAccordionSummary-content .song-card-title-header {
+  padding-left: 1px;
+}
+
+.MuiPaper-root.ms-accordion:not(.single-no-title-entry) {
+  background-color: rgb(255, 255, 255, 0.01);
+}
+
+.MuiPaper-root {
+  margin-bottom: 5px;
+}
+
+.MuiPaper-root,
+.ms-accordion.Mui-expanded {
+  background-color: rgb(255, 255, 255, 0.1);
+}
+
+.ms-accordion:hover {
+  background-color: rgb(255, 255, 255, 0.08);
+}
+
+.MuiPaper-root.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root.Mui-expanded .ms-accordion-title,
+.MuiPaper-root.ms-accordion .MuiButtonBase-root.MuiIconButton-root.MuiAccordionSummary-expandIcon.Mui-expanded {
+  opacity: 0.5;
+}
+
+.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root .MuiAccordionSummary-content {
+  margin: 3px;
+}
+
+.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root {
+  min-height: 30px;
   padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.ms-accordion .MuiAccordionDetails-root {
+  padding: 5px 10px 10px;
+  overflow-x: auto;
 }
 
-* {
-  box-sizing: border-box;
+.ms-accordion.Mui-expanded {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 3px;
+}
+
+.MuiContainer-root {
+  padding: 5px;
+  margin-bottom: 80px;
+}
+
+.ms-accordion.MuiAccordion-root:before {
+  background-color: transparent;
 }
