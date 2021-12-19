@@ -1,11 +1,13 @@
-import Skeleton from '@mui/material/Skeleton'
-import Container from '@mui/material/Container'
+import Skeleton from '@mui/material/Skeleton';
+import Container from '@mui/material/Container';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import Song from './song';
 import Filter from './filter';
 import { useSongsState } from '@/lib/songs-store';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
-import styles from '@/styles/general.module.css'
-import { forEach, orderBy } from 'lodash'
+import styles from '@/styles/general.module.css';
+import { forEach, orderBy } from 'lodash';
 
 const Songs = () => {
      const { songs, isLoadingSongs } = useSongsState();
@@ -70,6 +72,17 @@ const Songs = () => {
           <div>
                <Filter />
                {songsList}
+               <div className={styles.fab_buttons}>
+                    <Fab
+                         id="addSongButton"
+                         color="primary"
+                         aria-label="add"
+                         href="song/new"
+                         title="Add Song"
+                    >
+                         <AddIcon />
+                    </Fab>
+               </div>
           </div>
      );
 }

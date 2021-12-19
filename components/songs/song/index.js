@@ -1,12 +1,12 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
 import Markdown from '@/components/markdown';
-import styles from '@/styles/general.module.css'
+import styles from '@/styles/general.module.css';
 
 const Song = ({ song }) => {
 
@@ -68,6 +68,8 @@ const Song = ({ song }) => {
         </>
       );
     }
+  } else {
+    cardContent = cardHeader;
   }
 
   return (

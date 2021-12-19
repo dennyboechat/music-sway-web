@@ -6,8 +6,8 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import styles from '@/styles/general.module.css'
 
-export default function SearchInput() {
-    const {songsFilterValue, setSongsFilterValue} = useSongsFilterState();
+const SearchInput = () => {
+    const { songsFilterValue, setSongsFilterValue } = useSongsFilterState();
     const inputRef = React.useRef(null);
 
     const onCleanButtonClick = () => {
@@ -43,3 +43,5 @@ export default function SearchInput() {
         </div>
     )
 }
+
+export default SearchInput;

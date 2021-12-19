@@ -1,12 +1,11 @@
 import ReactMarkdown from 'react-markdown';
 
-export default function Markdown({ content, className }) {
-
+const Markdown = ({ content, className }) => {
     return (
-        <ReactMarkdown
-            className={className}
-        >
+        <ReactMarkdown className={className}>
             {content}
         </ReactMarkdown>
     );
 };
+
+export default Markdown;

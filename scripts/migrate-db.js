@@ -1,8 +1,6 @@
 const path = require('path');
 const envPath = path.resolve(process.cwd(), '.env.local');
 
-console.log({ envPath });
-
 require('dotenv').config({ path: envPath });
 
 const mysql = require('serverless-mysql');
@@ -16,7 +14,7 @@ const db = mysql({
   },
 });
 
-async function query(q) {
+const query = async (q) => {
   try {
     const results = await db.query(q);
     await db.end();
@@ -27,7 +25,7 @@ async function query(q) {
 }
 
 // Create tables if don't exist
-async function migrate() {
+const migrate = async () => {
   try {
     await query(`
       CREATE TABLE IF NOT EXISTS song (

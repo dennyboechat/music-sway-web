@@ -9,22 +9,22 @@ const resolvers = {
     song: async (root, { id }) => {
       try {
         const results = await query(`
-        SELECT 
-          song.id as songId, 
-          song.title as songTitle,
-          song.artist as songArtist,
-          song.category as songCategory,
-          song.observation as songObservation,
-          song_entry.id as entryId, 
-          song_entry.title as entryTitle, 
-          song_entry.content as entryContent
-        FROM 
-          song
-        LEFT JOIN 
-          song_entry on song_entry.song_id = song.id
-        WHERE 
-          song.id = ?
-        `,
+          SELECT 
+            song.id as songId, 
+            song.title as songTitle,
+            song.artist as songArtist,
+            song.category as songCategory,
+            song.observation as songObservation,
+            song_entry.id as entryId, 
+            song_entry.title as entryTitle, 
+            song_entry.content as entryContent
+          FROM 
+            song
+          LEFT JOIN 
+            song_entry on song_entry.song_id = song.id
+          WHERE 
+            song.id = ?
+          `,
           id
         )
 
@@ -35,10 +35,12 @@ const resolvers = {
           song.artist = data.songArtist;
           song.category = data.songCategory;
           song.observation = data.songObservation;
-          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          if (data.entryId) {
+            song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          }
         });
 
-        return song
+        return song;
       } catch (e) {
         console.error(e.message);
       }

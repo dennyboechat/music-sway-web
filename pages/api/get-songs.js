@@ -38,7 +38,9 @@ const resolvers = {
             song.observation = data.songObservation;
             songs.push(song);
           }
-          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          if (data.entryId) {
+            song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          }
         });
 
         return songs;
