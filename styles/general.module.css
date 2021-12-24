@@ -17,10 +17,6 @@
   display: flex;
 }
 
-.markdown_text {
-  white-space: pre-line;
-}
-
 .song_card_header {
   display: flex;
 }
@@ -82,4 +78,15 @@
   bottom: 20px;
   right: 20px;
   float: right;
+}
+
+.ms_rich_text_editor {
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 4px;
+  border: gray solid 1px;
+}
+
+.ms_rich_text_editor:hover {
+  border-color: #FFF;
 }

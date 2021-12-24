@@ -43,7 +43,7 @@ const Song = ({ song }) => {
             {cardHeader}
           </AccordionSummary>
           <AccordionDetails>
-            <Markdown className={styles.markdown_text} content={firstEntry.content} />
+            <Markdown content={firstEntry.content} />
           </AccordionDetails>
         </Accordion>
       );
@@ -60,7 +60,7 @@ const Song = ({ song }) => {
                 <Typography className="ms-accordion-title">{entry.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Markdown className={styles.markdown_text} content={entry.content} />
+                <Markdown content={entry.content} />
               </AccordionDetails>
             </Accordion>
           ))

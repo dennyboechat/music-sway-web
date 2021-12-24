@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import RichTextEditor from '@/components/rich-text-editor';
 import { useSongsState } from '@/lib/songs-store';
 import { uniq, map, filter, forEach } from 'lodash';
 
@@ -53,7 +54,12 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
                     </Button>
                 </Grid>
             </Grid>
-        </div >
+            <RichTextEditor
+                id={`entryContent_${index}`}
+                value={entry.content}
+                onChange={(e) => onValueChanged({ field: 'content', value: e })}
+            />
+        </div>
     );
 }
 
