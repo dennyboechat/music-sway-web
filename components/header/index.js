@@ -6,7 +6,7 @@ const Header = ({ titleSuffix }) => {
         <Head>
             <title>{`Music Sway ${titleSuffix || ''}`}</title>
             <meta name="description" content="Manage music you play" />
-            <link rel="icon" href="/favicon.png" />
+            <link rel="icon" href="/ms_logo.png" />
         </Head>
     );
 }

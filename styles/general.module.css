@@ -37,7 +37,6 @@
 }
 
 .search {
-  position: relative;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.08);
   max-width: 300px;
@@ -47,29 +46,27 @@
   background-color: rgb(255, 255, 255, 0.2);
 }
 
+.search_input {
+  padding-top: 10px;
+  padding-top: 10px;
+}
+
 .search_icon {
-  padding: 4px;
-  height: 100%;
-  position: absolute;
-  display: flex;
-  align-items: center;
+  margin-top: 0 !important;
 }
 
 .icon_button {
-  height: 100%;
   position: absolute;
   right: 0;
 }
 
-.input_root {
-  width: 100%;
+.songs_header {
+  margin: 5px;
+  display: flex;
+  align-items: center;
 }
 
-.input_input {
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.header_title {
   width: 100%;
 }
 

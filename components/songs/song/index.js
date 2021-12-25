@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
-import Markdown from '@/components/markdown';
+import HtmlParser from '@/components/html-parser';
 import styles from '@/styles/general.module.css';
 
 const Song = ({ song }) => {
@@ -43,7 +43,7 @@ const Song = ({ song }) => {
             {cardHeader}
           </AccordionSummary>
           <AccordionDetails>
-            <Markdown content={firstEntry.content} />
+            <HtmlParser content={firstEntry.content} />
           </AccordionDetails>
         </Accordion>
       );
@@ -60,7 +60,7 @@ const Song = ({ song }) => {
                 <Typography className="ms-accordion-title">{entry.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Markdown content={entry.content} />
+                <HtmlParser content={entry.content} />
               </AccordionDetails>
             </Accordion>
           ))

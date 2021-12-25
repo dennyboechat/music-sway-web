@@ -3,7 +3,8 @@ import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Song from './song';
-import Filter from './filter';
+import MsLogo from '@/components/ms-logo';
+import Filter from '@/components/songs/filter';
 import { useSongsState } from '@/lib/songs-store';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import styles from '@/styles/general.module.css';
@@ -70,7 +71,11 @@ const Songs = () => {
 
      return (
           <div>
-               <Filter />
+               <div className={styles.songs_header}>
+                    <MsLogo />
+                    <div className={styles.header_title} />
+                    <Filter />
+               </div>
                {songsList}
                <div className={styles.fab_buttons}>
                     <Fab
