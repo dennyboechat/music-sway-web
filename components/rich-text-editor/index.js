@@ -17,7 +17,9 @@ const RichTextEditor = ({ id, value, onChange }) => {
         content: value,
         onBlur: ({ editor }) => {
             const text = editor.getHTML();
-            onChange(text);
+            if (onChange) {
+                onChange(text);
+            }
         },
         parseOptions: {
             preserveWhitespace: 'full',

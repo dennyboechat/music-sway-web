@@ -3,15 +3,15 @@ import { gql } from "graphql-request";
 export const songsQuery = gql`
   query {
     songs {
-      id 
-      title 
-      artist
-      category
-      observation
+      id,
+      title,
+      artist,
+      category,
+      observation,
       entries { 
-        id
-        title
-        content
+        id,
+        title,
+        content,
       }
     }
   }
@@ -20,15 +20,15 @@ export const songsQuery = gql`
 export const songQuery = gql`
   query($id: ID!) {
     song(id: $id) {
-      id 
-      title 
-      artist
-      category
-      observation
+      id,
+      title, 
+      artist,
+      category,
+      observation,
       entries { 
-        id
-        title
-        content
+        id,
+        title,
+        content,
       }
     }
   }

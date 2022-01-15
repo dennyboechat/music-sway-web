@@ -39,7 +39,7 @@
 .search {
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.08);
-  max-width: 300px;
+  min-width: 300px;
 }
 
 .search:hover {
@@ -48,7 +48,7 @@
 
 .search_input {
   padding-top: 10px;
-  padding-top: 10px;
+  padding-right: 30px;
 }
 
 .search_icon {
@@ -70,6 +70,11 @@
   width: 100%;
 }
 
+.header_logo {
+  margin-left: 5px;
+  width: 100%;
+}
+
 .fab_buttons {
   position: fixed;
   bottom: 20px;
@@ -86,4 +91,8 @@
 
 .ms_rich_text_editor:hover {
   border-color: #FFF;
+}
+
+.html_content {
+  white-space: pre;
 }

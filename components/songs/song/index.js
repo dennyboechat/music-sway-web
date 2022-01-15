@@ -33,7 +33,7 @@ const Song = ({ song }) => {
   let cardContent;
   if (song.entries && song.entries.length > 0) {
     const firstEntry = song.entries[0];
-    if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim().length === 0)) {
+    if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim.length)) {
       cardContent = (
         <Accordion id={`${song.id}-0`} className="ms-accordion single-no-title-entry">
           <AccordionSummary

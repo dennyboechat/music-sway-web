@@ -1,26 +1,41 @@
+import { ApolloServer } from 'apollo-server-micro';
+import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
 
-const handler = async (req, res) => {
-    const { id } = req.query;
-    try {
-        if (!id) {
-            return res.status(400).json({ message: '`id` required' });
+const resolvers = {
+    Mutation: {
+        removeSong: async (root, { id }) => {
+
+            if (!id) {
+                console.error('`id` is required.');
+                return null;
+            }
+
+            if (typeof parseInt(id.toString()) !== 'number') {
+                console.error('`id` must be a number.');
+                return null;
+            }
+
+            await query(`
+                DELETE FROM 
+                    song
+                WHERE 
+                    id = ?
+                `,
+                id
+            );
+
+            return { msg: `Song ${id} deleted.` };
         }
-        if (typeof parseInt(id.toString()) !== 'number') {
-            return res.status(400).json({ message: '`id` must be a number' });
-        }
-        const results = await query(`
-            DELETE FROM 
-                song
-            WHERE 
-                id = ?
-            `,
-            id
-        );
-        res.json(results)
-    } catch (e) {
-        res.status(500).json({ message: e.message });
     }
+};
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
 }
 
-export default handler;
+const server = new ApolloServer({ typeDefs, resolvers });
+
+export default server.createHandler({ path: "/api/delete-song" });

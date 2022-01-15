@@ -7,8 +7,7 @@ import { typeDefs } from '@/graphQl/type-definitions';
 const resolvers = {
   Query: {
     songs: async () => {
-      try {
-        const results = await query(`
+      const results = await query(`
           SELECT 
             song.id as songId, 
             song.title as songTitle,
@@ -26,27 +25,24 @@ const resolvers = {
             song.id DESC
       `)
 
-        let songs = []
-        forEach(results, data => {
-          let song = songs.find(e => e.id === data.songId);
-          if (!song) {
-            song = getNewSong({ addEntry: false });
-            song.id = data.songId;
-            song.title = data.songTitle;
-            song.artist = data.songArtist;
-            song.category = data.songCategory;
-            song.observation = data.songObservation;
-            songs.push(song);
-          }
-          if (data.entryId) {
-            song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
-          }
-        });
+      let songs = []
+      forEach(results, data => {
+        let song = songs.find(e => e.id === data.songId);
+        if (!song) {
+          song = getNewSong({ addEntry: false });
+          song.id = data.songId;
+          song.title = data.songTitle;
+          song.artist = data.songArtist;
+          song.category = data.songCategory;
+          song.observation = data.songObservation;
+          songs.push(song);
+        }
+        if (data.entryId) {
+          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+        }
+      });
 
-        return songs;
-      } catch (error) {
-        throw error;
-      }
+      return songs;
     }
   }
 };

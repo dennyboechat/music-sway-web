@@ -1,9 +1,14 @@
 import parse from 'html-react-parser';
+import classnames from 'classnames';
+import styles from '@/styles/general.module.css';
 
-const HtmlParser = ({ content }) => {
+const HtmlParser = ({ content, className }) => {
+
+    className = classnames(styles.html_content, className);
+
     return (
-        <div>
-            {parse(content)}
+        <div className={className}>
+            {content ? parse(content) : ''}
         </div>
     );
 };

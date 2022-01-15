@@ -15,7 +15,7 @@ const EditSongPage = ({ songId }) => {
     }
 
     return (
-        <SongForm song={song} apiEndpoint="/api/edit-song" apiMethod="PATCH" />
+        <SongForm song={song} apiEndpoint="/api/edit-song" />
     );
 }
 

@@ -11,10 +11,12 @@ import Fab from '@mui/material/Fab';
 import { useSongsState } from '@/lib/songs-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
-import { uniqBy, map } from 'lodash';
+import { uniqBy, map, without, pick, forEach } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
+import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
+import { GraphQLClient } from 'graphql-request';
 
-const SongForm = ({ song, apiEndpoint, apiMethod }) => {
+const SongForm = ({ song, apiEndpoint }) => {
     const { songs } = useSongsState();
     const [songTitle, setSongTitle] = React.useState(song?.title);
     const [songArtist, setSongArtist] = React.useState(song?.artist);
@@ -28,8 +30,12 @@ const SongForm = ({ song, apiEndpoint, apiMethod }) => {
         return null;
     }
 
-    if (songEntries && songEntries.length > 0) {
-        songEntries = songEntries.map(songEntry => ({ ...songEntry, uuid: v4() }));
+    if (songEntries && songEntries.length) {
+        forEach(songEntries, songEntry => {
+            if (!songEntry.uuid) {
+                songEntry.uuid = v4();
+            }
+        });
     }
 
     const addEntry = () => {
@@ -41,39 +47,46 @@ const SongForm = ({ song, apiEndpoint, apiMethod }) => {
     const submitHandler = async (e) => {
         e.preventDefault();
         const invalidMessages = validateSong({ songTitle });
-        if (invalidMessages.length > 0) {
+        if (invalidMessages.length) {
             console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
             return;
         }
         setSubmitting(true);
-        const res = await fetch(apiEndpoint, {
-            method: apiMethod,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: song.id,
+
+        const entries = songEntries.map(obj => pick(obj, ['title', 'content']));
+
+        let variables = {
+            input: {
                 title: songTitle,
                 artist: songArtist,
                 category: songCategory,
                 observation: songObservation,
-                entries: songEntries,
-            }),
-        })
-        const json = await res.json();
-        if (!res.ok) {
-            throw Error(json.message);
+                entries: entries,
+            }
         }
+
+        if (song.id) {
+            variables.input.id = song.id;
+        }
+
+        try {
+            const graphQLClient = new GraphQLClient(apiEndpoint);
+            await graphQLClient.request(song.id ? updateSong : createSong, variables);
+        } catch (error) {
+            console.error(JSON.stringify(error, undefined, 2));
+        }
+
         Router.push('/');
         setSubmitting(false);
     };
 
-    const deleteSong = async () => {
+    const removeSong = async () => {
         setDeleting(true);
-        let res = await fetch(`/api/delete-song?id=${song.id}`, { method: 'DELETE' });
-        let json = await res.json();
-        if (!res.ok) {
-            throw Error(json.message);
+        try {
+            const graphQLClient = new GraphQLClient('/api/delete-song');
+            await graphQLClient.request(deleteSong, { id: song.id });
+        } catch (error) {
+            throw Error(error);
         }
         Router.push('/');
         setDeleting(false);
@@ -85,9 +98,9 @@ const SongForm = ({ song, apiEndpoint, apiMethod }) => {
 
     let artists = [];
     let categories = [];
-    if (songs && songs.length > 0) {
-        artists = map(uniqBy(songs, s => { return s.artist; }), 'artist');
-        categories = map(uniqBy(songs, s => { return s.category; }), 'category');
+    if (songs && songs.length) {
+        artists = without(map(uniqBy(songs, s => { return s.artist; }), 'artist'), null, undefined);
+        categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined);
     }
 
     return (
@@ -165,7 +178,7 @@ const SongForm = ({ song, apiEndpoint, apiMethod }) => {
                             id="deleteSongButton"
                             aria-label="delete"
                             disabled={deleting}
-                            onClick={deleteSong}
+                            onClick={removeSong}
                             variant="extended"
                         >
                             {'Delete'}

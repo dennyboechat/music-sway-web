@@ -1,44 +1,62 @@
+import { ApolloServer } from 'apollo-server-micro';
+import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
 
-const handler = async (req, res) => {
-    const { title, artist, category, observation, entries } = req.body
-    try {
-        if (!title) {
-            return res.status(400).json({ message: '`Title` is required' });
-        }
+const resolvers = {
+  Mutation: {
+    addSong: async (root, { input: { title, artist, category, observation, entries } }) => {
 
-        let results = await query(`
+      if (!title || title.trim.length) {
+        console.error('`Title` is required.');
+        return null;
+      }
+
+      let song = {
+        title: title,
+        artist: artist,
+        category: category,
+        observation: observation,
+      }
+
+      let results = await query(`
         INSERT INTO 
             song (title, artist, category, observation)
         VALUES 
-            (?, ?, ?, ?)
+          (?, ?, ?, ?)
         `,
-            [title, artist, category, observation]
-        );
+        [song.title, song.artist, song.category, song.observation]
+      );
 
-        const songIdResults = await query(`
+      const songIdResults = await query(`
         SELECT 
             LAST_INSERT_ID() as songId
       `
+      );
+      song.id = songIdResults[0].songId;
+
+      if (entries && entries.length) {
+        const entryRows = entries.map(entry => [entry.title, entry.content, song.id]);
+        results = await query(`
+          INSERT INTO 
+              song_entry (title, content, song_id)
+          VALUES 
+              ?
+          `,
+          [entryRows]
         );
-        const songId = songIdResults[0].songId;
+      }
 
-        if (entries && entries.length > 0) {
-            const entryRows = entries.map(entry => [entry.title, entry.content, songId]);
-            results = await query(`
-                INSERT INTO 
-                    song_entry (title, content, song_id)
-                VALUES 
-                    ?
-                `,
-                [entryRows]
-            );
-        }
-
-        return res.json(results);
-    } catch (e) {
-        res.status(500).json({ message: e.message });
+      return song;
     }
+  }
+};
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 }
 
-export default handler;
+const server = new ApolloServer({ typeDefs, resolvers });
+
+export default server.createHandler({ path: "/api/create-song" });

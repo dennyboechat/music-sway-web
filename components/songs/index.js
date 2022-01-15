@@ -72,7 +72,9 @@ const Songs = () => {
      return (
           <div>
                <div className={styles.songs_header}>
-                    <MsLogo />
+                    <span className={styles.header_logo} >
+                         <MsLogo />
+                    </span>
                     <div className={styles.header_title} />
                     <Filter />
                </div>

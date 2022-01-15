@@ -4,7 +4,7 @@ import { getNewSong } from '@/lib/utils';
 const NewSongPage = () => {
     const song = getNewSong({ addEntry: true });
     return (
-        <SongForm song={song} apiEndpoint="/api/create-song" apiMethod="POST" />
+        <SongForm song={song} apiEndpoint="/api/create-song" />
     );
 }
 

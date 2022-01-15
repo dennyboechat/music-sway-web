@@ -7,8 +7,7 @@ import { typeDefs } from '@/graphQl/type-definitions';
 const resolvers = {
   Query: {
     song: async (root, { id }) => {
-      try {
-        const results = await query(`
+      const results = await query(`
           SELECT 
             song.id as songId, 
             song.title as songTitle,
@@ -25,25 +24,22 @@ const resolvers = {
           WHERE 
             song.id = ?
           `,
-          id
-        )
+        id
+      )
 
-        let song = getNewSong({ addEntry: false });
-        forEach(results, data => {
-          song.id = data.songId;
-          song.title = data.songTitle;
-          song.artist = data.songArtist;
-          song.category = data.songCategory;
-          song.observation = data.songObservation;
-          if (data.entryId) {
-            song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
-          }
-        });
+      let song = getNewSong({ addEntry: false });
+      forEach(results, data => {
+        song.id = data.songId;
+        song.title = data.songTitle;
+        song.artist = data.songArtist;
+        song.category = data.songCategory;
+        song.observation = data.songObservation;
+        if (data.entryId) {
+          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+        }
+      });
 
-        return song;
-      } catch (e) {
-        console.error(e.message);
-      }
+      return song;
     }
   }
 };

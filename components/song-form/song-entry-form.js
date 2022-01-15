@@ -1,10 +1,11 @@
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import RichTextEditor from '@/components/rich-text-editor';
 import { useSongsState } from '@/lib/songs-store';
-import { uniq, map, filter, forEach } from 'lodash';
+import { uniq, map, filter, forEach, without } from 'lodash';
 
 const SongEntryForm = ({ entries, setEntries, entry, index }) => {
 
@@ -21,11 +22,11 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
     };
 
     let entryTitles = [];
-    if (songs && songs.length > 0) {
+    if (songs && songs.length) {
         forEach(songs, s => {
             entryTitles = map(s.entries, e => { return e.title; });
         })
-        entryTitles = uniq(entryTitles);
+        entryTitles = uniq(without(entryTitles, null, undefined));
     }
 
     return (
@@ -36,13 +37,13 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
                         id={`entryTitleAutoComplete_${index}`}
                         freeSolo
                         options={entryTitles}
-                        inputValue={entry.title}
-                        onInputChange={(e, value) => onValueChanged({ field: 'title', value })}
                         fullWidth
                         renderInput={(params) => (
                             <TextField
                                 id={`entryTitle_${index}`}
                                 label="Section Header"
+                                value={entry.title}
+                                onBlur={(e) => onValueChanged({ field: 'title', value: e.currentTarget.value })}
                                 {...params}
                             />
                         )}
@@ -57,7 +58,7 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
             <RichTextEditor
                 id={`entryContent_${index}`}
                 value={entry.content}
-                onChange={(e) => onValueChanged({ field: 'content', value: e })}
+                onChange={(value) => onValueChanged({ field: 'content', value })}
             />
         </div>
     );
