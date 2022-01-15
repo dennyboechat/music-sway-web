@@ -1,5 +1,7 @@
 import { useEditor, EditorContent, } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import TextStyle from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
 import styles from '@/styles/general.module.css';
 import MenuBarButton from '@/components/rich-text-editor/menu-bar-button';
 
@@ -8,6 +10,8 @@ const RichTextEditor = ({ id, value, onChange }) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
+            Color,
+            TextStyle,
         ],
         editorProps: {
             attributes: {
@@ -112,6 +116,11 @@ const RichTextEditor = ({ id, value, onChange }) => {
             <MenuBarButton
                 label="redo"
                 onClick={() => editor.chain().focus().redo().run()}
+            />
+            <input
+                type="color"
+                onInput={event => editor.chain().focus().setColor(event.target.value).run()}
+                value={editor.getAttributes('textStyle').color}
             />
         </>
     );
