@@ -37,13 +37,13 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
                         id={`entryTitleAutoComplete_${index}`}
                         freeSolo
                         options={entryTitles}
+                        inputValue={entry.title}
+                        onInputChange={(e, value) => onValueChanged({ field: 'title', value })}
                         fullWidth
                         renderInput={(params) => (
                             <TextField
                                 id={`entryTitle_${index}`}
                                 label="Section Header"
-                                value={entry.title}
-                                onBlur={(e) => onValueChanged({ field: 'title', value: e.currentTarget.value })}
                                 {...params}
                             />
                         )}

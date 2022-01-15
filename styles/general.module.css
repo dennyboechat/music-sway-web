@@ -40,6 +40,7 @@
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.08);
   min-width: 300px;
+  border: 0;
 }
 
 .search:hover {
@@ -47,8 +48,7 @@
 }
 
 .search_input {
-  padding-top: 10px;
-  padding-right: 30px;
+  border: none;
 }
 
 .search_icon {
@@ -58,6 +58,7 @@
 .icon_button {
   position: absolute;
   right: 0;
+  top: 12px;
 }
 
 .songs_header {

@@ -26,22 +26,24 @@ const SearchInput = () => {
                 autoComplete="off"
                 autoFocus={true}
                 value={songsFilterValue}
-                variant="filled"
                 fullWidth={true}
                 onChange={e => { setSongsFilterValue(e.target.value) }}
                 InputProps={{
                     startAdornment:
-                        <InputAdornment position="start" className={styles.search_icon}>
+                        <InputAdornment position="start">
                             <SearchIcon />
                         </InputAdornment>,
-                    disableUnderline: true,
                     classes: {
-                        input: styles.search_input,
+                        notchedOutline: styles.search_input,
                     }
                 }}
             />
             {songsFilterValue && songsFilterValue.length > 0 &&
-                <IconButton id="searchCleanButton" className={styles.icon_button} onClick={onCleanButtonClick}>
+                <IconButton
+                    id="searchCleanButton"
+                    className={styles.icon_button}
+                    onClick={onCleanButtonClick}
+                >
                     <CloseIcon />
                 </IconButton>
             }
