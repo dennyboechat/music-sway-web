@@ -8,11 +8,15 @@ import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { useSongsState } from '@/lib/songs-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
 import { uniqBy, map, without, pick, forEach } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
+import { getSongRestrictions, getSongRestrictionByName, getSongRestrictionById } from '@/lib/song-restriction';
 import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 
@@ -22,6 +26,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [songArtist, setSongArtist] = React.useState(song?.artist);
     const [songCategory, setSongCategory] = React.useState(song?.category);
     const [songObservation, setSongObservation] = React.useState(song?.observation);
+    const [songRestrictionId, setSongRestrictionId] = React.useState(song?.restrictionId);
     let [songEntries, setSongEntries] = React.useState(song.entries || []);
     const [submitting, setSubmitting] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
@@ -46,7 +51,7 @@ const SongForm = ({ song, apiEndpoint }) => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const invalidMessages = validateSong({ songTitle });
+        const invalidMessages = validateSong({ songTitle, songRestrictionId });
         if (invalidMessages.length) {
             console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
             return;
@@ -61,6 +66,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                 artist: songArtist,
                 category: songCategory,
                 observation: songObservation,
+                restrictionId: songRestrictionId,
                 entries: entries,
             }
         }
@@ -103,10 +109,37 @@ const SongForm = ({ song, apiEndpoint }) => {
         categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined);
     }
 
+    const songRestrictions = [];
+    forEach(getSongRestrictions(), songRestriction => {
+        songRestrictions.push(
+            <FormControlLabel
+                key={songRestriction.id}
+                value={songRestriction.name}
+                control={<Radio />}
+                label={songRestriction.label}
+            />
+        );
+    });
+
+    const songRestrictionName = getSongRestrictionById(songRestrictionId).name;
+
+    const handleSetSongRestrictionId = (name) => {
+        const restriction = getSongRestrictionByName(name);
+        setSongRestrictionId(restriction.id);
+    }
+
     return (
         <form onSubmit={submitHandler}>
             <Header titleSuffix={`- ${songTitle}`} />
             <Container className={styles.content_container}>
+                <RadioGroup
+                    aria-label="song-restriction"
+                    name="song-restriction-radio-buttons-group"
+                    value={songRestrictionName}
+                    onChange={(e, value) => handleSetSongRestrictionId(value)}
+                >
+                    {songRestrictions}
+                </RadioGroup>
                 <Grid container item xs={12} lg={6}>
                     <TextField
                         id="songTitle"
@@ -116,7 +149,6 @@ const SongForm = ({ song, apiEndpoint }) => {
                         required
                         fullWidth
                         autoComplete="off"
-
                     />
                 </Grid>
                 <Grid container item xs={12} lg={6}>

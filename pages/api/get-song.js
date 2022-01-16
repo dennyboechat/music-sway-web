@@ -14,6 +14,8 @@ const resolvers = {
             song.artist as songArtist,
             song.category as songCategory,
             song.observation as songObservation,
+            song.restriction_id as songRestrictionId,
+            song.owner_id as songOwnerId,
             song_entry.id as entryId, 
             song_entry.title as entryTitle, 
             song_entry.content as entryContent
@@ -34,6 +36,8 @@ const resolvers = {
         song.artist = data.songArtist;
         song.category = data.songCategory;
         song.observation = data.songObservation;
+        song.restrictionId = data.songRestrictionId;
+        song.ownerId = data.ownerId;
         if (data.entryId) {
           song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
         }

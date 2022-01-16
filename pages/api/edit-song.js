@@ -4,7 +4,7 @@ import { query } from '@/lib/db';
 
 const resolvers = {
     Mutation: {
-        editSong: async (root, { input: { id, title, artist, category, observation, entries } }) => {
+        editSong: async (root, { input: { id, title, artist, category, observation, restrictionId, entries } }) => {
 
             if (!id || !title || title.trim.length) {
                 console.error('`id` and `title` are required.');
@@ -17,6 +17,8 @@ const resolvers = {
                 artist: artist,
                 category: category,
                 observation: observation,
+                restrictionId: restrictionId,
+                ownerId: 1,
             }
 
             let results = await query(`
@@ -26,11 +28,12 @@ const resolvers = {
                     title = ?, 
                     artist = ?, 
                     category = ?, 
-                    observation = ?
+                    observation = ?,
+                    restriction_id = ?
                 WHERE 
                     id = ?
                 `,
-                [song.title, song.artist, song.category, song.observation, song.id]
+                [song.title, song.artist, song.category, song.observation, song.restrictionId, song.id]
             );
 
             results = await query(`

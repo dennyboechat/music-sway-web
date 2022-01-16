@@ -38,7 +38,7 @@ const SearchInput = () => {
                     }
                 }}
             />
-            {songsFilterValue && songsFilterValue.length > 0 &&
+            {songsFilterValue && songsFilterValue.length &&
                 <IconButton
                     id="searchCleanButton"
                     className={styles.icon_button}

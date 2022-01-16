@@ -8,6 +8,8 @@ export const songsQuery = gql`
       artist,
       category,
       observation,
+      restrictionId,
+      ownerId,
       entries { 
         id,
         title,
@@ -25,6 +27,8 @@ export const songQuery = gql`
       artist,
       category,
       observation,
+      restrictionId,
+      ownerId,
       entries { 
         id,
         title,

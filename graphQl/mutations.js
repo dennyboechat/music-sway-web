@@ -8,6 +8,8 @@ export const createSong = gql`
       artist,
       category,
       observation,
+      restrictionId,
+      ownerId,
       entries {
         id,
         title,
@@ -25,6 +27,8 @@ export const updateSong = gql`
       artist,
       category,
       observation,
+      restrictionId,
+      ownerId,
       entries {
         id,
         title,

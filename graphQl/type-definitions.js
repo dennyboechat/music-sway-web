@@ -18,6 +18,7 @@ const typeDefs = gql`
         artist: String
         category: String
         observation: String
+        restrictionId: Int
         entries: [SongEntryInput]
     }
 
@@ -27,6 +28,7 @@ const typeDefs = gql`
         artist: String
         category: String
         observation: String
+        restrictionId: Int
         entries: [SongEntryInput]
     }
 
@@ -36,6 +38,8 @@ const typeDefs = gql`
         artist: String
         category: String
         observation: String
+        restrictionId: Int
+        ownerId: Int
         entries: [SongEntry]
     }
 
