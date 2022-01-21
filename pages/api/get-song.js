@@ -1,6 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { query } from '@/lib/db'
-import { getNewSong } from '@/lib/utils';
+import { query } from '@/lib/db';
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
 
@@ -29,7 +28,7 @@ const resolvers = {
         id
       )
 
-      let song = getNewSong({ addEntry: false });
+      let song = {};
       forEach(results, data => {
         song.id = data.songId;
         song.title = data.songTitle;
@@ -38,6 +37,7 @@ const resolvers = {
         song.observation = data.songObservation;
         song.restrictionId = data.songRestrictionId;
         song.ownerId = data.ownerId;
+        song.entries = [];
         if (data.entryId) {
           song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
         }

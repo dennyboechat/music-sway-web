@@ -14,14 +14,12 @@ const Song = ({ song }) => {
     <div className={styles.song_card_header}>
       <div className={styles.song_card_title_header}>
         <Typography component="h4" color="primary">
-          <a
+          <label
             id={song.id}
-            href={`/song/${song.id}`}
-            title="Edit Song"
-            className={styles.edit_song_link}
+            className={styles.song_title}
           >
             {song.title}
-          </a>
+          </label>
         </Typography>
         <Typography variant="caption" display="block" gutterBottom color="textSecondary">
           {song.artist}

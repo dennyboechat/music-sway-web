@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import themeDark from '@/styles/themeDark';
 import { SongsStateProvider } from '@/lib/songs-store';
 import { SongsFilterStateProvider } from '@/lib/songsFilter-store';
+import { PlaylistsStateProvider } from '@/lib/playlists-store';
 import NoSleep from 'nosleep.js';
 import '../styles/globals.css';
 
@@ -18,8 +19,10 @@ const MyApp = ({ Component, pageProps }) => {
     <ThemeProvider theme={themeDark}>
       <SongsStateProvider>
         <SongsFilterStateProvider>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <PlaylistsStateProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </PlaylistsStateProvider>
         </SongsFilterStateProvider>
       </SongsStateProvider>
     </ThemeProvider>

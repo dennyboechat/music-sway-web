@@ -27,13 +27,8 @@
   padding-right: 4px;
 }
 
-.edit_song_link {
-  text-decoration: inherit;
-  color: inherit;
-}
-
-.edit_song_link:hover {
-  opacity: 0.8;
+.song_title {
+  cursor: pointer;
 }
 
 .search {

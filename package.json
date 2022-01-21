@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "node scripts/migrate-db.js"
+    "migrate": "node scripts/migrate-db.js",
+    "drop-tables": "node scripts/drop-tables.js"
   },
   "dependencies": {
     "@emotion/react": "11.6.0",

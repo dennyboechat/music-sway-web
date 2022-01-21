@@ -1,6 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db'
-import { getNewSong } from '@/lib/utils';
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
 
@@ -31,14 +30,16 @@ const resolvers = {
       forEach(results, data => {
         let song = songs.find(e => e.id === data.songId);
         if (!song) {
-          song = getNewSong({ addEntry: false });
-          song.id = data.songId;
-          song.title = data.songTitle;
-          song.artist = data.songArtist;
-          song.category = data.songCategory;
-          song.observation = data.songObservation;
-          song.restrictionId = data.songRestrictionId;
-          song.ownerId = data.ownerId;
+          song = {
+            id: data.songId,
+            title: data.songTitle,
+            artist: data.songArtist,
+            category: data.songCategory,
+            observation: data.songObservation,
+            restrictionId: data.songRestrictionId,
+            ownerId: data.ownerId,
+            entries: [],
+          }
           songs.push(song);
         }
         if (data.entryId) {

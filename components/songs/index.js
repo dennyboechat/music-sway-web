@@ -2,7 +2,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import Song from './song';
+import Song from '@/components/songs/song';
 import MsLogo from '@/components/ms-logo';
 import Filter from '@/components/songs/filter';
 import { useSongsState } from '@/lib/songs-store';
@@ -72,7 +72,7 @@ const Songs = () => {
      return (
           <div>
                <div className={styles.songs_header}>
-                    <span className={styles.header_logo} >
+                    <span className={styles.header_logo}>
                          <MsLogo />
                     </span>
                     <div className={styles.header_title} />

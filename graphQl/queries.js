@@ -37,3 +37,20 @@ export const songQuery = gql`
     }
   }
 `;
+
+export const playlistsQuery = gql`
+  query {
+    playlists {
+      id,
+      name,
+      observation,
+      restrictionId,
+      ownerId,
+      entries {
+        id,
+        songId,
+        orderIndex,
+      }
+    }
+  }
+`;
