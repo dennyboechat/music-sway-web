@@ -27,8 +27,8 @@ const Songs = () => {
           )
      } else {
           let sortedSongs = [];
-          if (songs.length > 0) {
-               if (songsFilterValue && songsFilterValue.length > 0) {
+          if (songs.length) {
+               if (songsFilterValue && songsFilterValue.length) {
                     forEach(songs, song => {
                          if (song.title.toLowerCase().startsWith(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 1;
@@ -71,7 +71,7 @@ const Songs = () => {
 
      return (
           <div>
-               <div className={styles.songs_header}>
+               <div className={styles.general_header}>
                     <span className={styles.header_logo}>
                          <MsLogo />
                     </span>

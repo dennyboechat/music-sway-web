@@ -43,7 +43,11 @@ const resolvers = {
           songs.push(song);
         }
         if (data.entryId) {
-          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          song.entries.push({
+            id: data.entryId,
+            title: data.entryTitle,
+            content: data.entryContent
+          });
         }
       });
 

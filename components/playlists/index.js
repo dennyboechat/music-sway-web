@@ -10,9 +10,9 @@ const Playlists = () => {
 
     let playlistsData;
     if (isLoadingPlaylists) {
-        const playlistPanelHeight = 110;
+        const playlistPanelHeight = 80;
         const playlistsListSkeleton = new Array(8).fill().map((v, i) =>
-            <Skeleton key={i} variant="rect" height={playlistPanelHeight} className={styles.playlists_list_skeleton} />
+            <Skeleton key={i} variant="rect" height={playlistPanelHeight} className={styles.playlists_skeleton} />
         );
         playlistsData = (
             <Container className={styles.content_container}>
@@ -33,7 +33,7 @@ const Playlists = () => {
 
     return (
         <div>
-            <div className={styles.playlists_header}>
+            <div className={styles.general_header}>
                 <span className={styles.header_logo}>
                     <MsLogo />
                 </span>

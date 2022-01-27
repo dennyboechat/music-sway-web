@@ -7,18 +7,6 @@ const typeDefs = gql`
         content: String
     }
 
-    type SongEntry {
-        id: ID!
-        title: String
-        content: String
-    }
-
-    type PlaylistEntry {
-        id: ID!
-        songId: ID!
-        orderIndex: Int
-    }
-
     input SongAddInput {
         title: String!
         artist: String
@@ -38,6 +26,12 @@ const typeDefs = gql`
         entries: [SongEntryInput]
     }
 
+    type SongEntry {
+        id: ID!
+        title: String
+        content: String
+    }    
+
     type Song {
         id: ID!
         title: String!
@@ -47,6 +41,12 @@ const typeDefs = gql`
         restrictionId: Int
         ownerId: Int
         entries: [SongEntry]
+    }
+
+    type PlaylistEntry {
+        id: ID!
+        orderIndex: Int
+        song: Song
     }
 
     type Playlist {

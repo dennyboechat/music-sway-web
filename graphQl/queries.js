@@ -48,8 +48,21 @@ export const playlistsQuery = gql`
       ownerId,
       entries {
         id,
-        songId,
         orderIndex,
+        song {
+          id,
+          title,
+          artist,
+          category,
+          observation,
+          restrictionId,
+          ownerId,
+          entries { 
+            id,
+            title,
+            content,
+          }
+        }
       }
     }
   }

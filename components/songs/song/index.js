@@ -4,7 +4,9 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EditIcon from '@mui/icons-material/Edit';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import HtmlParser from '@/components/html-parser';
 import styles from '@/styles/general.module.css';
 
@@ -14,10 +16,7 @@ const Song = ({ song }) => {
     <div className={styles.song_card_header}>
       <div className={styles.song_card_title_header}>
         <Typography component="h4" color="primary">
-          <label
-            id={song.id}
-            className={styles.song_title}
-          >
+          <label id={song.id}>
             {song.title}
           </label>
         </Typography>
@@ -31,6 +30,15 @@ const Song = ({ song }) => {
   let cardContent;
   if (song.entries && song.entries.length > 0) {
     const firstEntry = song.entries[0];
+    const actions = (
+      <Link
+        id={`${song.id}_editButton`}
+        href={`/song/${song.id}`}
+        title="Edit Song"
+      >
+        <EditIcon />
+      </Link>
+    );
     if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim.length)) {
       cardContent = (
         <Accordion id={`${song.id}-0`} className="ms-accordion single-no-title-entry">
@@ -41,6 +49,7 @@ const Song = ({ song }) => {
             {cardHeader}
           </AccordionSummary>
           <AccordionDetails>
+            {actions}
             <HtmlParser content={firstEntry.content} />
           </AccordionDetails>
         </Accordion>
@@ -58,6 +67,7 @@ const Song = ({ song }) => {
                 <Typography className="ms-accordion-title">{entry.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
+                {actions}
                 <HtmlParser content={entry.content} />
               </AccordionDetails>
             </Accordion>

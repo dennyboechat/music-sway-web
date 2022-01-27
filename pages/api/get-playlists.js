@@ -15,13 +15,28 @@ const resolvers = {
             playlist.owner_id as playlistOwnerId,
             playlist_entry.id as entryId, 
             playlist_entry.song_id as entrySongId, 
-            playlist_entry.order_index as entryOrderIndex
+            playlist_entry.order_index as entryOrderIndex,
+            song.id as songId, 
+            song.title as songTitle,
+            song.artist as songArtist,
+            song.category as songCategory,
+            song.observation as songObservation,
+            song.restriction_id as songRestrictionId,
+            song.owner_id as songOwnerId,
+            song_entry.id as songEntryId, 
+            song_entry.title as songEntryTitle, 
+            song_entry.content as songEntryContent
           FROM 
             playlist
           LEFT JOIN 
             playlist_entry on playlist_entry.playlist_id = playlist.id
+          LEFT JOIN  
+            song on song.id = playlist_entry.song_id
+          LEFT JOIN  
+            song_entry on song_entry.song_id = song.id
           ORDER BY 
-            playlist.id DESC
+            playlist.name,
+            playlist_entry.order_index
       `)
 
       let playlists = []
@@ -38,8 +53,34 @@ const resolvers = {
           }
           playlists.push(playlist);
         }
-        if (data.entryId) {
-          playlist.entries.push({ id: data.entryId, songId: data.entrySongId, orderIndex: data.entryOrderIndex });
+        let playlistEntry = playlist.entries.find(e => e.id === data.entryId);
+        if (!playlistEntry && data.entryId) {
+          playlistEntry = {
+            id: data.entryId,
+            orderIndex: data.entryOrderIndex,
+            song: {
+              id: data.songId,
+              title: data.songTitle,
+              artist: data.songArtist,
+              category: data.songCategory,
+              observation: data.songObservation,
+              restrictionId: data.songRestrictionId,
+              ownerId: data.ownerId,
+              entries: [],
+            }
+          };
+          playlist.entries.push(playlistEntry);
+        }
+        if (playlistEntry && playlistEntry.song && data.songEntryId) {
+          let songEntry = playlistEntry.song.entries.find(e => e.id === data.songEntryId);
+          if (!songEntry) {
+            songEntry = {
+              id: data.songEntryId,
+              title: data.songEntryTitle,
+              content: data.songEntryContent
+            };
+            playlistEntry.song.entries.push(songEntry);
+          }
         }
       });
 

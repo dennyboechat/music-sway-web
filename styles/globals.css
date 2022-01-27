@@ -56,9 +56,12 @@
 
 .MuiContainer-root {
   padding: 5px;
-  margin-bottom: 80px;
 }
 
 .ms-accordion.MuiAccordion-root:before {
   background-color: transparent;
+}
+
+.MuiCardContent-root:last-child {
+  padding-bottom: 8px;
 }
