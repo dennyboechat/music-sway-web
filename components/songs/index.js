@@ -3,12 +3,11 @@ import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Song from '@/components/songs/song';
-import MsLogo from '@/components/ms-logo';
-import Filter from '@/components/songs/filter';
 import { useSongsState } from '@/lib/songs-store';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import styles from '@/styles/general.module.css';
 import { forEach, orderBy } from 'lodash';
+import { getParsedCharacterText } from '@/lib/utils';
 
 const Songs = () => {
      const { songs, isLoadingSongs } = useSongsState();
@@ -30,25 +29,25 @@ const Songs = () => {
           if (songs.length) {
                if (songsFilterValue && songsFilterValue.length) {
                     forEach(songs, song => {
-                         if (song.title.toLowerCase().startsWith(songsFilterValue.toLowerCase())) {
+                         if (getParsedCharacterText({ text: song.title }).startsWith(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 1;
                               sortedSongs.push(song);
-                         } else if (song.title.toLowerCase().includes(songsFilterValue.toLowerCase())) {
+                         } else if (getParsedCharacterText({ text: song.title }).includes(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 2;
                               sortedSongs.push(song);
-                         } else if (song.artist && song.artist.toLowerCase().includes(songsFilterValue.toLowerCase())) {
+                         } else if (getParsedCharacterText({ text: song.artist }).includes(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 3;
                               sortedSongs.push(song);
-                         } else if (song.category && song.category.toLowerCase().includes(songsFilterValue.toLowerCase())) {
+                         } else if (getParsedCharacterText({ text: song.category }).includes(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 4;
                               sortedSongs.push(song);
-                         } else if (song.observation && song.observation.toLowerCase().includes(songsFilterValue.toLowerCase())) {
+                         } else if (getParsedCharacterText({ text: song.observation }).includes(songsFilterValue.toLowerCase())) {
                               song.filterOrder = 5;
                               sortedSongs.push(song);
-                         } else if (song.entries && song.entries.some(entry => (entry.title && entry.title.toLowerCase().includes(songsFilterValue.toLowerCase())))) {
+                         } else if (song.entries && song.entries.some(entry => (getParsedCharacterText({ text: entry.title }).includes(songsFilterValue.toLowerCase())))) {
                               song.filterOrder = 6;
                               sortedSongs.push(song);
-                         } else if (song.entries && song.entries.some(entry => (entry.content && entry.content.toLowerCase().includes(songsFilterValue.toLowerCase())))) {
+                         } else if (song.entries && song.entries.some(entry => (getParsedCharacterText({ text: entry.content }).includes(songsFilterValue.toLowerCase())))) {
                               song.filterOrder = 7;
                               sortedSongs.push(song);
                          }
@@ -71,13 +70,6 @@ const Songs = () => {
 
      return (
           <div>
-               <div className={styles.general_header}>
-                    <span className={styles.header_logo}>
-                         <MsLogo />
-                    </span>
-                    <div className={styles.header_title} />
-                    <Filter />
-               </div>
                {songsList}
                <div className={styles.fab_buttons}>
                     <Fab

@@ -1,6 +1,5 @@
 import Skeleton from '@mui/material/Skeleton';
 import Container from '@mui/material/Container';
-import MsLogo from '@/components/ms-logo';
 import { usePlaylistsState } from '@/lib/playlists-store';
 import Playlist from '@/components/playlists/playlist';
 import styles from '@/styles/general.module.css';
@@ -11,7 +10,7 @@ const Playlists = () => {
     let playlistsData;
     if (isLoadingPlaylists) {
         const playlistPanelHeight = 80;
-        const playlistsListSkeleton = new Array(8).fill().map((v, i) =>
+        const playlistsListSkeleton = new Array(4).fill().map((v, i) =>
             <Skeleton key={i} variant="rect" height={playlistPanelHeight} className={styles.playlists_skeleton} />
         );
         playlistsData = (
@@ -33,12 +32,6 @@ const Playlists = () => {
 
     return (
         <div>
-            <div className={styles.general_header}>
-                <span className={styles.header_logo}>
-                    <MsLogo />
-                </span>
-                <div className={styles.header_title} />
-            </div>
             {playlistsData}
         </div>
     );

@@ -54,14 +54,15 @@
   margin-bottom: 3px;
 }
 
-.MuiContainer-root {
-  padding: 5px;
+body div.MuiContainer-root {
+  padding: 3px;
 }
 
 .ms-accordion.MuiAccordion-root:before {
   background-color: transparent;
 }
 
-.MuiCardContent-root:last-child {
+body div.MuiCardContent-root:last-child,
+body div.MuiCardContent-root {
   padding-bottom: 8px;
 }
