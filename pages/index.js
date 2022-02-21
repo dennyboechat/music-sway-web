@@ -4,11 +4,11 @@ import Songs from '@/components/songs';
 import Playlists from '@/components/playlists';
 import MsLogo from '@/components/ms-logo';
 import Filter from '@/components/songs/filter';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from "swiper";
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
-import "swiper/css/pagination";
 import { scrollToPageTop } from '@/lib/utils';
 
 const Home = () => {
@@ -32,21 +32,35 @@ const Home = () => {
           <MsLogo />
         </span>
         <div className={styles.header_title} />
-        {showSongsFilter && <Filter />}
+        {showSongsFilter &&
+          <Filter />
+        }
       </div>
       <Swiper
-        modules={[Pagination]}
         grabCursor={true}
         onReachBeginning={onSwipeReachBeginning()}
         onReachEnd={onSwipeReachEnd()}
       >
-        <SwiperSlide id="songsSwiper">
+        <SwiperSlide id="songsSwiper" className={styles.swiper_slide}>
           <Songs />
         </SwiperSlide>
-        <SwiperSlide id="playlistsSwiper">
+        <SwiperSlide id="playlistsSwiper" className={styles.swiper_slide}>
           <Playlists />
         </SwiperSlide>
       </Swiper>
+      {showSongsFilter &&
+        <div className={styles.fab_buttons}>
+          <Fab
+            id="addSongButton"
+            color="primary"
+            aria-label="add"
+            href="song/new"
+            title="Add Song"
+          >
+            <AddIcon />
+          </Fab>
+        </div>
+      }
     </>
   )
 }

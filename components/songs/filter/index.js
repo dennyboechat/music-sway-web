@@ -24,7 +24,6 @@ const SearchInput = () => {
                 id="searchInput"
                 placeholder="title, artist, content ..."
                 autoComplete="off"
-                autoFocus={true}
                 value={songsFilterValue}
                 fullWidth={true}
                 onChange={e => { setSongsFilterValue(e.target.value) }}

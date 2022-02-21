@@ -72,7 +72,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  float: right;
+  z-index: 1;
 }
 
 .ms_rich_text_editor {
@@ -102,4 +102,8 @@
 
 .playlist_accordion_details {
   padding: 0;
+}
+
+.swiper_slide {
+  min-height: 100vh;
 }

@@ -28,7 +28,9 @@ const resolvers = {
         id
       )
 
-      let song = {};
+      let song = {
+        entries: [],
+      };
       forEach(results, data => {
         song.id = data.songId;
         song.title = data.songTitle;
@@ -37,9 +39,12 @@ const resolvers = {
         song.observation = data.songObservation;
         song.restrictionId = data.songRestrictionId;
         song.ownerId = data.ownerId;
-        song.entries = [];
         if (data.entryId) {
-          song.entries.push({ id: data.entryId, title: data.entryTitle, content: data.entryContent });
+          song.entries.push({
+            id: data.entryId,
+            title: data.entryTitle,
+            content: data.entryContent
+          });
         }
       });
 

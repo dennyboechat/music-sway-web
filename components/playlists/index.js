@@ -30,11 +30,7 @@ const Playlists = () => {
         )
     }
 
-    return (
-        <div>
-            {playlistsData}
-        </div>
-    );
+    return playlistsData;
 }
 
 export default Playlists;
