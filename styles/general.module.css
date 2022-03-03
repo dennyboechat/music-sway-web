@@ -86,6 +86,12 @@
   border-color: #FFF;
 }
 
+.ms_rich_text_editor_menu_bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
 .html_content {
   white-space: pre;
 }
@@ -102,6 +108,15 @@
 
 .playlist_accordion_details {
   padding: 0;
+}
+
+.playlist_entry_drag_drop {
+  background-color: rgba(255, 255, 255, 0.08);
+  min-height: 100px;
+}
+
+.playlist_entry_drag_drop_item {
+  background-color: rgba(29, 52, 255, 0.08);
 }
 
 .swiper_slide {

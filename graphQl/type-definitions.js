@@ -17,13 +17,33 @@ const typeDefs = gql`
     }
 
     input SongUpdateInput {
-        id: ID!,
+        id: ID!
         title: String!
         artist: String
         category: String
         observation: String
         restrictionId: Int
         entries: [SongEntryInput]
+    }
+
+    input PlaylistEntryInput {
+        songId: ID!
+        orderIndex: Int!
+    }
+
+    input PlaylistAddInput {
+        name: String!
+        observation: String
+        restrictionId: Int
+        entries: [PlaylistEntryInput]
+    }
+
+    input PlaylistUpdateInput {
+        id: ID!
+        name: String!
+        observation: String
+        restrictionId: Int
+        entries: [PlaylistEntryInput]
     }
 
     type SongEntry {
@@ -45,8 +65,8 @@ const typeDefs = gql`
 
     type PlaylistEntry {
         id: ID!
-        orderIndex: Int
-        song: Song
+        orderIndex: Int!
+        song: Song!
     }
 
     type Playlist {
@@ -61,6 +81,7 @@ const typeDefs = gql`
     type Query {
         song(id: ID!): Song
         songs: [Song]
+        playlist(id: ID!): Playlist
         playlists: [Playlist]
     }
 
@@ -68,10 +89,17 @@ const typeDefs = gql`
         msg: String,
     }
 
+    type PlaylistDeleted {
+        msg: String,
+    }
+
     type Mutation {
         addSong(input: SongAddInput!): Song,
         editSong(input: SongUpdateInput!): Song,
         removeSong(id: ID!): SongDeleted,
+        addPlaylist(input: PlaylistAddInput!): Playlist,
+        editPlaylist(input: PlaylistUpdateInput!): Playlist,
+        removePlaylist(id: ID!): PlaylistDeleted,
     }
 `;
 

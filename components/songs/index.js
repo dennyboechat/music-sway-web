@@ -13,9 +13,8 @@ const Songs = () => {
 
      let songsList;
      if (isLoadingSongs) {
-          const songPanelHeight = 110;
           const songsListSkeleton = new Array(8).fill().map((v, i) =>
-               <Skeleton key={i} variant="rect" height={songPanelHeight} className={styles.songs_list_skeleton} />
+               <Skeleton key={i} variant="rect" height={110} className={styles.songs_list_skeleton} />
           );
           songsList = (
                <Container className={styles.content_container}>

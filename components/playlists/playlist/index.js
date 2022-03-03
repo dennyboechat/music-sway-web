@@ -5,6 +5,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
+import EditIcon from '@mui/icons-material/Edit';
+import Link from '@mui/material/Link';
 import { orderBy } from 'lodash';
 import styles from '@/styles/general.module.css';
 
@@ -41,9 +43,19 @@ const Playlist = ({ playlist }) => {
                         <Typography variant="caption" display="block" gutterBottom color="textSecondary">
                             {songsTotalLabel}
                         </Typography>
+                        <Typography variant="caption" display="block" gutterBottom color="textSecondary">
+                            {playlist.observation}
+                        </Typography>
                     </div>
                 </AccordionSummary>
                 <AccordionDetails className={styles.playlist_accordion_details}>
+                    <Link
+                        id={`${playlist.id}_editButton`}
+                        href={`/playlist/${playlist.id}`}
+                        title="Edit Playlist"
+                    >
+                        <EditIcon />
+                    </Link>
                     {playlistEntries && playlistEntries.map(playlistEntry => (
                         <div key={playlistEntry.id}>
                             <Song song={playlistEntry.song} />

@@ -12,16 +12,51 @@ import 'swiper/css';
 import { scrollToPageTop } from '@/lib/utils';
 
 const Home = () => {
-  const [showSongsFilter, setShowSongsFilter] = React.useState(true);
+  const [showSongs, setShowSongs] = React.useState(true);
 
   const onSwipeReachBeginning = () => () => {
-    setShowSongsFilter(true);
+    setShowSongs(true);
     scrollToPageTop();
   }
 
   const onSwipeReachEnd = () => () => {
-    setShowSongsFilter(false);
+    setShowSongs(false);
     scrollToPageTop();
+  }
+
+  let filter;
+  let createRecordButton;
+  if (showSongs) {
+    filter = (
+      <Filter />
+    );
+    createRecordButton = (
+      <div className={styles.fab_buttons}>
+        <Fab
+          id="addSongButton"
+          color="primary"
+          aria-label="add"
+          href="song/new"
+          title="Add Song"
+        >
+          <AddIcon />
+        </Fab>
+      </div>
+    );
+  } else {
+    createRecordButton = (
+      <div className={styles.fab_buttons}>
+        <Fab
+          id="addPlaylistButton"
+          color="primary"
+          aria-label="add"
+          href="playlist/new"
+          title="Add Playlist"
+        >
+          <AddIcon />
+        </Fab>
+      </div>
+    );
   }
 
   return (
@@ -32,9 +67,7 @@ const Home = () => {
           <MsLogo />
         </span>
         <div className={styles.header_title} />
-        {showSongsFilter &&
-          <Filter />
-        }
+        {filter}
       </div>
       <Swiper
         grabCursor={true}
@@ -48,19 +81,7 @@ const Home = () => {
           <Playlists />
         </SwiperSlide>
       </Swiper>
-      {showSongsFilter &&
-        <div className={styles.fab_buttons}>
-          <Fab
-            id="addSongButton"
-            color="primary"
-            aria-label="add"
-            href="song/new"
-            title="Add Song"
-          >
-            <AddIcon />
-          </Fab>
-        </div>
-      }
+      {createRecordButton}
     </>
   )
 }

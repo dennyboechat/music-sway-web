@@ -35,7 +35,7 @@ const RichTextEditor = ({ id, value, onChange }) => {
     }
 
     const menuBar = (
-        <>
+        <div className={styles.ms_rich_text_editor_menu_bar}>
             <MenuBarButton
                 label="bold"
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -122,14 +122,14 @@ const RichTextEditor = ({ id, value, onChange }) => {
                 onInput={event => editor.chain().focus().setColor(event.target.value).run()}
                 value={editor.getAttributes('textStyle').color}
             />
-        </>
+        </div>
     );
 
     return (
-        <>
+        <div>
             {menuBar}
             <EditorContent id={id} editor={editor} />
-        </>
+        </div>
     );
 }
 

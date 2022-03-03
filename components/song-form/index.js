@@ -16,7 +16,7 @@ import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
 import { uniqBy, map, without, pick, forEach } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
-import { getSongRestrictions, getSongRestrictionByName, getSongRestrictionById } from '@/lib/song-restriction';
+import { getRestrictions, getRestrictionByName, getRestrictionById } from '@/lib/restriction';
 import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 
@@ -62,9 +62,9 @@ const SongForm = ({ song, apiEndpoint }) => {
 
         let variables = {
             input: {
-                title: songTitle,
-                artist: songArtist,
-                category: songCategory,
+                title: songTitle.trim(),
+                artist: songArtist ? songArtist.trim() : null,
+                category: songCategory ? songCategory.trim() : null,
                 observation: songObservation,
                 restrictionId: songRestrictionId,
                 entries: entries,
@@ -109,22 +109,22 @@ const SongForm = ({ song, apiEndpoint }) => {
         categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined);
     }
 
-    const songRestrictions = [];
-    forEach(getSongRestrictions(), songRestriction => {
-        songRestrictions.push(
+    const restrictions = [];
+    forEach(getRestrictions(), restriction => {
+        restrictions.push(
             <FormControlLabel
-                key={songRestriction.id}
-                value={songRestriction.name}
+                key={restriction.id}
+                value={restriction.name}
                 control={<Radio />}
-                label={songRestriction.label}
+                label={restriction.label}
             />
         );
     });
 
-    const songRestrictionName = getSongRestrictionById(songRestrictionId).name;
+    const songRestrictionName = getRestrictionById(songRestrictionId).name;
 
     const handleSetSongRestrictionId = (name) => {
-        const restriction = getSongRestrictionByName(name);
+        const restriction = getRestrictionByName(name);
         setSongRestrictionId(restriction.id);
     }
 
@@ -138,7 +138,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                     value={songRestrictionName}
                     onChange={(e, value) => handleSetSongRestrictionId(value)}
                 >
-                    {songRestrictions}
+                    {restrictions}
                 </RadioGroup>
                 <Grid container item xs={12} lg={6}>
                     <TextField
