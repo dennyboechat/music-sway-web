@@ -1,3 +1,4 @@
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Accordion from '@mui/material/Accordion';
@@ -5,20 +6,21 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
+import FlipIcon from '@mui/icons-material/Flip';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 import HtmlParser from '@/components/html-parser';
 import styles from '@/styles/general.module.css';
 
 const Song = ({ song }) => {
 
+  const [splitContent, setSplitContent] = React.useState(false);
+
   const cardHeader = (
     <div className={styles.song_card_header}>
       <div className={styles.song_card_title_header}>
         <Typography component="h4" color="primary">
-          <label id={song.id}>
-            {song.title}
-          </label>
+          {song.title}
         </Typography>
         <Typography variant="caption" display="block" gutterBottom color="textSecondary">
           {song.artist}
@@ -31,13 +33,22 @@ const Song = ({ song }) => {
   if (song.entries && song.entries.length > 0) {
     const firstEntry = song.entries[0];
     const actions = (
-      <Link
-        id={`${song.id}_editButton`}
-        href={`/song/${song.id}`}
-        title="Edit Song"
-      >
-        <EditIcon />
-      </Link>
+      <div className={styles.song_card_actions}>
+        <Button
+          id={`${song.id}_editButton`}
+          href={`/song/${song.id}`}
+          title="Edit Song"
+        >
+          <EditIcon />
+        </Button>
+        <Button
+          id={`${song.id}_splitContentButton`}
+          title="Split Content"
+          onClick={() => setSplitContent(!splitContent)}
+        >
+          <FlipIcon />
+        </Button>
+      </div>
     );
     if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim.length)) {
       cardContent = (
@@ -50,7 +61,7 @@ const Song = ({ song }) => {
           </AccordionSummary>
           <AccordionDetails>
             {actions}
-            <HtmlParser content={firstEntry.content} />
+            <HtmlParser content={firstEntry.content} className={splitContent ? styles.song_card_content_split : ''} />
           </AccordionDetails>
         </Accordion>
       );
@@ -68,7 +79,7 @@ const Song = ({ song }) => {
               </AccordionSummary>
               <AccordionDetails>
                 {actions}
-                <HtmlParser content={entry.content} />
+                <HtmlParser content={entry.content} className={splitContent ? styles.song_card_content_split : ''} />
               </AccordionDetails>
             </Accordion>
           ))

@@ -4,7 +4,7 @@
 }
 
 .songs_list_skeleton {
-  margin-bottom: 5px;
+  margin-bottom: 1px;
 }
 
 .songs_list_skeleton_search {
@@ -27,6 +27,14 @@
   padding-right: 4px;
 }
 
+.song_card_content_split {
+  column-count: 2;
+}
+
+.song_card_actions {
+  display: flex;
+}
+
 .search {
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -44,12 +52,6 @@
 
 .search_icon {
   margin-top: 0 !important;
-}
-
-.icon_button {
-  position: absolute !important;
-  right: 0;
-  top: 12px;
 }
 
 .general_header {
@@ -93,7 +95,7 @@
 }
 
 .html_content {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .playlists_skeleton {
@@ -106,10 +108,6 @@
   background-color: transparent;
 }
 
-.playlist_accordion_details {
-  padding: 0;
-}
-
 .playlist_entry_drag_drop {
   background-color: rgba(255, 255, 255, 0.08);
   min-height: 100px;
@@ -117,6 +115,23 @@
 
 .playlist_entry_drag_drop_item {
   background-color: rgba(29, 52, 255, 0.08);
+  
+}
+
+.playlist_entry_toggle {
+  border: 1px solid #2A2A2A;
+  border-radius: 2px;
+  cursor: move;
+  padding: 10px;
+}
+
+.playlist_entry_toggle:hover {
+  background-color: rgba(29, 52, 255, 0.08);
+}
+
+.playlist_pick_songs {
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .swiper_slide {

@@ -3,27 +3,16 @@ import Skeleton from '@mui/material/Skeleton';
 import { ReactSortable } from "react-sortablejs";
 import { useSongsState } from '@/lib/songs-store';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { v4 } from 'uuid';
 import styles from '@/styles/general.module.css';
 import { orderBy, forEach, remove } from 'lodash';
+import FilterInput from '@/components/filter-input';
+import { filterSongs } from '@/lib/utils';
 
 const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
     const { songs, isLoadingSongs } = useSongsState();
-    const [songsState, setSongsState] = React.useState();
-
-    React.useEffect(() => {
-        let existingSongs;
-        if (songs && songs.length) {
-            existingSongs = songs.map(song => (
-                {
-                    id: song.id,
-                    name: song.title,
-                }
-            ));
-            existingSongs = orderBy(existingSongs, ['name']);
-        }
-        setSongsState(existingSongs);
-    }, [songs]);
+    const [songsFilterValue, setSongsFilterValue] = React.useState('');
 
     let entries = orderBy(playlistEntries, ['orderIndex']);
     let entryDetails = [];
@@ -34,37 +23,64 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
             <Skeleton key={i} variant="rect" height={110} className={styles.songs_list_skeleton} />
         );
     } else {
-        if (songsState) {
+        if (songs) {
             if (entries) {
                 forEach(entries, entry => {
-                    const foundSong = songsState.find(song => song.id === entry.songId);
+                    const foundSong = songs.find(song => song.id === entry.songId);
                     if (foundSong) {
                         entryDetails.push(
-                            <div key={entry.id} id={entry.id}>
-                                {foundSong.name}
+                            <div
+                                key={entry.id}
+                                id={entry.id}
+                                className={styles.playlist_entry_toggle}
+                            >
+                                {foundSong.title}
+                                <Typography variant="caption" display="block" gutterBottom color="textSecondary">
+                                    {foundSong.artist}
+                                </Typography>
                             </div>
                         );
                     }
                 });
             }
+
+            const filteredSongs = filterSongs({ songs, songsFilterValue });
+
             songsList = (
-                <ReactSortable
-                    list={songsState}
-                    setList={setSongsState}
-                    group={{
-                        name: 'songs',
-                        pull: 'clone',
-                        put: false,
-                    }}
-                    animation={200}
-                    delayOnTouchStart={true}
-                    delay={2}
-                    sort={false}
-                >
-                    {songsState.map((item) => (
-                        <div key={item.id}>{item.name}</div>
-                    ))}
-                </ReactSortable>
+                <div>
+                    <FilterInput
+                        id="filterSongForPlaylist"
+                        placeholder="title, artist, content ..."
+                        value={songsFilterValue}
+                        setValue={setSongsFilterValue}
+                    />
+                    <ReactSortable
+                        list={filteredSongs}
+                        setList={() => { }}
+                        group={{
+                            name: 'songs',
+                            pull: 'clone',
+                            put: false,
+                        }}
+                        animation={200}
+                        delayOnTouchStart={true}
+                        delay={2}
+                        sort={false}
+                        className={styles.playlist_pick_songs}
+                    >
+                        {filteredSongs.map((item) => (
+                            <div
+                                key={item.id}
+                                className={styles.playlist_entry_toggle}
+                            >
+                                {item.title}
+                                <Typography variant="caption" display="block" gutterBottom color="textSecondary">
+                                    {item.artist}
+                                </Typography>
+                            </div>
+                        ))}
+                    </ReactSortable>
+                </div>
             );
         } else {
             songsList = 'No songs to be added to the playlist.';
