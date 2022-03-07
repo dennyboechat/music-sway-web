@@ -12,7 +12,7 @@ const Songs = () => {
 
      let songsList;
      if (isLoadingSongs) {
-          const songsListSkeleton = new Array(8).fill().map((v, i) =>
+          const songsListSkeleton = new Array(15).fill().map((v, i) =>
                <Skeleton key={i} variant="rect" height={60} className={styles.songs_list_skeleton} />
           );
           songsList = (

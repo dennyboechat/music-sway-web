@@ -10,16 +10,23 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
 import { scrollToPageTop } from '@/lib/utils';
+import { autoPageScrollDownStop } from '@/lib/utils';
+import { useConfigurationState } from '@/lib/configuration-store';
 
 const Home = () => {
+  const { setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
 
   const onSwipeReachBeginning = () => () => {
+    autoPageScrollDownStop();
+    setAutoScrollContentSpeed(0);
     setShowSongs(true);
     scrollToPageTop();
   }
 
   const onSwipeReachEnd = () => () => {
+    autoPageScrollDownStop();
+    setAutoScrollContentSpeed(0);
     setShowSongs(false);
     scrollToPageTop();
   }

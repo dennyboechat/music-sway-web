@@ -5,6 +5,7 @@ import themeDark from '@/styles/themeDark';
 import { SongsStateProvider } from '@/lib/songs-store';
 import { SongsFilterStateProvider } from '@/lib/songsFilter-store';
 import { PlaylistsStateProvider } from '@/lib/playlists-store';
+import { ConfigurationStateProvider } from '@/lib/configuration-store';
 import NoSleep from 'nosleep.js';
 import '../styles/globals.css';
 
@@ -20,8 +21,10 @@ const MyApp = ({ Component, pageProps }) => {
       <SongsStateProvider>
         <SongsFilterStateProvider>
           <PlaylistsStateProvider>
-            <CssBaseline />
-            <Component {...pageProps} />
+            <ConfigurationStateProvider>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </ConfigurationStateProvider>
           </PlaylistsStateProvider>
         </SongsFilterStateProvider>
       </SongsStateProvider>

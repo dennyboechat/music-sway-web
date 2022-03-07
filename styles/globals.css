@@ -39,9 +39,12 @@ div.MuiButtonBase-root.MuiAccordionSummary-root {
   padding-right: 5px;
 }
 
-.ms-accordion .MuiAccordionDetails-root {
-  padding: 5px 10px 10px;
-  overflow-x: auto;
+div.MuiAccordionDetails-root {
+  padding: 0;
+}
+
+div.MuiAccordion-root:before {
+  background-color: transparent;
 }
 
 .MuiPaper-root .Mui-expanded .ms-accordion {
@@ -55,15 +58,7 @@ body div.MuiContainer-root {
   padding: 3px;
 }
 
-.ms-accordion.MuiAccordion-root:before {
-  background-color: transparent;
-}
-
 body div.MuiCardContent-root:last-child,
 body div.MuiCardContent-root {
-  padding: 0;
-}
-
-.MuiAccordionDetails-root .playlist_accordion_details {
   padding: 0;
 }

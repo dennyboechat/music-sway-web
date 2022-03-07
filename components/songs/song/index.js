@@ -7,14 +7,19 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import FlipIcon from '@mui/icons-material/Flip';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import HtmlParser from '@/components/html-parser';
 import styles from '@/styles/general.module.css';
+import { autoPageScrollDownStart, autoPageScrollDownStop } from '@/lib/utils';
+import { useConfigurationState } from '@/lib/configuration-store';
 
 const Song = ({ song }) => {
-
   const [splitContent, setSplitContent] = React.useState(false);
+  const { autoScrollContentSpeed, setAutoScrollContentSpeed } = useConfigurationState();
 
   const cardHeader = (
     <div className={styles.song_card_header}>
@@ -29,25 +34,97 @@ const Song = ({ song }) => {
     </div>
   );
 
+  const scrollContent = ({ speedUp }) => {
+    let scrollDown;
+    if (speedUp) {
+      if (autoScrollContentSpeed) {
+        scrollDown = autoScrollContentSpeed - 20;
+      } else {
+        scrollDown = 100;
+      }
+    } else {
+      scrollDown = autoScrollContentSpeed === 100 ? 0 : autoScrollContentSpeed + 20;
+    }
+    setAutoScrollContentSpeed(scrollDown);
+    if (scrollDown) {
+      autoPageScrollDownStop();
+      autoPageScrollDownStart(scrollDown);
+    } else {
+      autoPageScrollDownStop();
+    }
+  }
+
   let cardContent;
-  if (song.entries && song.entries.length > 0) {
+  if (song.entries && song.entries.length) {
     const firstEntry = song.entries[0];
+
+    let autoScrollContentSpeedIcon;
+    let autoScrollContentSpeedLabel;
+
+    if (autoScrollContentSpeed) {
+      switch (autoScrollContentSpeed) {
+        case 100:
+          autoScrollContentSpeedLabel = '1';
+          break;
+        case 80:
+          autoScrollContentSpeedLabel = '2';
+          break;
+        case 60:
+          autoScrollContentSpeedLabel = '3';
+          break;
+        case 40:
+          autoScrollContentSpeedLabel = '4';
+          break;
+        case 20:
+          autoScrollContentSpeedLabel = '5';
+          break;
+      }
+      autoScrollContentSpeedIcon = <AddIcon />;
+      autoScrollContentSpeedLabel = (
+        <>
+          <label>{autoScrollContentSpeedLabel}</label>
+          <IconButton
+            id={`${song.id}_scrollDownSpeedDownButton`}
+            title="Auto Scroll Content"
+            onClick={() => scrollContent({ speedUp: false })}
+            color="primary"
+          >
+            <RemoveIcon />
+          </IconButton>
+        </>
+      );
+    } else {
+      autoScrollContentSpeedIcon = <KeyboardDoubleArrowDownIcon />;
+    }
+
     const actions = (
       <div className={styles.song_card_actions}>
-        <Button
+        <IconButton
           id={`${song.id}_editButton`}
           href={`/song/${song.id}`}
           title="Edit Song"
+          color="primary"
         >
           <EditIcon />
-        </Button>
-        <Button
+        </IconButton>
+        <IconButton
           id={`${song.id}_splitContentButton`}
           title="Split Content"
           onClick={() => setSplitContent(!splitContent)}
+          color="primary"
         >
           <FlipIcon />
-        </Button>
+        </IconButton>
+        <IconButton
+          id={`${song.id}_scrollDownSpeedUpButton`}
+          title="Auto Scroll Content"
+          onClick={() => scrollContent({ speedUp: true })}
+          color="primary"
+          disabled={autoScrollContentSpeed === 20}
+        >
+          {autoScrollContentSpeedIcon}
+        </IconButton>
+        {autoScrollContentSpeedLabel}
       </div>
     );
     if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim.length)) {

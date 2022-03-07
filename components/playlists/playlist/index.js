@@ -6,7 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import { orderBy } from 'lodash';
 import styles from '@/styles/general.module.css';
 
@@ -38,7 +38,7 @@ const Playlist = ({ playlist }) => {
                 >
                     <div className={styles.song_card_title_header}>
                         <Typography component="h4">
-                            <label>{playlist.name}</label>
+                            {playlist.name}
                         </Typography>
                         <Typography variant="caption" display="block" gutterBottom color="textSecondary">
                             {songsTotalLabel}
@@ -49,13 +49,14 @@ const Playlist = ({ playlist }) => {
                     </div>
                 </AccordionSummary>
                 <AccordionDetails className={styles.playlist_accordion_details}>
-                    <Button
+                    <IconButton
                         id={`${playlist.id}_editButton`}
                         href={`/playlist/${playlist.id}`}
                         title="Edit Playlist"
+                        color="primary"
                     >
                         <EditIcon />
-                    </Button>
+                    </IconButton>
                     {playlistEntries && playlistEntries.map(playlistEntry => (
                         <div key={playlistEntry.id}>
                             <Song song={playlistEntry.song} />
