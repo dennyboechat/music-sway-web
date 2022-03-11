@@ -31,10 +31,6 @@
   column-count: 2;
 }
 
-.song_card_actions {
-  display: flex;
-}
-
 .search {
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -136,4 +132,8 @@
 
 .swiper_slide {
   min-height: 100vh;
+}
+
+.song_card_actions_decrease_font_size_icon {
+  margin-top: 3px;
 }

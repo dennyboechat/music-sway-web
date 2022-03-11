@@ -10,6 +10,8 @@ import FlipIcon from '@mui/icons-material/Flip';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
+import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import HtmlParser from '@/components/html-parser';
@@ -17,8 +19,15 @@ import styles from '@/styles/general.module.css';
 import { autoPageScrollDownStart, autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
 
+const AUTO_SCROLL_NO_SPEED = 0;
+const AUTO_SCROLL_FIRST_SPEED = 100;
+const AUTO_SCROLL_SPEED_BREAK = 20;
+const FONT_SIZE_BREAK = 2;
+const FONT_SIZE_DECREASE_LIMIT = 8;
+
 const Song = ({ song }) => {
   const [splitContent, setSplitContent] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState(16);
   const { autoScrollContentSpeed, setAutoScrollContentSpeed } = useConfigurationState();
 
   const cardHeader = (
@@ -34,16 +43,34 @@ const Song = ({ song }) => {
     </div>
   );
 
+  const changeFontSize = ({ increase }) => {
+    if (increase) {
+      setFontSize(fontSize + FONT_SIZE_BREAK);
+    } else {
+      setFontSize(fontSize - FONT_SIZE_BREAK);
+    }
+  }
+
+  const scrollContentStartStop = () => {
+    if (autoScrollContentSpeed) {
+      autoPageScrollDownStop();
+      setAutoScrollContentSpeed(AUTO_SCROLL_NO_SPEED);
+    } else {
+      autoPageScrollDownStart();
+      setAutoScrollContentSpeed(AUTO_SCROLL_FIRST_SPEED);
+    }
+  }
+
   const scrollContent = ({ speedUp }) => {
     let scrollDown;
     if (speedUp) {
       if (autoScrollContentSpeed) {
-        scrollDown = autoScrollContentSpeed - 20;
+        scrollDown = autoScrollContentSpeed - AUTO_SCROLL_SPEED_BREAK;
       } else {
-        scrollDown = 100;
+        scrollDown = AUTO_SCROLL_FIRST_SPEED;
       }
     } else {
-      scrollDown = autoScrollContentSpeed === 100 ? 0 : autoScrollContentSpeed + 20;
+      scrollDown = autoScrollContentSpeed === AUTO_SCROLL_FIRST_SPEED ? AUTO_SCROLL_NO_SPEED : autoScrollContentSpeed + AUTO_SCROLL_SPEED_BREAK;
     }
     setAutoScrollContentSpeed(scrollDown);
     if (scrollDown) {
@@ -56,10 +83,8 @@ const Song = ({ song }) => {
 
   let cardContent;
   if (song.entries && song.entries.length) {
-    const firstEntry = song.entries[0];
-
-    let autoScrollContentSpeedIcon;
     let autoScrollContentSpeedLabel;
+    let autoScrollContentSpeedActions;
 
     if (autoScrollContentSpeed) {
       switch (autoScrollContentSpeed) {
@@ -79,9 +104,18 @@ const Song = ({ song }) => {
           autoScrollContentSpeedLabel = '5';
           break;
       }
-      autoScrollContentSpeedIcon = <AddIcon />;
-      autoScrollContentSpeedLabel = (
+
+      autoScrollContentSpeedActions = (
         <>
+          <IconButton
+            id={`${song.id}_scrollDownSpeedUpButton`}
+            title="Auto Scroll Content"
+            onClick={() => scrollContent({ speedUp: true })}
+            color="primary"
+            disabled={autoScrollContentSpeed === AUTO_SCROLL_SPEED_BREAK}
+          >
+            <AddIcon />
+          </IconButton>
           <label>{autoScrollContentSpeedLabel}</label>
           <IconButton
             id={`${song.id}_scrollDownSpeedDownButton`}
@@ -93,12 +127,10 @@ const Song = ({ song }) => {
           </IconButton>
         </>
       );
-    } else {
-      autoScrollContentSpeedIcon = <KeyboardDoubleArrowDownIcon />;
     }
 
     const actions = (
-      <div className={styles.song_card_actions}>
+      <div>
         <IconButton
           id={`${song.id}_editButton`}
           href={`/song/${song.id}`}
@@ -106,6 +138,23 @@ const Song = ({ song }) => {
           color="primary"
         >
           <EditIcon />
+        </IconButton>
+        <IconButton
+          id={`${song.id}_increaseFontSizeButton`}
+          title="Increase Font Size"
+          onClick={() => changeFontSize({ increase: true })}
+          color="primary"
+        >
+          <TextIncreaseIcon />
+        </IconButton>
+        <IconButton
+          id={`${song.id}_decreaseFontSizeButton`}
+          title="Decrease Font Size"
+          onClick={() => changeFontSize({ increase: false })}
+          color="primary"
+          disabled={fontSize === FONT_SIZE_DECREASE_LIMIT}
+        >
+          <TextDecreaseIcon sx={{ fontSize: 18 }} className={styles.song_card_actions_decrease_font_size_icon} />
         </IconButton>
         <IconButton
           id={`${song.id}_splitContentButton`}
@@ -116,17 +165,18 @@ const Song = ({ song }) => {
           <FlipIcon />
         </IconButton>
         <IconButton
-          id={`${song.id}_scrollDownSpeedUpButton`}
+          id={`${song.id}_scrollDownButton`}
           title="Auto Scroll Content"
-          onClick={() => scrollContent({ speedUp: true })}
+          onClick={() => scrollContentStartStop()}
           color="primary"
-          disabled={autoScrollContentSpeed === 20}
         >
-          {autoScrollContentSpeedIcon}
+          <KeyboardDoubleArrowDownIcon />
         </IconButton>
-        {autoScrollContentSpeedLabel}
+        {autoScrollContentSpeedActions}
       </div>
     );
+
+    const firstEntry = song.entries[0];
     if (song.entries.length === 1 && (!firstEntry.title || firstEntry.title.trim.length)) {
       cardContent = (
         <Accordion id={`${song.id}-0`} className="ms-accordion single-no-title-entry">
@@ -138,7 +188,9 @@ const Song = ({ song }) => {
           </AccordionSummary>
           <AccordionDetails>
             {actions}
-            <HtmlParser content={firstEntry.content} className={splitContent ? styles.song_card_content_split : ''} />
+            <div style={{ fontSize }}>
+              <HtmlParser content={firstEntry.content} className={splitContent ? styles.song_card_content_split : ''} />
+            </div>
           </AccordionDetails>
         </Accordion>
       );
@@ -156,7 +208,9 @@ const Song = ({ song }) => {
               </AccordionSummary>
               <AccordionDetails>
                 {actions}
-                <HtmlParser content={entry.content} className={splitContent ? styles.song_card_content_split : ''} />
+                <div style={{ fontSize }}>
+                  <HtmlParser content={entry.content} className={splitContent ? styles.song_card_content_split : ''} />
+                </div>
               </AccordionDetails>
             </Accordion>
           ))

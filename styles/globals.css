@@ -40,10 +40,13 @@ div.MuiButtonBase-root.MuiAccordionSummary-root {
 }
 
 div.MuiAccordionDetails-root {
-  padding: 0;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-div.MuiAccordion-root:before {
+.MuiCardContent-root > div.MuiAccordion-root:before {
   background-color: transparent;
 }
 
