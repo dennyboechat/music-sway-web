@@ -1,23 +1,20 @@
-.ms-accordion {
+div.ms-accordion {
   box-shadow: none;
   margin-bottom: 3px;
   background-image: none;
+  background-color: rgb(255, 255, 255, 0.05);
+  margin: 0;
 }
 
 .single-no-title-entry .MuiAccordionSummary-content .song-card-title-header {
   padding-left: 1px;
 }
 
-.ms-accordion {
-  background-color: rgb(255, 255, 255, 0.05);
-  margin: 0;
-}
-
-.ms-accordion.single-no-title-entry {
+div.ms-accordion.single-no-title-entry {
   margin: 1px;
 }
 
-.ms-accordion:hover {
+div.ms-accordion:hover {
   background-color: rgb(255, 255, 255, 0.07);
 }
 
@@ -25,15 +22,15 @@
   opacity: 0.9;
 }
 
-.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root.Mui-expanded .ms-accordion-title {
+div.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root.Mui-expanded .ms-accordion-title {
   opacity: 0.5;
 }
 
-.ms-accordion.Mui-expanded {
+div.ms-accordion.Mui-expanded {
   margin: 0;
 }
 
-.playlist_accordion {
+div.playlist_accordion {
   background-color: transparent;
 }
 
@@ -42,16 +39,16 @@
   background-color: rgb(255, 255, 255, 0.05);
 }
 
-.playlist_accordion .ms-accordion,
-.playlist_accordion .song_card_header {
+div.playlist_accordion .ms-accordion,
+div.playlist_accordion .song_card_header {
   background-color: rgb(255, 255, 255, 0.02);
 }
 
-.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root .MuiAccordionSummary-content {
+div.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root .MuiAccordionSummary-content {
   margin: 3px;
 }
 
-.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root {
+div.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root {
   min-height: 30px;
   padding: 0;
 }
@@ -68,7 +65,7 @@ div.MuiAccordionDetails-root {
   padding-bottom: 0;
 }
 
-.ms-accordion.MuiAccordion-root:before {
+div.ms-accordion.MuiAccordion-root:before {
   opacity: 0;
 }
 
