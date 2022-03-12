@@ -7,7 +7,7 @@ import RichTextEditor from '@/components/rich-text-editor';
 import { useSongsState } from '@/lib/songs-store';
 import { uniq, map, filter, forEach, without } from 'lodash';
 
-const SongEntryForm = ({ entries, setEntries, entry, index }) => {
+const SongEntryForm = ({ entries, setEntries, entry }) => {
 
     const { songs } = useSongsState();
 
@@ -30,11 +30,11 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
     }
 
     return (
-        <div key={index}>
+        <div key={entry.uuid}>
             <Grid container>
                 <Grid container item xs={12} lg={6}>
                     <Autocomplete
-                        id={`entryTitleAutoComplete_${index}`}
+                        id={`entryTitleAutoComplete_${entry.uuid}`}
                         freeSolo
                         options={entryTitles}
                         inputValue={entry.title}
@@ -42,7 +42,7 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
                         fullWidth
                         renderInput={(params) => (
                             <TextField
-                                id={`entryTitle_${index}`}
+                                id={`entryTitle_${entry.uuid}`}
                                 label="Section Header"
                                 {...params}
                             />
@@ -50,13 +50,13 @@ const SongEntryForm = ({ entries, setEntries, entry, index }) => {
                     />
                 </Grid>
                 <Grid container item xs={12} lg={6}>
-                    <Button id="deleteEntry" onClick={onDeleteEntry}>
+                    <Button id={`deleteEntry_${entry.uuid}`} onClick={onDeleteEntry}>
                         {'Delete'}
                     </Button>
                 </Grid>
             </Grid>
             <RichTextEditor
-                id={`entryContent_${index}`}
+                id={`entryContent_${entry.uuid}`}
                 value={entry.content}
                 onChange={(value) => onValueChanged({ field: 'content', value })}
             />

@@ -126,7 +126,7 @@ const RichTextEditor = ({ id, value, onChange }) => {
     );
 
     return (
-        <div>
+        <div id={`rich_text_editor_${id}`}>
             {menuBar}
             <EditorContent id={id} editor={editor} />
         </div>

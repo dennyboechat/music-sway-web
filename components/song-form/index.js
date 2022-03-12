@@ -197,8 +197,8 @@ const SongForm = ({ song, apiEndpoint }) => {
                     />
                 </Grid>
                 {
-                    songEntries.map((entry, index) => (
-                        <SongEntryForm key={index} entries={songEntries} setEntries={setSongEntries} entry={entry} index={index} />
+                    songEntries.map(entry => (
+                        <SongEntryForm key={entry.uuid} entries={songEntries} setEntries={setSongEntries} entry={entry} />
                     ))
                 }
                 <Button id="addEntry" onClick={addEntry}>
