@@ -31,7 +31,7 @@ const Playlist = ({ playlist }) => {
 
     return (
         <Container>
-            <Accordion id={playlist.id} className={styles.playlist_accordion}>
+            <Accordion id={playlist.id} className="playlist_accordion">
                 <AccordionSummary
                     id={`${playlist.id}-summary`}
                     expandIcon={<ExpandMoreIcon />}

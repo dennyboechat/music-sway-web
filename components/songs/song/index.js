@@ -1,6 +1,4 @@
 import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -31,15 +29,13 @@ const Song = ({ song }) => {
   const { autoScrollContentSpeed, setAutoScrollContentSpeed } = useConfigurationState();
 
   const cardHeader = (
-    <div className={styles.song_card_header}>
-      <div className={styles.song_card_title_header}>
-        <Typography component="h4" color="primary">
-          {song.title}
-        </Typography>
-        <Typography variant="caption" display="block" gutterBottom color="textSecondary">
-          {song.artist}
-        </Typography>
-      </div>
+    <div className={styles.song_card_title_header}>
+      <Typography component="h4" color="primary">
+        {song.title}
+      </Typography>
+      <Typography variant="caption" display="block" gutterBottom color="textSecondary">
+        {song.artist}
+      </Typography>
     </div>
   );
 
@@ -122,6 +118,7 @@ const Song = ({ song }) => {
             title="Auto Scroll Content"
             onClick={() => scrollContent({ speedUp: false })}
             color="primary"
+            disabled={autoScrollContentSpeed === AUTO_SCROLL_FIRST_SPEED}
           >
             <RemoveIcon />
           </IconButton>
@@ -196,8 +193,10 @@ const Song = ({ song }) => {
       );
     } else {
       cardContent = (
-        <>
-          {cardHeader}
+        <div className={styles.song_card_multiple_accordion}>
+          <div className="song_card_header">
+            {cardHeader}
+          </div>
           {song.entries && song.entries.map(entry => (
             <Accordion id={`${song.id}-${entry.id}`} key={`${song.id}-${entry.id}`} className="ms-accordion">
               <AccordionSummary
@@ -215,20 +214,14 @@ const Song = ({ song }) => {
             </Accordion>
           ))
           }
-        </>
+        </div>
       );
     }
   } else {
     cardContent = cardHeader;
   }
 
-  return (
-    <Card>
-      <CardContent>
-        {cardContent}
-      </CardContent>
-    </Card>
-  );
+  return cardContent;
 }
 
 export default Song;
