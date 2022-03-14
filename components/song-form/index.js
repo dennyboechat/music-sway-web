@@ -14,7 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useSongsState } from '@/lib/songs-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
-import { uniqBy, map, without, pick, forEach } from 'lodash';
+import { uniqBy, map, without, pick, forEach, filter, cloneDeep } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
 import { getRestrictions, getRestrictionByName, getRestrictionById } from '@/lib/restriction';
 import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
@@ -27,7 +27,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [songCategory, setSongCategory] = React.useState(song?.category);
     const [songObservation, setSongObservation] = React.useState(song?.observation);
     const [songRestrictionId, setSongRestrictionId] = React.useState(song?.restrictionId);
-    let [songEntries, setSongEntries] = React.useState(song.entries || []);
+    const [songEntries, setSongEntries] = React.useState(song.entries || []);
     const [submitting, setSubmitting] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
 
@@ -102,11 +102,23 @@ const SongForm = ({ song, apiEndpoint }) => {
         Router.push('/');
     }
 
+    const onSongEntryValueChanged = ({ field, value, entry }) => {
+        let entriesCopy = cloneDeep(songEntries);
+        entriesCopy = entriesCopy.map(obj => obj.uuid === entry.uuid ? { ...obj, [field]: value } : obj);
+        setSongEntries(entriesCopy);
+    };
+
+    const onRemoveSongEntry = ({ entry }) => {
+        let entriesCopy = cloneDeep(songEntries);
+        entriesCopy = filter(entriesCopy, e => { return e.uuid !== entry.uuid });
+        setSongEntries(entriesCopy);
+    };
+
     let artists = [];
     let categories = [];
     if (songs && songs.length) {
-        artists = without(map(uniqBy(songs, s => { return s.artist; }), 'artist'), null, undefined);
-        categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined);
+        artists = without(map(uniqBy(songs, s => { return s.artist; }), 'artist'), null, undefined, '');
+        categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined, '');
     }
 
     const restrictions = [];
@@ -156,7 +168,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         id="artistAutocomplete"
                         freeSolo
                         options={artists}
-                        inputValue={songArtist}
+                        inputValue={songArtist || ''}
                         onInputChange={(e, value) => setSongArtist(value)}
                         fullWidth
                         renderInput={(params) => (
@@ -173,7 +185,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         id="categoryAutocomplete"
                         freeSolo
                         options={categories}
-                        inputValue={songCategory}
+                        inputValue={songCategory || ''}
                         onInputChange={(e, value) => setSongCategory(value)}
                         fullWidth
                         renderInput={(params) => (
@@ -198,7 +210,12 @@ const SongForm = ({ song, apiEndpoint }) => {
                 </Grid>
                 {
                     songEntries.map(entry => (
-                        <SongEntryForm key={entry.uuid} entries={songEntries} setEntries={setSongEntries} entry={entry} />
+                        <SongEntryForm
+                            key={entry.uuid}
+                            onValueChanged={onSongEntryValueChanged}
+                            onRemoveSong={onRemoveSongEntry}
+                            entry={entry}
+                        />
                     ))
                 }
                 <Button id="addEntry" onClick={addEntry}>

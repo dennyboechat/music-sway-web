@@ -5,28 +5,18 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import RichTextEditor from '@/components/rich-text-editor';
 import { useSongsState } from '@/lib/songs-store';
-import { uniq, map, filter, forEach, without } from 'lodash';
+import { uniq, map, forEach, without } from 'lodash';
 
-const SongEntryForm = ({ entries, setEntries, entry }) => {
+const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
 
     const { songs } = useSongsState();
-
-    const onValueChanged = ({ field, value }) => {
-        const entriesCopy = entries.map(obj => obj.uuid === entry.uuid ? { ...obj, [field]: value } : obj);
-        setEntries(entriesCopy);
-    };
-
-    const onDeleteEntry = () => {
-        const entriesCopy = filter(entries, e => { return e.uuid !== entry.uuid });
-        setEntries(entriesCopy);
-    };
 
     let entryTitles = [];
     if (songs && songs.length) {
         forEach(songs, s => {
             entryTitles = map(s.entries, e => { return e.title; });
         })
-        entryTitles = uniq(without(entryTitles, null, undefined));
+        entryTitles = uniq(without(entryTitles, null, undefined, ''));
     }
 
     return (
@@ -38,7 +28,7 @@ const SongEntryForm = ({ entries, setEntries, entry }) => {
                         freeSolo
                         options={entryTitles}
                         inputValue={entry.title}
-                        onInputChange={(e, value) => onValueChanged({ field: 'title', value })}
+                        onInputChange={(e, value) => onValueChanged({ field: 'title', value, entry })}
                         fullWidth
                         renderInput={(params) => (
                             <TextField
@@ -50,7 +40,10 @@ const SongEntryForm = ({ entries, setEntries, entry }) => {
                     />
                 </Grid>
                 <Grid container item xs={12} lg={6}>
-                    <Button id={`deleteEntry_${entry.uuid}`} onClick={onDeleteEntry}>
+                    <Button
+                        id={`deleteEntry_${entry.uuid}`}
+                        onClick={() => onRemoveSong({ entry })}
+                    >
                         {'Delete'}
                     </Button>
                 </Grid>
@@ -58,7 +51,7 @@ const SongEntryForm = ({ entries, setEntries, entry }) => {
             <RichTextEditor
                 id={`entryContent_${entry.uuid}`}
                 value={entry.content}
-                onChange={(value) => onValueChanged({ field: 'content', value })}
+                onChange={(value) => onValueChanged({ field: 'content', value, entry })}
             />
         </div>
     );

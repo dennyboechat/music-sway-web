@@ -73,23 +73,6 @@
   z-index: 1;
 }
 
-.ms_rich_text_editor {
-  padding-left: 16px;
-  padding-right: 16px;
-  border-radius: 4px;
-  border: gray solid 1px;
-}
-
-.ms_rich_text_editor:hover {
-  border-color: #FFF;
-}
-
-.ms_rich_text_editor_menu_bar {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
 .html_content {
   white-space: pre-wrap;
 }
