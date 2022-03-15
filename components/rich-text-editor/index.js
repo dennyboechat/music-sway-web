@@ -15,11 +15,16 @@ const RichTextEditor = ({ id, value, onChange }) => {
                     menubar: false,
                     branding: false,
                     statusbar: false,
+                    toolbar_sticky: true,
+                    force_br_newlines : true,
+                    force_p_newlines : false,
+                    forced_root_block : '',
                     plugins: 'lists hr autoresize',
                     skin: 'material-outline',
                     content_css: 'material-outline',
                     icons: 'material',
                     toolbar: "bold italic strikethrough | forecolor backcolor | h1 h2 | bullist numlist blockquote hr emoticons | undo redo",
+                    content_style: "body { background: #000; color: #FFF; font-size: 16px; font-family: Arial; }",
                 }}
             />
         </div>

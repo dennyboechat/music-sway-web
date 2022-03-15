@@ -77,3 +77,11 @@ body div.MuiCardContent-root:last-child,
 body div.MuiCardContent-root {
   padding: 0;
 }
+
+.tox iframe.tox-edit-area__iframe {
+  border: gray solid 1px;
+}
+
+.tox div.tox-toolbar__primary {
+  background-color: #E5E5E5;
+}
