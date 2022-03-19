@@ -34,11 +34,18 @@
 .search {
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.07);
+  border: 0;
+}
+
+.general_search {
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.07);
   min-width: 300px;
   border: 0;
 }
 
-.search:hover {
+.search:hover,
+.general_search:hover {
   background-color: rgb(255, 255, 255, 0.2);
 }
 
@@ -116,4 +123,20 @@
 
 .song_card_actions_decrease_font_size_icon {
   margin-top: 3px;
+}
+
+.text_align_right {
+  text-align: right;
+}
+
+.default_bottom_margin {
+  margin-bottom: 10px;
+}
+
+.default_half_bottom_margin {
+  margin-bottom: 5px;
+}
+
+.song_entry_form_wrapper_highlighted {
+  opacity: .8;
 }

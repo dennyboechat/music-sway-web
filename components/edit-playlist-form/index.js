@@ -1,5 +1,6 @@
 import React from "react";
 import { usePlaylist } from '@/lib/swr-hooks';
+import HeaderPanel from '@/components/header/header-panel';
 import PlaylistForm from '@/components/playlist-form';
 import LoadingPlaylist from '@/components/edit-playlist-form/loading-playlist';
 import { cloneDeep, forEach } from 'lodash';
@@ -9,7 +10,12 @@ const EditPlaylistPage = ({ playlistId }) => {
     const { playlist, isLoadingPlaylist } = usePlaylist(playlistId);
 
     if (isLoadingPlaylist) {
-        return <LoadingPlaylist />;
+        return (
+            <>
+                <HeaderPanel />
+                <LoadingPlaylist />
+            </>
+        );
     }
 
     if (!playlist) {
@@ -25,7 +31,10 @@ const EditPlaylistPage = ({ playlistId }) => {
     }
 
     return (
-        <PlaylistForm playlist={playlistCopy} apiEndpoint="/api/edit-playlist" />
+        <>
+            <HeaderPanel />
+            <PlaylistForm playlist={playlistCopy} apiEndpoint="/api/edit-playlist" />
+        </>
     );
 }
 

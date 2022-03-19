@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import FilterInput from '@/components/filter-input';
+import styles from '@/styles/general.module.css'
 
 const SearchInput = () => {
     const { songsFilterValue, setSongsFilterValue } = useSongsFilterState();
@@ -11,6 +12,7 @@ const SearchInput = () => {
             placeholder="title, artist, content ..."
             value={songsFilterValue}
             setValue={setSongsFilterValue}
+            className={styles.general_search}
         />
     )
 }

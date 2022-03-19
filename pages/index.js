@@ -2,10 +2,10 @@ import React from 'react';
 import Header from '@/components/header';
 import Songs from '@/components/songs';
 import Playlists from '@/components/playlists';
-import MsLogo from '@/components/ms-logo';
 import Filter from '@/components/songs/filter';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import HeaderPanel from '@/components/header/header-panel';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
@@ -69,13 +69,9 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div className={styles.general_header}>
-        <span className={styles.header_logo}>
-          <MsLogo />
-        </span>
-        <div className={styles.header_title} />
+      <HeaderPanel>
         {filter}
-      </div>
+      </HeaderPanel>
       <Swiper
         grabCursor={true}
         onReachBeginning={onSwipeReachBeginning()}

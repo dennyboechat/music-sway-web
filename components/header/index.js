@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-const Header = ({ titleSuffix }) => {    
+const Header = ({ titleSuffix }) => {
 
     return (
         <Head>

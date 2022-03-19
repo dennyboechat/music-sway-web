@@ -2,21 +2,20 @@ import React from 'react';
 import Router from 'next/router'
 import Header from '@/components/header';
 import SongEntryForm from '@/components/song-form/song-entry-form';
+import RestrictionSelection from '@/components/restriction-selection';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import AddIcon from '@mui/icons-material/Add';
 import { useSongsState } from '@/lib/songs-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
-import { uniqBy, map, without, pick, forEach, filter, cloneDeep } from 'lodash';
+import { uniqBy, map, without, pick, forEach, filter, cloneDeep, orderBy } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
-import { getRestrictions, getRestrictionByName, getRestrictionById } from '@/lib/restriction';
+import { getRestrictionByName } from '@/lib/restriction';
 import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 
@@ -118,52 +117,44 @@ const SongForm = ({ song, apiEndpoint }) => {
     let categories = [];
     if (songs && songs.length) {
         artists = without(map(uniqBy(songs, s => { return s.artist; }), 'artist'), null, undefined, '');
+        artists = orderBy(artists);
         categories = without(map(uniqBy(songs, s => { return s.category; }), 'category'), null, undefined, '');
+        categories = orderBy(categories);
     }
-
-    const restrictions = [];
-    forEach(getRestrictions(), restriction => {
-        restrictions.push(
-            <FormControlLabel
-                key={restriction.id}
-                value={restriction.name}
-                control={<Radio />}
-                label={restriction.label}
-            />
-        );
-    });
-
-    const songRestrictionName = getRestrictionById(songRestrictionId).name;
 
     const handleSetSongRestrictionId = (name) => {
         const restriction = getRestrictionByName(name);
         setSongRestrictionId(restriction.id);
     }
 
+    const songTitleHeader = songTitle ? `- ${songTitle}` : '';
+
     return (
         <form onSubmit={submitHandler}>
-            <Header titleSuffix={`- ${songTitle}`} />
+            <Header titleSuffix={songTitleHeader} />
             <Container className={styles.content_container}>
-                <RadioGroup
-                    aria-label="song-restriction"
-                    name="song-restriction-radio-buttons-group"
-                    value={songRestrictionName}
-                    onChange={(e, value) => handleSetSongRestrictionId(value)}
-                >
-                    {restrictions}
-                </RadioGroup>
-                <Grid container item xs={12} lg={6}>
-                    <TextField
-                        id="songTitle"
-                        label="Song Title"
-                        value={songTitle}
-                        onChange={e => setSongTitle(e.target.value)}
-                        required
-                        fullWidth
-                        autoComplete="off"
-                    />
+                <Grid container>
+                    <Grid item xs={12} lg={6}>
+                        <TextField
+                            id="songTitle"
+                            label="Song Title"
+                            value={songTitle}
+                            onChange={e => setSongTitle(e.target.value)}
+                            required
+                            fullWidth
+                            autoComplete="off"
+                            className={styles.default_bottom_margin}
+                        />
+                    </Grid>
+                    <Grid item xs={12} lg={6} className={styles.text_align_right}>
+                        <RestrictionSelection
+                            id="song_restriction"
+                            selectedRestrictionId={songRestrictionId}
+                            onChange={handleSetSongRestrictionId}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid container item xs={12} lg={6}>
+                <Grid item xs={12} lg={6}>
                     <Autocomplete
                         id="artistAutocomplete"
                         freeSolo
@@ -171,6 +162,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         inputValue={songArtist || ''}
                         onInputChange={(e, value) => setSongArtist(value)}
                         fullWidth
+                        className={styles.default_bottom_margin}
                         renderInput={(params) => (
                             <TextField
                                 id="artist"
@@ -180,7 +172,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         )}
                     />
                 </Grid>
-                <Grid container item xs={12} lg={6}>
+                <Grid item xs={12} lg={6}>
                     <Autocomplete
                         id="categoryAutocomplete"
                         freeSolo
@@ -188,6 +180,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         inputValue={songCategory || ''}
                         onInputChange={(e, value) => setSongCategory(value)}
                         fullWidth
+                        className={styles.default_bottom_margin}
                         renderInput={(params) => (
                             <TextField
                                 id="category"
@@ -197,7 +190,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         )}
                     />
                 </Grid>
-                <Grid container item xs={12} lg={6}>
+                <Grid item xs={12} lg={6}>
                     <TextField
                         id="songObservation"
                         label="Observation"
@@ -206,21 +199,31 @@ const SongForm = ({ song, apiEndpoint }) => {
                         fullWidth
                         multiline
                         autoComplete="off"
+                        className={styles.default_bottom_margin}
                     />
                 </Grid>
-                {
-                    songEntries.map(entry => (
-                        <SongEntryForm
-                            key={entry.uuid}
-                            onValueChanged={onSongEntryValueChanged}
-                            onRemoveSong={onRemoveSongEntry}
-                            entry={entry}
-                        />
-                    ))
-                }
-                <Button id="addEntry" onClick={addEntry}>
-                    {'Add Section'}
-                </Button>
+                <Grid item xs={12}>
+                    {
+                        songEntries.map(entry => (
+                            <SongEntryForm
+                                key={entry.uuid}
+                                onValueChanged={onSongEntryValueChanged}
+                                onRemoveSong={onRemoveSongEntry}
+                                entry={entry}
+                            />
+                        ))
+                    }
+                </Grid>
+                <Grid item xs={12} className={styles.text_align_right}>
+                    <Button
+                        id="addEntry"
+                        onClick={addEntry}
+                        variant="outlined"
+                        startIcon={<AddIcon />}
+                    >
+                        {'Add Section'}
+                    </Button>
+                </Grid>
                 <div className={styles.fab_buttons}>
                     {song.id &&
                         <Fab

@@ -5,8 +5,9 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import styles from '@/styles/general.module.css'
+import classnames from 'classnames';
 
-const FilterInput = ({ id, placeholder, value, setValue }) => {
+const FilterInput = ({ id, placeholder, value, setValue, className }) => {
     const inputRef = React.useRef();
 
     const onCleanButtonClick = () => {
@@ -16,8 +17,10 @@ const FilterInput = ({ id, placeholder, value, setValue }) => {
         }
     }
 
+    className = classnames(styles.search, className);
+
     return (
-        <div className={styles.search}>
+        <div className={className}>
             <TextField
                 id={id}
                 placeholder={placeholder}

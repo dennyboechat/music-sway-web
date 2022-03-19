@@ -1,10 +1,14 @@
 import SongForm from '@/components/song-form';
 import { getNewSong } from '@/lib/utils';
+import HeaderPanel from '@/components/header/header-panel';
 
 const NewSongPage = () => {
     const song = getNewSong({ addEntry: true });
     return (
-        <SongForm song={song} apiEndpoint="/api/create-song" />
+        <>
+            <HeaderPanel />
+            <SongForm song={song} apiEndpoint="/api/create-song" />
+        </>
     );
 }
 

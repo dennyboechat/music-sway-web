@@ -6,13 +6,11 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Fab from '@mui/material/Fab';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import RestrictionSelection from '@/components/restriction-selection';
 import styles from '@/styles/general.module.css';
-import { forEach, pick } from 'lodash';
+import { pick } from 'lodash';
 import { validatePlaylist } from '@/lib/utils';
-import { getRestrictions, getRestrictionByName, getRestrictionById } from '@/lib/restriction';
+import { getRestrictionByName } from '@/lib/restriction';
 import { createPlaylist, updatePlaylist, deletePlaylist } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 
@@ -79,47 +77,37 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         Router.push('/');
     }
 
-    const restrictions = [];
-    forEach(getRestrictions(), restriction => {
-        restrictions.push(
-            <FormControlLabel
-                key={restriction.id}
-                value={restriction.name}
-                control={<Radio />}
-                label={restriction.label}
-            />
-        );
-    });
-
-    const playlistRestrictionName = getRestrictionById(playlistRestrictionId).name;
-
     const handleSetPlaylistRestrictionId = (name) => {
         const restriction = getRestrictionByName(name);
         setPlaylistRestrictionId(restriction.id);
     }
 
+    const playlistNameHeader = playlistName ? `- ${playlistName}` : '';
+
     return (
         <form onSubmit={submitHandler}>
-            <Header titleSuffix={`- ${playlistName}`} />
+            <Header titleSuffix={playlistNameHeader} />
             <Container className={styles.content_container}>
-                <RadioGroup
-                    aria-label="playlist-restriction"
-                    name="playlist-restriction-radio-buttons-group"
-                    value={playlistRestrictionName}
-                    onChange={(e, value) => handleSetPlaylistRestrictionId(value)}
-                >
-                    {restrictions}
-                </RadioGroup>
-                <Grid container item xs={12} lg={6}>
-                    <TextField
-                        id="playlistName"
-                        label="Playlist Name"
-                        value={playlistName}
-                        onChange={e => setPlaylistName(e.target.value)}
-                        required
-                        fullWidth
-                        autoComplete="off"
-                    />
+                <Grid container>
+                    <Grid item xs={12} lg={6}>
+                        <TextField
+                            id="playlistName"
+                            label="Playlist Name"
+                            value={playlistName}
+                            onChange={e => setPlaylistName(e.target.value)}
+                            required
+                            fullWidth
+                            autoComplete="off"
+                            className={styles.default_bottom_margin}
+                        />
+                    </Grid>
+                    <Grid item xs={12} lg={6} className={styles.text_align_right}>
+                        <RestrictionSelection
+                            id="playlist_restriction"
+                            selectedRestrictionId={playlistRestrictionId}
+                            onChange={handleSetPlaylistRestrictionId}
+                        />
+                    </Grid>
                 </Grid>
                 <Grid container item xs={12} lg={6}>
                     <TextField
@@ -130,6 +118,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                         fullWidth
                         multiline
                         autoComplete="off"
+                        className={styles.default_bottom_margin}
                     />
                 </Grid>
                 <PlaylistSongEntry

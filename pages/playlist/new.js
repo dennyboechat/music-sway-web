@@ -1,10 +1,14 @@
 import PlaylistForm from '@/components/playlist-form';
+import HeaderPanel from '@/components/header/header-panel';
 import { getNewPlaylist } from '@/lib/utils';
 
 const NewPlaylistPage = () => {
     const playlist = getNewPlaylist();
     return (
-        <PlaylistForm playlist={playlist} apiEndpoint="/api/create-playlist" />
+        <>
+            <HeaderPanel />
+            <PlaylistForm playlist={playlist} apiEndpoint="/api/create-playlist" />
+        </>
     );
 }
 
