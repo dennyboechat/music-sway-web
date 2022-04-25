@@ -71,6 +71,12 @@
 .header_logo {
   margin-left: 5px;
   width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.general_header_title {
+  margin-left: 5px;
 }
 
 .fab_buttons {
@@ -81,7 +87,6 @@
 }
 
 .html_content {
-  white-space: pre-wrap;
   font-family: Arial;
 }
 
@@ -91,14 +96,26 @@
   margin-right: 15px;
 }
 
-.playlist_entry_drag_drop {
-  background-color: rgba(255, 255, 255, 0.08);
-  min-height: 100px;
+.playlist_entry_toggle_delete_button {
+  visibility: hidden;
 }
 
-.playlist_entry_drag_drop_item {
+.playlist_entry_drag_drop {
+  background-color: rgba(255, 255, 255, 0.08);
+  min-height: 210px;
+}
+
+.playlist_entry_drag_drop_item,
+.playlist_entry_drag_item {
+  background-color: rgba(29, 52, 255, 0.3);
+}
+
+.playlist_entry_toggle:hover {
   background-color: rgba(29, 52, 255, 0.08);
-  
+}
+
+.playlist_entry_toggle:hover .playlist_entry_toggle_delete_button {
+  visibility: visible;
 }
 
 .playlist_entry_toggle {
@@ -106,15 +123,18 @@
   border-radius: 2px;
   cursor: move;
   padding: 10px;
-}
-
-.playlist_entry_toggle:hover {
-  background-color: rgba(29, 52, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
 }
 
 .playlist_pick_songs {
-  max-height: 500px;
+  max-height: 492px;
   overflow-y: auto;
+}
+
+.playlist_songs_title {
+  margin-top: 5px;
+  margin-bottom: 7px;
 }
 
 .swiper_slide {
@@ -139,4 +159,15 @@
 
 .song_entry_form_wrapper_highlighted {
   opacity: .8;
+}
+
+.confirm_buttons_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 5px;
+}
+
+.avatar_small_font {
+  font-size: 1rem;
 }

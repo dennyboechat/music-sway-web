@@ -9,6 +9,9 @@ const themeDark = createTheme({
         primary: {
             main: '#00BFFF',
         },
+        secondary: {
+            main: '#FFF',
+        },
     },
 });
 

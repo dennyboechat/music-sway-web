@@ -2,10 +2,12 @@ import React from 'react';
 import Router from 'next/router'
 import Header from '@/components/header';
 import PlaylistSongEntry from '@/components/playlist-form/song-entry';
+import ConfirmButtonFab from '@/components/confirm-buttons/confirmButtonFab';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Fab from '@mui/material/Fab';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import RestrictionSelection from '@/components/restriction-selection';
 import styles from '@/styles/general.module.css';
 import { pick } from 'lodash';
@@ -21,6 +23,8 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     let [playlistEntries, setPlaylistEntries] = React.useState(playlist.entries || []);
     const [submitting, setSubmitting] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
+    const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
     if (!playlist) {
         return null;
@@ -61,7 +65,15 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         setSubmitting(false);
     };
 
-    const removePlaylist = async () => {
+    const onDelete = () => {
+        setShowDeleteConfirmation(true);
+    };
+
+    const onCancelDelete = () => {
+        setShowDeleteConfirmation(false);
+    };
+
+    const onConfirmDelete = async () => {
         setDeleting(true);
         try {
             const graphQLClient = new GraphQLClient('/api/delete-playlist');
@@ -82,13 +94,38 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         setPlaylistRestrictionId(restriction.id);
     }
 
+    let deleteButton;
+    if (playlist.id) {
+        if (showDeleteConfirmation) {
+            deleteButton = (
+                <ConfirmButtonFab
+                    onConfirm={onConfirmDelete}
+                    onCancel={onCancelDelete}
+                />
+            );
+        } else {
+            deleteButton = (
+                <Fab
+                    id="deletePlaylistButton"
+                    aria-label="delete"
+                    disabled={deleting}
+                    onClick={onDelete}
+                    variant="extended"
+                >
+                    {'Delete'}
+                </Fab>
+            );
+        }
+    }
+
     const playlistNameHeader = playlistName ? `- ${playlistName}` : '';
+    const columnDirection = isLgResolution ? 'row' : 'column-reverse';
 
     return (
         <form onSubmit={submitHandler}>
             <Header titleSuffix={playlistNameHeader} />
             <Container className={styles.content_container}>
-                <Grid container>
+                <Grid container direction={columnDirection}>
                     <Grid item xs={12} lg={6}>
                         <TextField
                             id="playlistName"
@@ -126,35 +163,30 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                     setPlaylistEntries={setPlaylistEntries}
                 />
                 <div className={styles.fab_buttons}>
-                    {playlist.id &&
+                    {deleteButton}
+                    {!showDeleteConfirmation &&
                         <Fab
-                            id="deletePlaylistButton"
-                            aria-label="delete"
-                            disabled={deleting}
-                            onClick={removePlaylist}
+                            id="savePlaylistButton"
+                            color="primary"
+                            aria-label="save"
+                            type="submit"
+                            disabled={submitting}
                             variant="extended"
                         >
-                            {'Delete'}
+                            {submitting ? 'Saving' : 'Save'}
                         </Fab>
                     }
-                    <Fab
-                        id="savePlaylistButton"
-                        color="primary"
-                        aria-label="save"
-                        type="submit"
-                        disabled={submitting}
-                        variant="extended"
-                    >
-                        {submitting ? 'Saving' : 'Save'}
-                    </Fab>
-                    <Fab
-                        id="cancelPlaylistButton"
-                        aria-label="cancel"
-                        variant="extended"
-                        onClick={onCancel}
-                    >
-                        {'Cancel'}
-                    </Fab>
+                    {!showDeleteConfirmation &&
+                        <Fab
+                            id="cancelPlaylistButton"
+                            color="secondary"
+                            aria-label="cancel"
+                            variant="extended"
+                            onClick={onCancel}
+                        >
+                            {'Cancel'}
+                        </Fab>
+                    }
                 </div>
             </Container>
         </form>
