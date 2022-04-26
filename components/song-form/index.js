@@ -182,6 +182,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                             fullWidth
                             autoComplete="off"
                             className={styles.default_bottom_margin}
+                            inputProps={{ maxLength: 255 }}
                         />
                     </Grid>
                     <Grid item xs={12} lg={6} className={styles.text_align_right}>
@@ -203,9 +204,13 @@ const SongForm = ({ song, apiEndpoint }) => {
                         className={styles.default_bottom_margin}
                         renderInput={(params) => (
                             <TextField
+                                {...params}
                                 id="artist"
                                 label="Artist"
-                                {...params}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    inputProps: { ...params.inputProps, maxLength: 255 }
+                                }}
                             />
                         )}
                     />
@@ -221,9 +226,13 @@ const SongForm = ({ song, apiEndpoint }) => {
                         className={styles.default_bottom_margin}
                         renderInput={(params) => (
                             <TextField
+                                {...params}
                                 id="category"
                                 label="Category"
-                                {...params}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    inputProps: { ...params.inputProps, maxLength: 255 }
+                                }}
                             />
                         )}
                     />
@@ -238,6 +247,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         multiline
                         autoComplete="off"
                         className={styles.default_bottom_margin}
+                        inputProps={{ maxLength: 2550 }}
                     />
                 </Grid>
                 <Grid item xs={12}>

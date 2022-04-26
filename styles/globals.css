@@ -13,7 +13,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #2A2A2A; 
+  background-color: #2A2A2A;
 }
 
 div.ms-accordion {
@@ -98,4 +98,18 @@ body div.MuiCardContent-root {
 
 .tox div.tox-toolbar__primary {
   background-color: #E5E5E5;
+}
+
+.default_half_bottom_margin {
+  margin-bottom: 5px;
+}
+
+.song_entry_rich_text_editor_wrapper,
+.song_entry_rich_text_editor_wrapper .tox-tinymce {
+  min-height: 400px;
+}
+
+.song_entry_form_wrapper_highlighted .default_half_bottom_margin,
+.song_entry_form_wrapper_highlighted .song_entry_rich_text_editor_wrapper {
+  opacity: .5;
 }

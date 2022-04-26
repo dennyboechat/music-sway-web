@@ -2,7 +2,7 @@ import Fab from '@mui/material/Fab';
 import Typography from '@mui/material/Typography';
 import styles from '@/styles/general.module.css';
 
-const ConfirmButtonFab = ({ confirmLabel = 'Yes', cancelLabel = 'No', text = 'Confirm?', onConfirm, onCancel }) => {
+const ConfirmButtonFab = ({ confirmLabel = 'Yes', cancelLabel = 'No', text = 'Sure?', onConfirm, onCancel }) => {
     return (
         <div className={styles.confirm_buttons_wrapper}>
             <Typography component="h4" color="primary">

@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from '@/styles/general.module.css';
 
-const ConfirmButtonGroup = ({ confirmLabel = 'Yes', cancelLabel = 'No', text = 'Confirm?', onConfirm, onCancel }) => {
+const ConfirmButtonGroup = ({ confirmLabel = 'Yes', cancelLabel = 'No', text = 'Sure?', onConfirm, onCancel }) => {
     return (
         <div className={styles.confirm_buttons_wrapper}>
             <Typography component="h4" color="primary">

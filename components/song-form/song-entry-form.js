@@ -28,7 +28,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
     }
 
     const onMouseOverDeleteButton = () => {
-        setWrapperClassName(styles.song_entry_form_wrapper_highlighted);
+        setWrapperClassName('song_entry_form_wrapper_highlighted');
     };
 
     const onMouseOutDeleteButton = () => {
@@ -76,7 +76,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
     return (
         <div key={entry.uuid} className={className}>
             <Grid container direction={columnDirection}>
-                <Grid item xs={12} lg={6} className={styles.default_half_bottom_margin}>
+                <Grid item xs={12} lg={6} className="default_half_bottom_margin">
                     <Autocomplete
                         id={`entryTitleAutoComplete_${entry.uuid}`}
                         freeSolo
@@ -86,9 +86,13 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
                         fullWidth
                         renderInput={(params) => (
                             <TextField
+                                {...params}
                                 id={`entryTitle_${entry.uuid}`}
                                 label="Section Header"
-                                {...params}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    inputProps: { ...params.inputProps, maxLength: 255 }
+                                }}
                             />
                         )}
                     />
@@ -101,6 +105,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
                 id={`entryContent_${entry.uuid}`}
                 value={entry.content}
                 onChange={(value) => onValueChanged({ field: 'content', value, entry })}
+                className="song_entry_rich_text_editor_wrapper"
             />
         </div>
     );

@@ -153,14 +153,6 @@
   margin-bottom: 10px;
 }
 
-.default_half_bottom_margin {
-  margin-bottom: 5px;
-}
-
-.song_entry_form_wrapper_highlighted {
-  opacity: .8;
-}
-
 .confirm_buttons_wrapper {
   display: flex;
   align-items: center;
@@ -170,4 +162,11 @@
 
 .avatar_small_font {
   font-size: 1rem;
+}
+
+.rich_text_editor_skeleton {
+  position: absolute; 
+  z-index: 1;
+  width: 99%;
+  max-width: 1192px;
 }

@@ -61,7 +61,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             console.error(error);
         }
 
-        Router.push('/');
+        // Router.push('/');
         setSubmitting(false);
     };
 
@@ -136,6 +136,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             fullWidth
                             autoComplete="off"
                             className={styles.default_bottom_margin}
+                            inputProps={{ maxLength: 255 }}
                         />
                     </Grid>
                     <Grid item xs={12} lg={6} className={styles.text_align_right}>
@@ -156,6 +157,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                         multiline
                         autoComplete="off"
                         className={styles.default_bottom_margin}
+                        inputProps={{ maxLength: 2550 }}
                     />
                 </Grid>
                 <PlaylistSongEntry
