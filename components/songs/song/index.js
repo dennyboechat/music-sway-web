@@ -77,6 +77,17 @@ const Song = ({ song }) => {
     }
   }
 
+  const editButton = (
+    <IconButton
+      id={`${song.id}_editButton`}
+      href={`/song/${song.id}`}
+      title="Edit Song"
+      color="primary"
+    >
+      <EditIcon />
+    </IconButton>
+  );
+
   let cardContent;
   if (song.entries && song.entries.length) {
     let autoScrollContentSpeedLabel;
@@ -128,14 +139,7 @@ const Song = ({ song }) => {
 
     const actions = (
       <div>
-        <IconButton
-          id={`${song.id}_editButton`}
-          href={`/song/${song.id}`}
-          title="Edit Song"
-          color="primary"
-        >
-          <EditIcon />
-        </IconButton>
+        {editButton}
         <IconButton
           id={`${song.id}_increaseFontSizeButton`}
           title="Increase Font Size"
@@ -218,7 +222,19 @@ const Song = ({ song }) => {
       );
     }
   } else {
-    cardContent = cardHeader;
+    cardContent = (
+      <Accordion id={`${song.id}-0`} className="ms-accordion single-no-title-entry">
+        <AccordionSummary
+          id={`${song.id}-summary`}
+          expandIcon={<ExpandMoreIcon />}
+        >
+          {cardHeader}
+        </AccordionSummary>
+        <AccordionDetails>
+          {editButton}
+        </AccordionDetails>
+      </Accordion>
+    )
   }
 
   return cardContent;

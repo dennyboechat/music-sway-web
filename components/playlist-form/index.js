@@ -7,37 +7,50 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Fab from '@mui/material/Fab';
+import SaveIcon from '@mui/icons-material/Save';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import DeleteIcon from '@mui/icons-material/Delete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import RestrictionSelection from '@/components/restriction-selection';
 import styles from '@/styles/general.module.css';
 import { pick } from 'lodash';
 import { validatePlaylist } from '@/lib/utils';
-import { getRestrictionByName } from '@/lib/restriction';
+import Restriction, { getRestrictionByName } from '@/lib/restriction';
 import { createPlaylist, updatePlaylist, deletePlaylist } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
+import { useSWRConfig } from 'swr';
+import { playlistsQuery } from '@/graphQl/queries';
 
 const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [playlistName, setPlaylistName] = React.useState(playlist?.name);
     const [playlistObservation, setPlaylistObservation] = React.useState(playlist?.observation);
     const [playlistRestrictionId, setPlaylistRestrictionId] = React.useState(playlist?.restrictionId);
-    let [playlistEntries, setPlaylistEntries] = React.useState(playlist.entries || []);
-    const [submitting, setSubmitting] = React.useState(false);
+    const [playlistEntries, setPlaylistEntries] = React.useState(playlist.entries || []);
+    const [saving, setSaving] = React.useState(false);
+    const [savingAndAddingNew, setSavingAndAddingNew] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
+    const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+    const { mutate } = useSWRConfig();
 
     if (!playlist) {
         return null;
     }
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
+    const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validatePlaylist({ playlistName, playlistRestrictionId });
         if (invalidMessages.length) {
             console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
             return;
         }
-        setSubmitting(true);
+
+        if (addsNew) {
+            setSavingAndAddingNew(true);
+        } else {
+            setSaving(true);
+        }
 
         const entries = playlistEntries.map(obj => pick(obj, ['songId', 'orderIndex']));
 
@@ -61,8 +74,21 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             console.error(error);
         }
 
-        // Router.push('/');
-        setSubmitting(false);
+        mutate(playlistsQuery);
+
+        if (addsNew) {
+            Router.push('/playlist/new');
+
+            setPlaylistName('');
+            setPlaylistObservation('');
+            setPlaylistRestrictionId(Restriction.PUBLIC.id);
+            setPlaylistEntries([]);
+
+            setSavingAndAddingNew(false);
+        } else {
+            Router.push('/');
+            setSaving(false);
+        }
     };
 
     const onDelete = () => {
@@ -81,17 +107,51 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         } catch (error) {
             throw Error(error);
         }
+        mutate(playlistsQuery);
         Router.push('/');
         setDeleting(false);
     };
 
     const onCancel = async () => {
+        setCanceling(true);
         Router.push('/');
     }
 
     const handleSetPlaylistRestrictionId = (name) => {
         const restriction = getRestrictionByName(name);
         setPlaylistRestrictionId(restriction.id);
+    }
+
+    const disabled = saving || savingAndAddingNew || deleting || canceling;
+
+    let saveAndAddNewButton;
+    if (!showDeleteConfirmation) {
+        let buttonLabel;
+        if (savingAndAddingNew) {
+            buttonLabel = 'Saving';
+        } else {
+            buttonLabel = (
+                <div className={styles.button_label_wrapper}>
+                    {'Save'}
+                    <div className={styles.button_caption_text}>
+                        {'& Add New'}
+                    </div>
+                </div>
+            );
+        }
+        saveAndAddNewButton = (
+            <Fab
+                id="saveAndAddNewSongButton"
+                color="primary"
+                aria-label="saveAndAddNew"
+                disabled={disabled}
+                variant="extended"
+                onClick={onSave({ addsNew: true })}
+            >
+                <SaveAsIcon />
+                {buttonLabel}
+            </Fab>
+        );
     }
 
     let deleteButton;
@@ -101,6 +161,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                 <ConfirmButtonFab
                     onConfirm={onConfirmDelete}
                     onCancel={onCancelDelete}
+                    disabled={disabled}
                 />
             );
         } else {
@@ -108,10 +169,11 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                 <Fab
                     id="deletePlaylistButton"
                     aria-label="delete"
-                    disabled={deleting}
                     onClick={onDelete}
                     variant="extended"
+                    disabled={disabled}
                 >
+                    <DeleteIcon />
                     {'Delete'}
                 </Fab>
             );
@@ -122,7 +184,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const columnDirection = isLgResolution ? 'row' : 'column-reverse';
 
     return (
-        <form onSubmit={submitHandler}>
+        <form>
             <Header titleSuffix={playlistNameHeader} />
             <Container className={styles.content_container}>
                 <Grid container direction={columnDirection}>
@@ -134,8 +196,9 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             onChange={e => setPlaylistName(e.target.value)}
                             required
                             fullWidth
+                            autoFocus
                             autoComplete="off"
-                            className={styles.default_bottom_margin}
+                            className="default_bottom_margin"
                             inputProps={{ maxLength: 255 }}
                         />
                     </Grid>
@@ -156,13 +219,14 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                         fullWidth
                         multiline
                         autoComplete="off"
-                        className={styles.default_bottom_margin}
+                        className="default_bottom_margin"
                         inputProps={{ maxLength: 2550 }}
                     />
                 </Grid>
                 <PlaylistSongEntry
                     playlistEntries={playlistEntries}
                     setPlaylistEntries={setPlaylistEntries}
+                    disabledButtons={disabled}
                 />
                 <div className={styles.fab_buttons}>
                     {deleteButton}
@@ -171,13 +235,15 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             id="savePlaylistButton"
                             color="primary"
                             aria-label="save"
-                            type="submit"
-                            disabled={submitting}
                             variant="extended"
+                            disabled={disabled}
+                            onClick={onSave({ addsNew: false })}
                         >
-                            {submitting ? 'Saving' : 'Save'}
+                            <SaveIcon />
+                            {saving ? 'Saving' : 'Save'}
                         </Fab>
                     }
+                    {saveAndAddNewButton}
                     {!showDeleteConfirmation &&
                         <Fab
                             id="cancelPlaylistButton"
@@ -185,7 +251,9 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             aria-label="cancel"
                             variant="extended"
                             onClick={onCancel}
+                            disabled={disabled}
                         >
+                            <HighlightOffIcon />
                             {'Cancel'}
                         </Fab>
                     }

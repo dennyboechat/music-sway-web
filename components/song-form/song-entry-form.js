@@ -12,7 +12,7 @@ import { uniq, map, forEach, without, orderBy } from 'lodash';
 import styles from '@/styles/general.module.css';
 import classnames from 'classnames';
 
-const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
+const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = false }) => {
     const { songs } = useSongsState();
     const [wrapperClassName, setWrapperClassName] = React.useState();
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
@@ -47,7 +47,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
         onRemoveSong({ entry });
     }
 
-    const className = classnames(styles.default_bottom_margin, wrapperClassName);
+    const className = classnames('default_bottom_margin', wrapperClassName);
     const columnDirection = isLgResolution ? 'row' : 'column-reverse';
 
     let deleteEntryButton;
@@ -56,6 +56,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
             <ConfirmButtonGroup
                 onConfirm={onConfirmDeleteEntry}
                 onCancel={onCancelDeleteEntry}
+                disabled={disabledButtons}
             />
         );
     } else {
@@ -67,6 +68,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong }) => {
                 onMouseOut={() => onMouseOutDeleteButton()}
                 variant="outlined"
                 startIcon={<DeleteIcon />}
+                disabled={disabledButtons}
             >
                 {'Delete Section'}
             </Button>

@@ -14,7 +14,7 @@ import FilterInput from '@/components/filter-input';
 import { filterSongs } from '@/lib/utils';
 import { deepOrange } from '@mui/material/colors';
 
-const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
+const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButtons = false }) => {
     const { songs, isLoadingSongs } = useSongsState();
     const [songsFilterValue, setSongsFilterValue] = React.useState('');
 
@@ -79,6 +79,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
                                     id={`deleteEntry_${entry.id}`}
                                     onClick={() => removePlaylistEntry({ entryId: entry.id })}
                                     className={styles.playlist_entry_toggle_delete_button}
+                                    disabled={disabledButtons}
                                 >
                                     <DeleteIcon />
                                 </IconButton>
@@ -111,6 +112,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
                         delay={2}
                         sort={false}
                         className={styles.playlist_pick_songs}
+                        disabled={disabledButtons}
                     >
                         {filteredSongs.map(item => getSongDisplayData(item))}
                     </ReactSortable>
@@ -159,6 +161,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries }) => {
                         ghostClass={styles.playlist_entry_drag_drop_item}
                         chosenClass={styles.playlist_entry_drag_item}
                         clone={item => ({ ...item, id: v4(), songId: item.id })}
+                        disabled={disabledButtons}
                     >
                         {entryDetails}
                     </ReactSortable>

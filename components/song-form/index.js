@@ -11,15 +11,21 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import DeleteIcon from '@mui/icons-material/Delete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSongsState } from '@/lib/songs-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
 import { uniqBy, map, without, pick, forEach, filter, cloneDeep, orderBy } from 'lodash';
 import { getNewSongEntry, validateSong } from '@/lib/utils';
-import { getRestrictionByName } from '@/lib/restriction';
+import Restriction, { getRestrictionByName } from '@/lib/restriction';
 import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
+import { useSWRConfig } from 'swr';
+import { songsQuery } from '@/graphQl/queries';
 
 const SongForm = ({ song, apiEndpoint }) => {
     const { songs } = useSongsState();
@@ -29,10 +35,13 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [songObservation, setSongObservation] = React.useState(song?.observation);
     const [songRestrictionId, setSongRestrictionId] = React.useState(song?.restrictionId);
     const [songEntries, setSongEntries] = React.useState(song.entries || []);
-    const [submitting, setSubmitting] = React.useState(false);
+    const [saving, setSaving] = React.useState(false);
+    const [savingAndAddingNew, setSavingAndAddingNew] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
+    const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+    const { mutate } = useSWRConfig();
 
     if (!song) {
         return null;
@@ -52,14 +61,18 @@ const SongForm = ({ song, apiEndpoint }) => {
         setSongEntries(entries);
     }
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
+    const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validateSong({ songTitle, songRestrictionId });
         if (invalidMessages.length) {
             console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
             return;
         }
-        setSubmitting(true);
+
+        if (addsNew) {
+            setSavingAndAddingNew(true);
+        } else {
+            setSaving(true);
+        }
 
         const entries = songEntries.map(obj => pick(obj, ['title', 'content']));
 
@@ -85,8 +98,23 @@ const SongForm = ({ song, apiEndpoint }) => {
             console.error(JSON.stringify(error, undefined, 2));
         }
 
-        Router.push('/');
-        setSubmitting(false);
+        mutate(songsQuery);
+
+        if (addsNew) {
+            Router.push('/song/new');
+
+            setSongTitle('');
+            setSongArtist('');
+            setSongCategory('');
+            setSongObservation('');
+            setSongRestrictionId(Restriction.PUBLIC.id);
+            setSongEntries([getNewSongEntry()]);
+
+            setSavingAndAddingNew(false);
+        } else {
+            Router.push('/');
+            setSaving(false);
+        }
     };
 
     const onDelete = () => {
@@ -105,11 +133,13 @@ const SongForm = ({ song, apiEndpoint }) => {
         } catch (error) {
             throw Error(error);
         }
+        mutate(songsQuery);
         Router.push('/');
         setDeleting(false);
     };
 
     const onCancel = async () => {
+        setCanceling(true);
         Router.push('/');
     }
 
@@ -139,6 +169,38 @@ const SongForm = ({ song, apiEndpoint }) => {
         setSongRestrictionId(restriction.id);
     }
 
+    const disabled = saving || savingAndAddingNew || deleting || canceling;
+
+    let saveAndAddNewButton;
+    if (!showDeleteConfirmation) {
+        let buttonLabel;
+        if (savingAndAddingNew) {
+            buttonLabel = 'Saving';
+        } else {
+            buttonLabel = (
+                <div className={styles.button_label_wrapper}>
+                    {'Save'}
+                    <div className={styles.button_caption_text}>
+                        {'& Add New'}
+                    </div>
+                </div>
+            );
+        }
+        saveAndAddNewButton = (
+            <Fab
+                id="saveAndAddNewSongButton"
+                color="primary"
+                aria-label="saveAndAddNew"
+                disabled={disabled}
+                variant="extended"
+                onClick={onSave({ addsNew: true })}
+            >
+                <SaveAsIcon />
+                {buttonLabel}
+            </Fab>
+        );
+    }
+
     let deleteButton;
     if (song.id) {
         if (showDeleteConfirmation) {
@@ -146,6 +208,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                 <ConfirmButtonFab
                     onConfirm={onConfirmDelete}
                     onCancel={onCancelDelete}
+                    disabled={disabled}
                 />
             );
         } else {
@@ -154,10 +217,11 @@ const SongForm = ({ song, apiEndpoint }) => {
                     id="deleteSongButton"
                     color="secondary"
                     aria-label="delete"
-                    disabled={deleting}
                     onClick={onDelete}
                     variant="extended"
+                    disabled={disabled}
                 >
+                    <DeleteIcon />
                     {'Delete'}
                 </Fab>
             );
@@ -168,7 +232,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const columnDirection = isLgResolution ? 'row' : 'column-reverse';
 
     return (
-        <form onSubmit={submitHandler}>
+        <form>
             <Header titleSuffix={songTitleHeader} />
             <Container className={styles.content_container}>
                 <Grid container direction={columnDirection}>
@@ -180,8 +244,9 @@ const SongForm = ({ song, apiEndpoint }) => {
                             onChange={e => setSongTitle(e.target.value)}
                             required
                             fullWidth
+                            autoFocus
                             autoComplete="off"
-                            className={styles.default_bottom_margin}
+                            className="default_bottom_margin"
                             inputProps={{ maxLength: 255 }}
                         />
                     </Grid>
@@ -201,7 +266,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         inputValue={songArtist || ''}
                         onInputChange={(e, value) => setSongArtist(value)}
                         fullWidth
-                        className={styles.default_bottom_margin}
+                        className="default_bottom_margin"
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -223,7 +288,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         inputValue={songCategory || ''}
                         onInputChange={(e, value) => setSongCategory(value)}
                         fullWidth
-                        className={styles.default_bottom_margin}
+                        className="default_bottom_margin"
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -246,7 +311,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         fullWidth
                         multiline
                         autoComplete="off"
-                        className={styles.default_bottom_margin}
+                        className="default_bottom_margin"
                         inputProps={{ maxLength: 2550 }}
                     />
                 </Grid>
@@ -258,6 +323,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                                 onValueChanged={onSongEntryValueChanged}
                                 onRemoveSong={onRemoveSongEntry}
                                 entry={entry}
+                                disabledButtons={disabled}
                             />
                         ))
                     }
@@ -268,6 +334,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         onClick={addEntry}
                         variant="outlined"
                         startIcon={<AddIcon />}
+                        disabled={disabled}
                     >
                         {'Add Section'}
                     </Button>
@@ -279,13 +346,15 @@ const SongForm = ({ song, apiEndpoint }) => {
                             id="saveSongButton"
                             color="primary"
                             aria-label="save"
-                            type="submit"
-                            disabled={submitting}
                             variant="extended"
+                            disabled={disabled}
+                            onClick={onSave({ addsNew: false })}
                         >
-                            {submitting ? 'Saving' : 'Save'}
+                            <SaveIcon />
+                            {saving ? 'Saving' : 'Save'}
                         </Fab>
                     }
+                    {saveAndAddNewButton}
                     {!showDeleteConfirmation &&
                         <Fab
                             id="cancelSongButton"
@@ -293,7 +362,9 @@ const SongForm = ({ song, apiEndpoint }) => {
                             aria-label="cancel"
                             variant="extended"
                             onClick={onCancel}
+                            disabled={disabled}
                         >
+                            <HighlightOffIcon />
                             {'Cancel'}
                         </Fab>
                     }

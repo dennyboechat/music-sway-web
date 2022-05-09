@@ -149,10 +149,6 @@
   text-align: right;
 }
 
-.default_bottom_margin {
-  margin-bottom: 10px;
-}
-
 .confirm_buttons_wrapper {
   display: flex;
   align-items: center;
@@ -169,4 +165,14 @@
   z-index: 1;
   width: 99%;
   max-width: 1192px;
+}
+
+.button_label_wrapper {
+  text-align: start;
+  line-height: 12px;
+  margin-top: 5px;
+}
+
+.button_caption_text {
+  font-size: 9px;
 }
