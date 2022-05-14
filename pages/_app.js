@@ -6,6 +6,8 @@ import { SongsStateProvider } from '@/lib/songs-store';
 import { SongsFilterStateProvider } from '@/lib/songsFilter-store';
 import { PlaylistsStateProvider } from '@/lib/playlists-store';
 import { ConfigurationStateProvider } from '@/lib/configuration-store';
+import { MessageStateProvider } from '@/lib/message-store';
+import AlertMessage from '@/components/alert';
 import NoSleep from 'nosleep.js';
 import '../styles/globals.css';
 
@@ -22,8 +24,11 @@ const MyApp = ({ Component, pageProps }) => {
         <SongsFilterStateProvider>
           <PlaylistsStateProvider>
             <ConfigurationStateProvider>
-              <CssBaseline />
-              <Component {...pageProps} />
+              <MessageStateProvider>
+                <CssBaseline />
+                <Component {...pageProps} />
+                <AlertMessage />
+              </MessageStateProvider>
             </ConfigurationStateProvider>
           </PlaylistsStateProvider>
         </SongsFilterStateProvider>

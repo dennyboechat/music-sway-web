@@ -17,6 +17,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSongsState } from '@/lib/songs-store';
+import { useMessageState } from '@/lib/message-store';
 import styles from '@/styles/general.module.css';
 import { v4 } from 'uuid';
 import { uniqBy, map, without, pick, forEach, filter, cloneDeep, orderBy } from 'lodash';
@@ -41,6 +42,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const [hasErrors, setHasErrors] = React.useState(false);
+    const { setAlertMessage } = useMessageState();
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
@@ -65,6 +67,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validateSong({ songTitle, songRestrictionId });
         if (invalidMessages.length) {
+            setAlertMessage({ message: `Yoo forgot mandatory fields: ${invalidMessages.join(', ')}`, severity: 'error' });
             setHasErrors(true);
             return;
         }
@@ -100,6 +103,7 @@ const SongForm = ({ song, apiEndpoint }) => {
         }
 
         mutate(songsQuery);
+        setAlertMessage({ message: `${songTitle} was saved.`, severity: 'success' });
 
         if (addsNew) {
             Router.push('/song/new');
@@ -136,6 +140,7 @@ const SongForm = ({ song, apiEndpoint }) => {
         }
         mutate(songsQuery);
         Router.push('/');
+        setAlertMessage({ message: `${songTitle} is gone forever.`, severity: 'success' });
         setDeleting(false);
     };
 

@@ -12,6 +12,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMessageState } from '@/lib/message-store';
 import RestrictionSelection from '@/components/restriction-selection';
 import styles from '@/styles/general.module.css';
 import { pick } from 'lodash';
@@ -33,6 +34,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const [hasErrors, setHasErrors] = React.useState(false);
+    const { setAlertMessage } = useMessageState();
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
@@ -43,6 +45,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validatePlaylist({ playlistName, playlistRestrictionId });
         if (invalidMessages.length) {
+            setAlertMessage({ message: `Yoo fill mandatory fields: ${invalidMessages.join(', ')}`, severity: 'error' });
             setHasErrors(true);
             return;
         }
@@ -76,6 +79,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         }
 
         mutate(playlistsQuery);
+        setAlertMessage({ message: `${playlistName} was saved.`, severity: 'success' });
 
         if (addsNew) {
             Router.push('/playlist/new');
@@ -110,6 +114,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         }
         mutate(playlistsQuery);
         Router.push('/');
+        setAlertMessage({ message: `${playlistName} is gone forever.`, severity: 'success' });
         setDeleting(false);
     };
 
