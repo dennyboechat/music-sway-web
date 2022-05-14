@@ -8,12 +8,12 @@ const RichTextEditor = ({ id, value, onChange, className }) => {
     const apiKey = 'k3b0j7q1x0idx8wn23lnultfh5fruhyftlj60f0bydzj2rkc';
 
     return (
-        <div id={`rich_text_editor_wrapper_${id}`} className={className}>
+        <div id="rich_text_editor_wrapper" className={className}>
             {loading &&
                 <Skeleton variant="rect" height={400} className={styles.rich_text_editor_skeleton} />
             }
             <Editor
-                id={`rich_text_editor_${id}`}
+                id={id}
                 apiKey={apiKey}
                 initialValue={value}
                 onBlur={(e) => onChange(e.target.getContent())}

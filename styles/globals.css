@@ -71,6 +71,10 @@ div.ms-accordion .MuiButtonBase-root.MuiAccordionSummary-root {
   padding: 0;
 }
 
+button.MuiButtonBase-root.MuiFab-root {
+  text-transform: none;
+}
+
 div.MuiButtonBase-root.MuiAccordionSummary-root {
   padding-left: 5px;
   padding-right: 5px;

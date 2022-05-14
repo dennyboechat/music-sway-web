@@ -6,7 +6,7 @@ import ConfirmButtonFab from '@/components/confirm-buttons/confirmButtonFab';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Fab from '@mui/material/Fab';
+import FloatingButton from '@/components/floating-button';
 import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -32,6 +32,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [deleting, setDeleting] = React.useState(false);
     const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
+    const [hasErrors, setHasErrors] = React.useState(false);
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
@@ -42,7 +43,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validatePlaylist({ playlistName, playlistRestrictionId });
         if (invalidMessages.length) {
-            console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
+            setHasErrors(true);
             return;
         }
 
@@ -139,19 +140,15 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                 </div>
             );
         }
-        saveAndAddNewButton = (
-            <Fab
-                id="saveAndAddNewSongButton"
-                color="primary"
+        saveAndAddNewButton =
+            <FloatingButton
+                id="saveAndAddNewPlaylistButton"
                 aria-label="saveAndAddNew"
                 disabled={disabled}
-                variant="extended"
+                label={buttonLabel}
+                icon={<SaveAsIcon />}
                 onClick={onSave({ addsNew: true })}
-            >
-                <SaveAsIcon />
-                {buttonLabel}
-            </Fab>
-        );
+            />;
     }
 
     let deleteButton;
@@ -166,16 +163,15 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             );
         } else {
             deleteButton = (
-                <Fab
+                <FloatingButton
                     id="deletePlaylistButton"
-                    aria-label="delete"
-                    onClick={onDelete}
-                    variant="extended"
+                    aria-label="deletePlaylist"
+                    color="secondary"
                     disabled={disabled}
-                >
-                    <DeleteIcon />
-                    {'Delete'}
-                </Fab>
+                    label='Delete'
+                    icon={<DeleteIcon />}
+                    onClick={onDelete}
+                />
             );
         }
     }
@@ -192,7 +188,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                         <TextField
                             id="playlistName"
                             label="Playlist Name"
-                            value={playlistName}
+                            value={playlistName || ''}
                             onChange={e => setPlaylistName(e.target.value)}
                             required
                             fullWidth
@@ -200,6 +196,8 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             autoComplete="off"
                             className="default_bottom_margin"
                             inputProps={{ maxLength: 255 }}
+                            error={hasErrors}
+                            helperText={hasErrors ? "Hey add a Playlist Name mate!" : null}
                         />
                     </Grid>
                     <Grid item xs={12} lg={6} className={styles.text_align_right}>
@@ -214,7 +212,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                     <TextField
                         id="playlistObservation"
                         label="Observation"
-                        value={playlistObservation}
+                        value={playlistObservation || ''}
                         onChange={e => setPlaylistObservation(e.target.value)}
                         fullWidth
                         multiline
@@ -231,31 +229,26 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                 <div className={styles.fab_buttons}>
                     {deleteButton}
                     {!showDeleteConfirmation &&
-                        <Fab
+                        <FloatingButton
                             id="savePlaylistButton"
-                            color="primary"
                             aria-label="save"
-                            variant="extended"
                             disabled={disabled}
+                            label={saving ? 'Saving' : 'Save'}
+                            icon={<SaveIcon />}
                             onClick={onSave({ addsNew: false })}
-                        >
-                            <SaveIcon />
-                            {saving ? 'Saving' : 'Save'}
-                        </Fab>
+                        />
                     }
                     {saveAndAddNewButton}
                     {!showDeleteConfirmation &&
-                        <Fab
+                        <FloatingButton
                             id="cancelPlaylistButton"
                             color="secondary"
                             aria-label="cancel"
-                            variant="extended"
-                            onClick={onCancel}
                             disabled={disabled}
-                        >
-                            <HighlightOffIcon />
-                            {'Cancel'}
-                        </Fab>
+                            label='Cancel'
+                            icon={<HighlightOffIcon />}
+                            onClick={onCancel}
+                        />
                     }
                 </div>
             </Container>

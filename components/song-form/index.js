@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
-import Fab from '@mui/material/Fab';
+import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
@@ -40,6 +40,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [deleting, setDeleting] = React.useState(false);
     const [canceling, setCanceling] = React.useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
+    const [hasErrors, setHasErrors] = React.useState(false);
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
@@ -64,7 +65,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const onSave = ({ addsNew }) => async () => {
         const invalidMessages = validateSong({ songTitle, songRestrictionId });
         if (invalidMessages.length) {
-            console.error('Missing mandatory fields: ' + invalidMessages.join(', '));
+            setHasErrors(true);
             return;
         }
 
@@ -187,17 +188,14 @@ const SongForm = ({ song, apiEndpoint }) => {
             );
         }
         saveAndAddNewButton = (
-            <Fab
+            <FloatingButton
                 id="saveAndAddNewSongButton"
-                color="primary"
                 aria-label="saveAndAddNew"
                 disabled={disabled}
-                variant="extended"
+                label={buttonLabel}
+                icon={<SaveAsIcon />}
                 onClick={onSave({ addsNew: true })}
-            >
-                <SaveAsIcon />
-                {buttonLabel}
-            </Fab>
+            />
         );
     }
 
@@ -213,17 +211,15 @@ const SongForm = ({ song, apiEndpoint }) => {
             );
         } else {
             deleteButton = (
-                <Fab
+                <FloatingButton
                     id="deleteSongButton"
                     color="secondary"
                     aria-label="delete"
-                    onClick={onDelete}
-                    variant="extended"
                     disabled={disabled}
-                >
-                    <DeleteIcon />
-                    {'Delete'}
-                </Fab>
+                    label='Delete'
+                    icon={<DeleteIcon />}
+                    onClick={onDelete}
+                />
             );
         }
     }
@@ -248,6 +244,8 @@ const SongForm = ({ song, apiEndpoint }) => {
                             autoComplete="off"
                             className="default_bottom_margin"
                             inputProps={{ maxLength: 255 }}
+                            error={hasErrors}
+                            helperText={hasErrors ? "Add a Song Tile dude!" : null}
                         />
                     </Grid>
                     <Grid item xs={12} lg={6} className={styles.text_align_right}>
@@ -258,7 +256,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         />
                     </Grid>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid container item xs={12} lg={6}>
                     <Autocomplete
                         id="artistAutocomplete"
                         freeSolo
@@ -280,7 +278,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid container item xs={12} lg={6}>
                     <Autocomplete
                         id="categoryAutocomplete"
                         freeSolo
@@ -302,7 +300,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid container item xs={12} lg={6}>
                     <TextField
                         id="songObservation"
                         label="Observation"
@@ -342,31 +340,26 @@ const SongForm = ({ song, apiEndpoint }) => {
                 <div className={styles.fab_buttons}>
                     {deleteButton}
                     {!showDeleteConfirmation &&
-                        <Fab
+                        <FloatingButton
                             id="saveSongButton"
-                            color="primary"
                             aria-label="save"
-                            variant="extended"
                             disabled={disabled}
+                            label={saving ? 'Saving' : 'Save'}
+                            icon={<SaveIcon />}
                             onClick={onSave({ addsNew: false })}
-                        >
-                            <SaveIcon />
-                            {saving ? 'Saving' : 'Save'}
-                        </Fab>
+                        />
                     }
                     {saveAndAddNewButton}
                     {!showDeleteConfirmation &&
-                        <Fab
+                        <FloatingButton
                             id="cancelSongButton"
                             color="secondary"
                             aria-label="cancel"
-                            variant="extended"
-                            onClick={onCancel}
                             disabled={disabled}
-                        >
-                            <HighlightOffIcon />
-                            {'Cancel'}
-                        </Fab>
+                            label='Cancel'
+                            icon={<HighlightOffIcon />}
+                            onClick={onCancel}
+                        />
                     }
                 </div>
             </Container>

@@ -1,3 +1,4 @@
+import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -5,14 +6,14 @@ import styles from '@/styles/general.module.css';
 
 const LoadingSong = () => {
     const inputSkeletons = new Array(5).fill().map((v, i) =>
-        <>
-            <Grid key={i} item xs={12} lg={6}>
+        <React.Fragment key={i}>
+            <Grid item xs={12} lg={6}>
                 <Skeleton variant="rect" height={60} />
             </Grid>
-            <Grid key={`${i}_`} item xs={12} lg={6}>
+            <Grid item xs={12} lg={6}>
                 <div />
             </Grid>
-        </>
+        </React.Fragment>
     );
     return (
         <Container className={styles.content_container}>

@@ -3,7 +3,7 @@ import Header from '@/components/header';
 import Songs from '@/components/songs';
 import Playlists from '@/components/playlists';
 import Filter from '@/components/songs/filter';
-import Fab from '@mui/material/Fab';
+import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
 import HeaderPanel from '@/components/header/header-panel';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -39,29 +39,27 @@ const Home = () => {
     );
     createRecordButton = (
       <div className={styles.fab_buttons}>
-        <Fab
+        <FloatingButton
           id="addSongButton"
-          color="primary"
-          aria-label="add"
+          aria-label="addSong"
           href="song/new"
           title="Add Song"
-        >
-          <AddIcon />
-        </Fab>
+          variant={null}
+          icon={<AddIcon />}
+        />
       </div>
     );
   } else {
     createRecordButton = (
       <div className={styles.fab_buttons}>
-        <Fab
+        <FloatingButton
           id="addPlaylistButton"
-          color="primary"
-          aria-label="add"
+          aria-label="addPlaylist"
           href="playlist/new"
           title="Add Playlist"
-        >
-          <AddIcon />
-        </Fab>
+          variant={null}
+          icon={<AddIcon />}
+        />
       </div>
     );
   }

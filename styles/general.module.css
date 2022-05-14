@@ -174,5 +174,10 @@
 }
 
 .button_caption_text {
-  font-size: 9px;
+  font-size: 8.5px;
+}
+
+.drawer_menu_logo {
+  text-align: center;
+  margin-top: 20px;
 }

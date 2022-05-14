@@ -62,7 +62,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
     } else {
         deleteEntryButton = (
             <Button
-                id={`deleteEntry_${entry.uuid}`}
+                id="deleteEntry"
                 onClick={() => onDeleteEntry({ entry })}
                 onMouseOver={() => onMouseOverDeleteButton()}
                 onMouseOut={() => onMouseOutDeleteButton()}
@@ -80,16 +80,17 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
             <Grid container direction={columnDirection}>
                 <Grid item xs={12} lg={6} className="default_half_bottom_margin">
                     <Autocomplete
-                        id={`entryTitleAutoComplete_${entry.uuid}`}
+                        id="entryTitleAutoComplete"
                         freeSolo
                         options={entryTitles}
                         inputValue={entry.title}
                         onInputChange={(e, value) => onValueChanged({ field: 'title', value, entry })}
                         fullWidth
+                        className="default_bottom_margin"
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                id={`entryTitle_${entry.uuid}`}
+                                id="entryTitle"
                                 label="Section Header"
                                 InputProps={{
                                     ...params.InputProps,
@@ -104,7 +105,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
                 </Grid>
             </Grid>
             <RichTextEditor
-                id={`entryContent_${entry.uuid}`}
+                id="entryContent"
                 value={entry.content}
                 onChange={(value) => onValueChanged({ field: 'content', value, entry })}
                 className="song_entry_rich_text_editor_wrapper"
