@@ -2,7 +2,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import MsLogo from '@/components/ms-logo';
 import styles from '@/styles/general.module.css';
 
-const DrawerMenu = ({ id, show, onOpen, onClose }) => {
+const DrawerMenu = ({ id, show, onOpen = () => { }, onClose }) => {
 
     return (
         <SwipeableDrawer

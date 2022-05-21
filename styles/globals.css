@@ -121,3 +121,12 @@ body div.MuiCardContent-root {
 body div.default_bottom_margin {
   margin-bottom: 10px;
 }
+
+div.swiper-button-prev,
+div.swiper-button-next {
+  position: fixed;
+}
+
+div.swiper-button-disabled {
+  display: none;
+}

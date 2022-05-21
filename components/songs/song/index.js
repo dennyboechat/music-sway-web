@@ -137,6 +137,14 @@ const Song = ({ song }) => {
       );
     }
 
+    const songObservation = song.observation && (
+      <div className={styles.song_observation_footer}>
+        <Typography variant="caption" display="block" gutterBottom>
+          {song.observation}
+        </Typography>
+      </div>
+    );
+
     const actions = (
       <div>
         {editButton}
@@ -191,6 +199,7 @@ const Song = ({ song }) => {
             {actions}
             <div style={{ fontSize }}>
               <HtmlParser content={firstEntry.content} className={splitContent ? styles.song_card_content_split : ''} />
+              {songObservation}
             </div>
           </AccordionDetails>
         </Accordion>
@@ -213,6 +222,7 @@ const Song = ({ song }) => {
                 {actions}
                 <div style={{ fontSize }}>
                   <HtmlParser content={entry.content} className={splitContent ? styles.song_card_content_split : ''} />
+                  {songObservation}
                 </div>
               </AccordionDetails>
             </Accordion>

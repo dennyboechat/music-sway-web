@@ -9,13 +9,18 @@ import HeaderPanel from '@/components/header/header-panel';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
+import "swiper/css/navigation";
+import { Navigation } from "swiper";
 import { scrollToPageTop } from '@/lib/utils';
 import { autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Home = () => {
   const { setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
+
+  const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
 
   const onSwipeReachBeginning = () => () => {
     autoPageScrollDownStop();
@@ -74,6 +79,8 @@ const Home = () => {
         grabCursor={true}
         onReachBeginning={onSwipeReachBeginning()}
         onReachEnd={onSwipeReachEnd()}
+        navigation={isBiggerResolution}
+        modules={[Navigation]}
       >
         <SwiperSlide id="songsSwiper" className={styles.swiper_slide}>
           <Songs />

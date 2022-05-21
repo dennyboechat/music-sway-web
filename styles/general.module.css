@@ -181,3 +181,8 @@
   text-align: center;
   margin-top: 20px;
 }
+
+.song_observation_footer {
+  margin-top: 10px;
+  border-top: 1px solid #2A2A2A;
+}

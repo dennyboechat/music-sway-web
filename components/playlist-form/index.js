@@ -119,8 +119,8 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     };
 
     const onCancel = async () => {
-        setCanceling(true);
         Router.push('/');
+        setCanceling(true);
     }
 
     const handleSetPlaylistRestrictionId = (name) => {
