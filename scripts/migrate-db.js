@@ -33,18 +33,35 @@ const migrate = async () => {
         id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(255) NOT NULL,
         name VARCHAR(255),
+        email VARCHAR(255) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
 
     await query(`
+      INSERT INTO 
+        user (username, name)
+      VALUES
+        ('admin', 'Admin')
+    `);
+
+    await query(`
       CREATE TABLE IF NOT EXISTS song_restriction (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id INT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
+    `);
+
+    await query(`
+      INSERT INTO 
+        song_restriction (id, name)
+      VALUES 
+        (1, 'Private'),
+        (2, 'Band'),
+        (3, 'Public')
     `);
 
     await query(`
@@ -93,8 +110,49 @@ const migrate = async () => {
         playlist_id INT NOT NULL,
         song_id INT NOT NULL,
         order_index INT NOT NULL,
-        CONSTRAINT fk_playlist_entry_playlist FOREIGN KEY (playlist_id) REFERENCES playlist (id) ON DELETE CASCADE ON UPDATE RESTRICT      
-        CONSTRAINT fk_playlist_entry_song FOREIGN KEY (song_id) REFERENCES song (id) ON DELETE CASCADE ON UPDATE RESTRICT      
+        CONSTRAINT fk_playlist_entry_playlist FOREIGN KEY (playlist_id) REFERENCES playlist (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT fk_playlist_entry_song FOREIGN KEY (song_id) REFERENCES song (id) ON DELETE CASCADE ON UPDATE RESTRICT
+      )
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS band (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        owner_id INT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        CONSTRAINT fk_band_owner_user FOREIGN KEY (owner_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE RESTRICT
+      )
+    `);
+
+    await query(`
+    CREATE TABLE IF NOT EXISTS band_user_status (
+      id INT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
+  `);
+
+  await query(`
+      INSERT INTO 
+      band_user_status (id, name)
+      VALUES 
+        (1, 'Approved'),
+        (2, 'Pending'),
+        (3, 'Denied')
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_band (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        band_id INT NOT NULL,
+        band_user_status_id INT NOT NULL,
+        CONSTRAINT fk_user_band_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT fk_user_band_band FOREIGN KEY (band_id) REFERENCES band (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT fk_user_band_band_user_status FOREIGN KEY (band_user_status_id) REFERENCES band_user_status (id) ON DELETE CASCADE ON UPDATE RESTRICT
       )
     `);
 

@@ -22,6 +22,8 @@ import { createPlaylist, updatePlaylist, deletePlaylist } from '@/graphQl/mutati
 import { GraphQLClient } from 'graphql-request';
 import { useSWRConfig } from 'swr';
 import { playlistsQuery } from '@/graphQl/queries';
+import { useConfigurationState } from '@/lib/configuration-store';
+import PageNavigation from '@/lib/page-navigation';
 
 const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [playlistName, setPlaylistName] = React.useState(playlist?.name);
@@ -35,11 +37,17 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const [hasErrors, setHasErrors] = React.useState(false);
     const { setAlertMessage } = useMessageState();
+    const { setNavigationPage } = useConfigurationState();
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
     if (!playlist) {
         return null;
+    }
+
+    const backToMainPage = () => {
+        setNavigationPage({ value: PageNavigation.PLAYLISTS });
+        Router.push('/');
     }
 
     const onSave = ({ addsNew }) => async () => {
@@ -91,7 +99,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
 
             setSavingAndAddingNew(false);
         } else {
-            Router.push('/');
+            backToMainPage();
             setSaving(false);
         }
     };
@@ -113,13 +121,13 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             throw Error(error);
         }
         mutate(playlistsQuery);
-        Router.push('/');
+        backToMainPage();
         setAlertMessage({ message: `${playlistName} is gone forever.`, severity: 'success' });
         setDeleting(false);
     };
 
     const onCancel = async () => {
-        Router.push('/');
+        backToMainPage();
         setCanceling(true);
     }
 

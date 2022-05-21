@@ -15,23 +15,28 @@ import { scrollToPageTop } from '@/lib/utils';
 import { autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import PageNavigation from '@/lib/page-navigation';
 
 const Home = () => {
-  const { setAutoScrollContentSpeed } = useConfigurationState();
+  const { navigationPage, setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
+
+  React.useEffect(() => {
+    setShowSongs(!navigationPage || navigationPage === PageNavigation.SONGS ? true : false);
+  }, [navigationPage]);
 
   const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
 
   const onSwipeReachBeginning = () => () => {
     autoPageScrollDownStop();
-    setAutoScrollContentSpeed(0);
+    setAutoScrollContentSpeed({ value: 0 });
     setShowSongs(true);
     scrollToPageTop();
   }
 
   const onSwipeReachEnd = () => () => {
     autoPageScrollDownStop();
-    setAutoScrollContentSpeed(0);
+    setAutoScrollContentSpeed({ value: 0 });
     setShowSongs(false);
     scrollToPageTop();
   }
@@ -81,6 +86,7 @@ const Home = () => {
         onReachEnd={onSwipeReachEnd()}
         navigation={isBiggerResolution}
         modules={[Navigation]}
+        initialSlide={navigationPage === PageNavigation.PLAYLISTS ? 1 : 0}
       >
         <SwiperSlide id="songsSwiper" className={styles.swiper_slide}>
           <Songs />

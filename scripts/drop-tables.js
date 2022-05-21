@@ -34,6 +34,9 @@ const dropTables = async () => {
         song_entry,
         song,
         song_restriction,
+        user_band,
+        band,
+        band_user_status,
         user
     `);
 

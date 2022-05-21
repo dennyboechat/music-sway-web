@@ -11,10 +11,10 @@
     "drop-tables": "node scripts/drop-tables.js"
   },
   "dependencies": {
-    "@emotion/react": "11.6.0",
-    "@emotion/styled": "11.6.0",
-    "@mui/icons-material": "5.6.2",
-    "@mui/material": "5.6.4",
+    "@emotion/react": "11.9.0",
+    "@emotion/styled": "11.8.1",
+    "@mui/icons-material": "5.8.0",
+    "@mui/material": "5.8.0",
     "@tinymce/tinymce-react": "3.13.1",
     "apollo-server-micro": "2.25.3",
     "dotenv": "10.0.0",
@@ -34,6 +34,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "@types/react": "^18.0.1",
     "@types/sortablejs": "1.10.7",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.0",

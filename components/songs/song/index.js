@@ -50,10 +50,10 @@ const Song = ({ song }) => {
   const scrollContentStartStop = () => {
     if (autoScrollContentSpeed) {
       autoPageScrollDownStop();
-      setAutoScrollContentSpeed(AUTO_SCROLL_NO_SPEED);
+      setAutoScrollContentSpeed({ value: AUTO_SCROLL_NO_SPEED });
     } else {
       autoPageScrollDownStart();
-      setAutoScrollContentSpeed(AUTO_SCROLL_FIRST_SPEED);
+      setAutoScrollContentSpeed({ value: AUTO_SCROLL_FIRST_SPEED });
     }
   }
 
@@ -68,7 +68,7 @@ const Song = ({ song }) => {
     } else {
       scrollDown = autoScrollContentSpeed === AUTO_SCROLL_FIRST_SPEED ? AUTO_SCROLL_NO_SPEED : autoScrollContentSpeed + AUTO_SCROLL_SPEED_BREAK;
     }
-    setAutoScrollContentSpeed(scrollDown);
+    setAutoScrollContentSpeed({ value: scrollDown });
     if (scrollDown) {
       autoPageScrollDownStop();
       autoPageScrollDownStart(scrollDown);
