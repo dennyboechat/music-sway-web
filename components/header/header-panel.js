@@ -4,13 +4,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import MsLogo from '@/components/ms-logo';
 import DrawerMenu from '@/components/drawer-menu';
 import styles from '@/styles/general.module.css';
+import { useConfigurationState } from '@/lib/configuration-store';
 
 const HeaderPanel = ({ children }) => {
-    const [showDrawerMenu, setShowDrawerMenu] = React.useState(false);
+    const { setShowDrawerMenu } = useConfigurationState();
     const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
 
     const onCloseDrawerMenu = () => {
-        setShowDrawerMenu(false);
+        setShowDrawerMenu({ value: false });
     }
 
     return (
@@ -18,7 +19,7 @@ const HeaderPanel = ({ children }) => {
             <span className={styles.header_logo}>
                 <IconButton
                     id="logo_button"
-                    onClick={() => setShowDrawerMenu(true)}
+                    onClick={() => setShowDrawerMenu({ value: true })}
                 >
                     <MsLogo />
                 </IconButton >
@@ -29,8 +30,6 @@ const HeaderPanel = ({ children }) => {
             <div className={styles.header_title} />
             {children}
             <DrawerMenu
-                id="mainDrawerMenu"
-                show={showDrawerMenu}
                 onClose={onCloseDrawerMenu}
             />
         </div>

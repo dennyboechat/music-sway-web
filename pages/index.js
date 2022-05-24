@@ -18,12 +18,18 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import PageNavigation from '@/lib/page-navigation';
 
 const Home = () => {
-  const { navigationPage, setAutoScrollContentSpeed } = useConfigurationState();
+  const { pageNavigation, setPageNavigation, setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
+  const swiperRef = React.useRef();
 
   React.useEffect(() => {
-    setShowSongs(!navigationPage || navigationPage === PageNavigation.SONGS ? true : false);
-  }, [navigationPage]);
+    const showSongs = !pageNavigation || pageNavigation === PageNavigation.SONGS ? true : false;
+    setShowSongs(showSongs);
+    if (swiperRef && swiperRef.current && swiperRef.current.swiper) {
+      const swiperIndex = showSongs ? 0 : 1;
+      swiperRef.current.swiper.slideTo(swiperIndex);
+    }
+  }, [pageNavigation]);
 
   const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
 
@@ -31,6 +37,7 @@ const Home = () => {
     autoPageScrollDownStop();
     setAutoScrollContentSpeed({ value: 0 });
     setShowSongs(true);
+    setPageNavigation({ value: PageNavigation.SONGS });
     scrollToPageTop();
   }
 
@@ -38,6 +45,7 @@ const Home = () => {
     autoPageScrollDownStop();
     setAutoScrollContentSpeed({ value: 0 });
     setShowSongs(false);
+    setPageNavigation({ value: PageNavigation.PLAYLISTS });
     scrollToPageTop();
   }
 
@@ -86,7 +94,7 @@ const Home = () => {
         onReachEnd={onSwipeReachEnd()}
         navigation={isBiggerResolution}
         modules={[Navigation]}
-        initialSlide={navigationPage === PageNavigation.PLAYLISTS ? 1 : 0}
+        ref={swiperRef}
       >
         <SwiperSlide id="songsSwiper" className={styles.swiper_slide}>
           <Songs />

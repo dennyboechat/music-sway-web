@@ -12,21 +12,30 @@ import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import { useConfigurationState } from '@/lib/configuration-store';
 import PageNavigation from '@/lib/page-navigation';
 import styles from '@/styles/general.module.css';
+import { cloneDeep } from 'lodash';
 
-const DrawerMenu = ({ id, show, onOpen = () => { }, onClose }) => {
+const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
 
-    const { setNavigationPage } = useConfigurationState();
+    const { showDrawerMenu, setShowDrawerMenu, configurationData, setConfigurationData } = useConfigurationState();
 
     const goToMainPage = ({ pageNavigation }) => {
-        setNavigationPage({ value: pageNavigation });
+        let configurationDataCopy = cloneDeep(configurationData);
+        configurationDataCopy.pageNavigation = pageNavigation;
+        configurationDataCopy.showDrawerMenu = false;
+        setConfigurationData(configurationDataCopy);
         Router.push('/');
+    };
+
+    const goTo = ({ path }) => {
+        setShowDrawerMenu({ value: false });
+        Router.push(path);
     };
 
     return (
         <SwipeableDrawer
             id={id}
             anchor="left"
-            open={show}
+            open={showDrawerMenu}
             onOpen={onOpen}
             onClose={onClose}
         >
@@ -55,7 +64,7 @@ const DrawerMenu = ({ id, show, onOpen = () => { }, onClose }) => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem key={'band'} disablePadding>
-                        <ListItemButton onClick={() => { Router.push('/band') }}>
+                        <ListItemButton onClick={() => { goTo({ path: '/band' }) }}>
                             <ListItemIcon>
                                 <LocalPlayIcon />
                             </ListItemIcon>
@@ -64,7 +73,7 @@ const DrawerMenu = ({ id, show, onOpen = () => { }, onClose }) => {
                     </ListItem>
                 </List>
             </div>
-        </SwipeableDrawer >
+        </SwipeableDrawer>
     );
 }
 

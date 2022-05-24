@@ -37,7 +37,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const [hasErrors, setHasErrors] = React.useState(false);
     const { setAlertMessage } = useMessageState();
-    const { setNavigationPage } = useConfigurationState();
+    const { setPageNavigation } = useConfigurationState();
     const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
@@ -46,7 +46,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     }
 
     const backToMainPage = () => {
-        setNavigationPage({ value: PageNavigation.PLAYLISTS });
+        setPageNavigation({ value: PageNavigation.PLAYLISTS });
         Router.push('/');
     }
 
