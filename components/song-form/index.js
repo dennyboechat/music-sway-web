@@ -250,7 +250,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                             className="default_bottom_margin"
                             inputProps={{ maxLength: 255 }}
                             error={hasErrors}
-                            helperText={hasErrors ? "Add a Song Tile dude!" : null}
+                            helperText={hasErrors ? "Add a Song Title dude!" : null}
                         />
                     </Grid>
                     <Grid item xs={12} lg={6} className={styles.text_align_right}>

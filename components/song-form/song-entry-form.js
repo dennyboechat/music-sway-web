@@ -63,7 +63,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
         deleteEntryButton = (
             <Button
                 id="deleteEntry"
-                onClick={() => onDeleteEntry({ entry })}
+                onClick={() => onDeleteEntry()}
                 onMouseOver={() => onMouseOverDeleteButton()}
                 onMouseOut={() => onMouseOutDeleteButton()}
                 variant="outlined"
@@ -105,7 +105,6 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
                 </Grid>
             </Grid>
             <RichTextEditor
-                id="entryContent"
                 value={entry.content}
                 onChange={(value) => onValueChanged({ field: 'content', value, entry })}
                 className="song_entry_rich_text_editor_wrapper"

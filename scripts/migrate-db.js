@@ -135,7 +135,7 @@ const migrate = async () => {
     )
   `);
 
-  await query(`
+    await query(`
       INSERT INTO 
       band_user_status (id, name)
       VALUES 
@@ -147,9 +147,10 @@ const migrate = async () => {
     await query(`
       CREATE TABLE IF NOT EXISTS user_band (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
+        user_id INT,
         band_id INT NOT NULL,
         band_user_status_id INT NOT NULL,
+        user_invitation_email VARCHAR(255),
         CONSTRAINT fk_user_band_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE RESTRICT,
         CONSTRAINT fk_user_band_band FOREIGN KEY (band_id) REFERENCES band (id) ON DELETE CASCADE ON UPDATE RESTRICT,
         CONSTRAINT fk_user_band_band_user_status FOREIGN KEY (band_user_status_id) REFERENCES band_user_status (id) ON DELETE CASCADE ON UPDATE RESTRICT

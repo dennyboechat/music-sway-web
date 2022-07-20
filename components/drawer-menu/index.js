@@ -68,7 +68,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                             <ListItemIcon>
                                 <LocalPlayIcon />
                             </ListItemIcon>
-                            <ListItemText primary={'Band'} />
+                            <ListItemText primary={'Bands'} />
                         </ListItemButton>
                     </ListItem>
                 </List>

@@ -78,11 +78,42 @@ const typeDefs = gql`
         entries: [PlaylistEntry]
     }
 
+    input BandMembersInput {
+        invitationEmail: String!
+        status: ID
+    }
+
+    input BandAddInput {
+        name: String!
+        members: [BandMembersInput]
+    }
+
+    input BandUpdateInput {
+        id: ID!
+        name: String!
+        members: [BandMembersInput]
+    }
+
+    type BandMember {
+        id: ID!
+        userId: ID
+        invitationEmail: String!
+        status: String!
+    }
+
+    type Band {
+        id: ID!
+        name: String!
+        ownerId: Int
+        members: [BandMember]
+    }
+
     type Query {
         song(id: ID!): Song
         songs: [Song]
         playlist(id: ID!): Playlist
         playlists: [Playlist]
+        bands(ownerId: ID!): [Band]
     }
 
     type SongDeleted {
@@ -93,6 +124,10 @@ const typeDefs = gql`
         msg: String,
     }
 
+    type BandDeleted {
+        msg: String,
+    }
+
     type Mutation {
         addSong(input: SongAddInput!): Song,
         editSong(input: SongUpdateInput!): Song,
@@ -100,6 +135,9 @@ const typeDefs = gql`
         addPlaylist(input: PlaylistAddInput!): Playlist,
         editPlaylist(input: PlaylistUpdateInput!): Playlist,
         removePlaylist(id: ID!): PlaylistDeleted,
+        addBand(input: BandAddInput!): Band,
+        editBand(input: BandUpdateInput!): Band,
+        removeBand(id: ID!): BandDeleted,
     }
 `;
 

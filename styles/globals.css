@@ -87,6 +87,10 @@ div.MuiAccordionDetails-root {
   padding-bottom: 0;
 }
 
+div.MuiAccordionDetails-root.band_details {
+  padding: 5px;
+}
+
 div.ms-accordion.MuiAccordion-root:before {
   opacity: 0;
 }
@@ -129,4 +133,8 @@ div.swiper-button-next {
 
 div.swiper-button-disabled {
   display: none;
+}
+
+.MuiDialogContent-root.band_details_dialog_content {
+  padding-top: 10px;
 }

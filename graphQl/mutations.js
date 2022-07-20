@@ -91,3 +91,39 @@ export const deletePlaylist = gql`
     }
   }
 `;
+
+export const createBand = gql`
+  mutation ($input: BandAddInput!) {
+    addBand(input: $input) {
+      id,
+      name,
+      members {
+        id,
+        invitationEmail,
+        status,
+      },
+    }
+  }
+`;
+
+export const updateBand = gql`
+  mutation ($input: BandUpdateInput!) {
+    editBand(input: $input) {
+      id,
+      name,
+      members {
+        id,
+        invitationEmail,
+        status,
+      },
+    }
+  }
+`;
+
+export const deleteBand = gql`
+  mutation ($id: ID!) {
+    removeBand(id: $id) {
+      msg,
+    }
+  }
+`;

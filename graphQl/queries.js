@@ -86,3 +86,18 @@ export const playlistQuery = gql`
     }
   }
 `;
+
+export const bandsQuery = gql`
+  query($ownerId: ID!) {
+    bands(ownerId: $ownerId) {
+      id,
+      name,
+      ownerId,
+      members {
+        id,
+        invitationEmail,
+        status,
+      }
+    }
+  }
+`;
