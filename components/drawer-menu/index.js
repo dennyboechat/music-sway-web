@@ -64,7 +64,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem key={'band'} disablePadding>
-                        <ListItemButton onClick={() => { goTo({ path: '/band' }) }}>
+                        <ListItemButton onClick={() => { goTo({ path: '/bands' }) }}>
                             <ListItemIcon>
                                 <LocalPlayIcon />
                             </ListItemIcon>

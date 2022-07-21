@@ -30,12 +30,22 @@ const getNewInvitationEmail = () => {
     };
 };
 
+const usePrevious = (value) => {
+    const ref = React.useRef();
+    React.useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
+}
+
 const BandDialog = ({ band, dialogShown, onDialogClose }) => {
     const { setAlertMessage } = useMessageState();
     const [bandName, setBandName] = React.useState();
     const [invitations, setInvitations] = React.useState([getNewInvitationEmail()]);
+    const prevInvitations = usePrevious(invitations);
     const [hasBandNameErrors, setHasBandNameErrors] = React.useState(false);
     const [invitationErrors, setInvitationErrors] = React.useState();
+    const [saving, setSaving] = React.useState(false);
     const { mutate } = useSWRConfig();
     const isUpdate = band && band.id;
 
@@ -60,11 +70,11 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
         }
     }, [dialogShown, band]);
 
-    // React.useEffect(() => {
-    //     if (prevInvitations !== invitations) {
-    //         focusLastElement({ rootElemRef: 'div.MuiDialog-container', elementRef: 'input' });
-    //     }
-    // }, [invitations]);
+    React.useEffect(() => {
+        if (prevInvitations && invitations && prevInvitations.length < invitations.length) {
+            focusLastElement({ rootElemRef: 'div.MuiDialog-container', elementRef: 'input' });
+        }
+    }, [invitations, prevInvitations]);
 
     const onChangeInvitationEmail = ({ invitation, invitationEmail }) => {
         const invitationsClone = cloneDeep(invitations);
@@ -106,6 +116,8 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
             return;
         }
 
+        setSaving(true);
+
         let members = invitations.filter(obj => { return obj.invitationEmail; });
         members = uniqBy(members, obj => { return obj.invitationEmail });
         members = members.map(obj => pick(obj, ['invitationEmail', 'status']));
@@ -132,6 +144,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
         mutate(bandsQuery);
         onClose();
         setAlertMessage({ message: `${bandName} was saved.`, severity: 'success' });
+        setSaving(false);
     }
 
     const onClose = (_, reason) => {
@@ -205,6 +218,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                                         variant="outlined"
                                         startIcon={<DeleteIcon />}
                                         className={styles.margin_top_10px}
+                                        disabled={saving}
                                     >
                                         {'Remove'}
                                     </Button>
@@ -218,6 +232,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                                         variant="outlined"
                                         startIcon={<AddIcon />}
                                         className={styles.margin_top_10px}
+                                        disabled={saving}
                                     >
                                         {'Add another'}
                                     </Button>
@@ -232,6 +247,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                     id="cancelBandButton"
                     onClick={onClose}
                     icon={<HighlightOffIcon />}
+                    disabled={saving}
                 >
                     {'Cancel'}
                 </Button>
@@ -239,6 +255,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                     id="saveBandButton"
                     onClick={onSaveBand()}
                     icon={<SaveIcon />}
+                    disabled={saving}
                 >
                     {'Save'}
                 </Button>
