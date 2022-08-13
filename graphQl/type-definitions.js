@@ -46,6 +46,12 @@ const typeDefs = gql`
         entries: [PlaylistEntryInput]
     }
 
+    type User {
+        id: ID!
+        name: String!
+        email: String!
+    }
+
     type SongEntry {
         id: ID!
         title: String
@@ -109,11 +115,12 @@ const typeDefs = gql`
     }
 
     type Query {
+        user(email: String!): User
         song(id: ID!): Song
         songs: [Song]
         playlist(id: ID!): Playlist
         playlists: [Playlist]
-        bands(ownerId: ID!): [Band]
+        bands: [Band]
     }
 
     type SongDeleted {

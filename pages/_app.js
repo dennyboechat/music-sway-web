@@ -1,4 +1,5 @@
 import React from "react";
+import { SessionProvider } from 'next-auth/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import themeDark from '@/styles/themeDark';
@@ -8,35 +9,34 @@ import { PlaylistsStateProvider } from '@/lib/playlists-store';
 import { ConfigurationStateProvider } from '@/lib/configuration-store';
 import { MessageStateProvider } from '@/lib/message-store';
 import { BandsStateProvider } from "@/lib/bands-store";
+import { AuthProvider } from "@/lib/auth-provider";
 import AlertMessage from '@/components/alert';
-import NoSleep from 'nosleep.js';
 import '../styles/globals.css';
 
-const MyApp = ({ Component, pageProps }) => {
-
-  React.useEffect(() => {
-    const noSleep = new NoSleep();
-    noSleep.enable();
-  }, []);
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
 
   return (
-    <ThemeProvider theme={themeDark}>
-      <SongsStateProvider>
-        <SongsFilterStateProvider>
-          <PlaylistsStateProvider>
-            <ConfigurationStateProvider>
-              <MessageStateProvider>
-                <BandsStateProvider>
-                  <CssBaseline />
-                  <Component {...pageProps} />
-                  <AlertMessage />
-                </BandsStateProvider>
-              </MessageStateProvider>
-            </ConfigurationStateProvider>
-          </PlaylistsStateProvider>
-        </SongsFilterStateProvider>
-      </SongsStateProvider>
-    </ThemeProvider>
+    <SessionProvider session={session}>
+      <ThemeProvider theme={themeDark}>
+        <AuthProvider>
+          <SongsStateProvider>
+            <SongsFilterStateProvider>
+              <PlaylistsStateProvider>
+                <ConfigurationStateProvider>
+                  <MessageStateProvider>
+                    <BandsStateProvider>
+                      <CssBaseline />
+                      <Component {...pageProps} />
+                      <AlertMessage />
+                    </BandsStateProvider>
+                  </MessageStateProvider>
+                </ConfigurationStateProvider>
+              </PlaylistsStateProvider>
+            </SongsFilterStateProvider>
+          </SongsStateProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </SessionProvider>
   );
 }
 

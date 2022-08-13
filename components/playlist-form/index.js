@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'next/router'
+import Router from 'next/router';
 import Header from '@/components/header';
 import PlaylistSongEntry from '@/components/playlist-form/song-entry';
 import ConfirmButtonFab from '@/components/confirm-buttons/confirmButtonFab';

@@ -1,21 +1,26 @@
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import MsLogo from '@/components/ms-logo';
+import UserAvatar from '@/components/user/user-avatar';
 import Router from 'next/router'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import Logout from '@mui/icons-material/Logout';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import { useConfigurationState } from '@/lib/configuration-store';
 import PageNavigation from '@/lib/page-navigation';
+import { signOut } from 'next-auth/react';
+import { useAuthProvider } from '@/lib/auth-provider';
 import styles from '@/styles/general.module.css';
 import { cloneDeep } from 'lodash';
 
 const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
-
+    const { loggedUser } = useAuthProvider();
     const { showDrawerMenu, setShowDrawerMenu, configurationData, setConfigurationData } = useConfigurationState();
 
     const goToMainPage = ({ pageNavigation }) => {
@@ -39,7 +44,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
             onOpen={onOpen}
             onClose={onClose}
         >
-            <div>
+            <div className={styles.drawer_menu}>
                 <div className={styles.drawer_menu_logo}>
                     <MsLogo />
                 </div>
@@ -63,7 +68,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                             <ListItemText primary={'Playlists'} />
                         </ListItemButton>
                     </ListItem>
-                    <ListItem key={'band'} disablePadding>
+                    <ListItem key={'bands'} disablePadding>
                         <ListItemButton onClick={() => { goTo({ path: '/bands' }) }}>
                             <ListItemIcon>
                                 <LocalPlayIcon />
@@ -71,7 +76,20 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                             <ListItemText primary={'Bands'} />
                         </ListItemButton>
                     </ListItem>
+                    <Divider />
+                    <ListItem key={'logout'} disablePadding>
+                        <ListItemButton onClick={() => { signOut() }}>
+                            <ListItemIcon>
+                                <Logout fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText primary={'Logout'} />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
+                <div className={styles.drawer_menu_user}>
+                    <UserAvatar />
+                    {loggedUser?.user?.name}
+                </div>
             </div>
         </SwipeableDrawer>
     );

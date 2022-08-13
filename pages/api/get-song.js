@@ -2,10 +2,18 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db';
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
   Query: {
-    song: async (root, { id }) => {
+    song: async (root, { id }, context) => {
+
+      const user = await getUserByEmail({ context, query });
+      if (!user) {
+        return null;
+      }
+
       const results = await query(`
           SELECT 
             song.id as songId, 
@@ -23,10 +31,19 @@ const resolvers = {
           LEFT JOIN 
             song_entry on song_entry.song_id = song.id
           WHERE 
-            song.id = ?
+            song.id = ? AND
+            song.owner_id = ?
           `,
-        id
-      )
+        [
+          id,
+          user.id
+        ]
+      );
+
+      if (!results) {
+        console.error('User cannot get this song.');
+        return null;
+      }
 
       let song = {
         entries: [],
@@ -59,6 +76,13 @@ export const config = {
   },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req }) => {
+    const session = await getSession({ req });
+    return { session };
+  },
+});
 
 export default server.createHandler({ path: "/api/get-song" });

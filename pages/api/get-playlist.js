@@ -2,10 +2,18 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db';
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
     Query: {
-        playlist: async (root, { id }) => {
+        playlist: async (root, { id }, context) => {
+
+            const user = await getUserByEmail({ context, query });
+            if (!user) {
+                return null;
+            }
+
             const results = await query(`
                 SELECT 
                     playlist.id as playlistId, 
@@ -21,10 +29,19 @@ const resolvers = {
                 LEFT JOIN 
                     playlist_entry on playlist_entry.playlist_id = playlist.id
                 WHERE 
-                    playlist.id = ?
+                    playlist.id = ? AND
+                    owner_id = ?
                 `,
-                id
+                [
+                    id,
+                    user.id
+                ]
             );
+
+            if (!results) {
+                console.error('User cannot update this playlist.');
+                return null;
+            }
 
             let playlist = {
                 entries: [],
@@ -57,6 +74,13 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default server.createHandler({ path: "/api/get-playlist" });

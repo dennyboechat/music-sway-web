@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
     Mutation: {
-        addBand: async (root, { input: { name, members } }) => {
+        addBand: async (root, { input: { name, members } }, context) => {
+
+            const user = await getUserByEmail({ context, query });
+            if (!user) {
+                return null;
+            }
 
             if (!name || name.trim.length) {
                 console.error('`name` is required.');
@@ -13,21 +20,21 @@ const resolvers = {
 
             let band = {
                 name: name,
-                ownerId: 1,
+                ownerId: user.id,
             }
 
             let results = await query(`
                 INSERT INTO 
                     band (name, owner_id)
                 VALUES 
-                (?, ?)
+                    (?, ?)
                 `,
                 [band.name, band.ownerId]
             );
 
             const bandIdResults = await query(`
                 SELECT 
-                    LAST_INSERT_ID() as bandId
+                    LAST_INSERT_ID() AS bandId
             `
             );
             band.id = bandIdResults[0].bandId;
@@ -56,6 +63,13 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default server.createHandler({ path: "/api/create-band" });

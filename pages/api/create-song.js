@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
   Mutation: {
-    addSong: async (root, { input: { title, artist, category, observation, restrictionId, entries } }) => {
+    addSong: async (root, { input: { title, artist, category, observation, restrictionId, entries } }, context) => {
+
+      const user = await getUserByEmail({ context, query });
+      if (!user) {
+        return null;
+      }
 
       if (!title || title.trim.length || !restrictionId) {
         console.error('`title` and `restriction id` are required.');
@@ -17,7 +24,7 @@ const resolvers = {
         category: category,
         observation: observation,
         restrictionId: restrictionId,
-        ownerId: 1,
+        ownerId: user.id,
       }
 
       let results = await query(`
@@ -26,12 +33,19 @@ const resolvers = {
         VALUES 
           (?, ?, ?, ?, ?, ?)
         `,
-        [song.title, song.artist, song.category, song.observation, song.restrictionId, song.ownerId]
+        [
+          song.title,
+          song.artist,
+          song.category,
+          song.observation,
+          song.restrictionId,
+          song.ownerId
+        ]
       );
 
       const songIdResults = await query(`
         SELECT 
-            LAST_INSERT_ID() as songId
+            LAST_INSERT_ID() AS songId
       `
       );
       song.id = songIdResults[0].songId;
@@ -59,6 +73,13 @@ export const config = {
   },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req }) => {
+    const session = await getSession({ req });
+    return { session };
+  },
+});
 
 export default server.createHandler({ path: "/api/create-song" });

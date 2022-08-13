@@ -16,8 +16,10 @@ import { autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import PageNavigation from '@/lib/page-navigation';
+import { useAuthProvider } from '@/lib/auth-provider';
 
 const Home = () => {
+  const { loggedUser } = useAuthProvider();
   const { pageNavigation, setPageNavigation, setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
   const swiperRef = React.useRef();
@@ -32,6 +34,15 @@ const Home = () => {
   }, [pageNavigation]);
 
   const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
+
+  if (!loggedUser) {
+    return (
+      <>
+        <Header />
+        <HeaderPanel />
+      </>
+    );
+  }
 
   const onSwipeReachBeginning = () => () => {
     autoPageScrollDownStop();

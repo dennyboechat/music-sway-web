@@ -138,3 +138,8 @@ div.swiper-button-disabled {
 .MuiDialogContent-root.band_details_dialog_content {
   padding-top: 10px;
 }
+
+button.user_main_menu {
+  margin-right: 10px;
+  margin-left: 10px;
+}

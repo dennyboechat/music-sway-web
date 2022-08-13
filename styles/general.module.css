@@ -177,6 +177,11 @@
   font-size: 8.5px;
 }
 
+.drawer_menu {
+  margin-bottom: 60px;
+  width: 200px;
+}
+
 .drawer_menu_logo {
   text-align: center;
   margin-top: 20px;
@@ -184,6 +189,18 @@
 
 .drawer_menu_title {
   text-align: center;
+}
+
+.drawer_menu_user {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+  column-gap: 20px;
+  color: #D3D3D3;
+  background-color: #353535;
 }
 
 .song_observation_footer {

@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
     Mutation: {
-        editSong: async (root, { input: { id, title, artist, category, observation, restrictionId, entries } }) => {
+        editSong: async (root, { input: { id, title, artist, category, observation, restrictionId, entries } }, context) => {
+
+            const user = await getUserByEmail({ context, query });
+            if (!user) {
+                return null;
+            }
 
             if (!id || !title || title.trim.length) {
                 console.error('`id` and `title` are required.');
@@ -18,7 +25,7 @@ const resolvers = {
                 category: category,
                 observation: observation,
                 restrictionId: restrictionId,
-                ownerId: 1,
+                ownerId: user.id,
             }
 
             let results = await query(`
@@ -31,10 +38,24 @@ const resolvers = {
                     observation = ?,
                     restriction_id = ?
                 WHERE 
-                    id = ?
+                    id = ? AND
+                    owner_id = ?
                 `,
-                [song.title, song.artist, song.category, song.observation, song.restrictionId, song.id]
+                [
+                    song.title,
+                    song.artist,
+                    song.category,
+                    song.observation,
+                    song.restrictionId,
+                    song.id,
+                    user.id
+                ]
             );
+
+            if (!results) {
+                console.error('User cannot update this song.');
+                return null;
+            }
 
             results = await query(`
                 DELETE FROM 
@@ -68,6 +89,13 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default server.createHandler({ path: "/api/edit-song" });

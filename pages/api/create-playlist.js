@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
   Mutation: {
-    addPlaylist: async (root, { input: { name, observation, restrictionId, entries } }) => {
+    addPlaylist: async (root, { input: { name, observation, restrictionId, entries } }, context) => {
+
+      const user = await getUserByEmail({ context, query });
+      if (!user) {
+        return null;
+      }
 
       if (!name || name.trim.length || !restrictionId) {
         console.error('`name` and `restriction id` are required.');
@@ -15,7 +22,7 @@ const resolvers = {
         name: name,
         observation: observation,
         restrictionId: restrictionId,
-        ownerId: 1,
+        ownerId: user.id,
       }
 
       let results = await query(`
@@ -57,6 +64,13 @@ export const config = {
   },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req }) => {
+    const session = await getSession({ req });
+    return { session };
+  },
+});
 
 export default server.createHandler({ path: "/api/create-playlist" });

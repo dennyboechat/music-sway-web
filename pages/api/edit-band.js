@@ -1,10 +1,17 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
     Mutation: {
-        editBand: async (root, { input: { id, name, members } }) => {
+        editBand: async (root, { input: { id, name, members } }, context) => {
+
+            const user = await getUserByEmail({ context, query });
+            if (!user) {
+                return null;
+            }
 
             if (!id || !name || name.trim.length) {
                 console.error('`id` and `name` are required.');
@@ -14,6 +21,7 @@ const resolvers = {
             let band = {
                 id: id,
                 name: name,
+                ownerId: user.id,
             }
 
             let results = await query(`
@@ -22,10 +30,20 @@ const resolvers = {
                 SET 
                     name = ?
                 WHERE 
-                    id = ?
+                    id = ? AND
+                    owner_id = ?
                 `,
-                [band.name, band.id]
+                [
+                    band.name,
+                    band.id,
+                    user.id
+                ]
             );
+
+            if (!results) {
+                console.error('User cannot update this band.');
+                return null;
+            }
 
             results = await query(`
                 DELETE FROM 
@@ -59,6 +77,13 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default server.createHandler({ path: "/api/edit-band" });

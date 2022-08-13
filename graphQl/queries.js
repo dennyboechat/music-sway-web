@@ -88,8 +88,8 @@ export const playlistQuery = gql`
 `;
 
 export const bandsQuery = gql`
-  query($ownerId: ID!) {
-    bands(ownerId: $ownerId) {
+  query {
+    bands {
       id,
       name,
       ownerId,

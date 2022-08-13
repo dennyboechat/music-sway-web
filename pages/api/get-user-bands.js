@@ -2,10 +2,18 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db';
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getSession } from 'next-auth/react';
+import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
     Query: {
-        bands: async (root, { ownerId }) => {
+        bands: async (root, { }, context) => {
+
+            const user = await getUserByEmail({ context, query });
+            if (!user) {
+                return null;
+            }
+
             const results = await query(`
                 SELECT 
                     band.id as bandId, 
@@ -21,7 +29,7 @@ const resolvers = {
                 WHERE 
                     band.owner_id = ?
                 `,
-                ownerId
+                [user.id]
             )
 
             let bands = [];
@@ -56,6 +64,13 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default server.createHandler({ path: "/api/get-user-bands" });
