@@ -10,26 +10,17 @@ import DrawerMenu from '@/components/drawer-menu';
 import UserAvatar from '@/components/user/user-avatar';
 import Logout from '@mui/icons-material/Logout';
 import styles from '@/styles/general.module.css';
-import { signIn, signOut, getProviders } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useConfigurationState } from '@/lib/configuration-store';
 import { useAuthProvider } from '@/lib/auth-provider';
+import SignInDialog from './signInDialog';
 
 const HeaderPanel = ({ children }) => {
     const { loggedUser } = useAuthProvider();
     const { setShowDrawerMenu } = useConfigurationState();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [providers, setProviders] = React.useState();
+    const [showSignInDialog, setShowSignInDialog] = React.useState(false);
     const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
-
-    React.useEffect(() => {
-        const getAvailableProviders = async () => {
-            const availableProviders = await getProviders();
-            setProviders(availableProviders);
-        }
-        if (!loggedUser) {
-            getAvailableProviders();
-        }
-    }, [loggedUser]);
 
     const onCloseDrawerMenu = () => {
         setShowDrawerMenu({ value: false });
@@ -44,6 +35,10 @@ const HeaderPanel = ({ children }) => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const onCloseSignInDialog = () => {
+        setShowSignInDialog(false);
+    }
 
     let userData;
     if (isBiggerResolution) {
@@ -86,14 +81,12 @@ const HeaderPanel = ({ children }) => {
                     </Menu>
                 </>
             );
-        } else if (providers) {
-            userData = Object.values(providers).map((provider, index) => {
-                return (
-                    <MenuItem key={index} onClick={() => { signIn(provider.id) }}>
-                        <ListItemText primary="Log in" />
-                    </MenuItem>
-                );
-            });
+        } else {
+            userData = (
+                <MenuItem onClick={() => { setShowSignInDialog(true) }}>
+                    <ListItemText primary="Sign in" />
+                </MenuItem>
+            );
         }
     }
 
@@ -116,6 +109,10 @@ const HeaderPanel = ({ children }) => {
             {userData}
             <DrawerMenu
                 onClose={onCloseDrawerMenu}
+            />
+            <SignInDialog
+                showDialog={showSignInDialog}
+                onCloseDialog={onCloseSignInDialog}
             />
         </div>
     );

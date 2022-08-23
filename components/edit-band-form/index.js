@@ -31,7 +31,7 @@ const BandForm = () => {
 
         bandsData = (
             <form>
-                {bands.map(band => (
+                {bands && bands.map(band => (
                     <BandDetails
                         key={band.id}
                         band={band}
