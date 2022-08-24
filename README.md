@@ -115,8 +115,8 @@ npm run drop-tables
 * [x] Playlist list.
 * [x] CRUD Songs.
 * [x] CRUD Playlists.
-* [x] CRUD Bands.  
-* [-] Users credentials and invitations.
+* [x] CRUD Bands.
+* [ ] Users credentials and invitations.
 * [ ] Songs copy feature.
 * [ ] Bands setup improvement.
 * [ ] Main page content.
@@ -137,6 +137,6 @@ Distributed under the MIT License.
     <li><a href="https://github.com/SortableJS/react-sortablejs/" target="_blank">react-sortablejs</a></li>
     <li><a href="https://github.com/richtr/NoSleep.js/" target="_blank">NoSleep.js</a></li>
     <li><a href="https://github.com/motdotla/dotenv/" target="_blank">DotEnv</a></li>
-    <li><a href="TinyMCE" target="_blank">https://www.tiny.cloud/</a></li>
+    <li><a href="https://www.tiny.cloud/" target="_blank">TinyMCE</a></li>
     <li><a href="https://github.com/remarkablemark/html-react-parser/" target="_blank">html-react-parser</a></li>
 </ul>

@@ -13,10 +13,12 @@ import { orderBy, filter, forEach, remove } from 'lodash';
 import FilterInput from '@/components/filter-input';
 import { filterSongs } from '@/lib/utils';
 import { deepOrange } from '@mui/material/colors';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButtons = false }) => {
     const { songs, isLoadingSongs } = useSongsState();
     const [songsFilterValue, setSongsFilterValue] = React.useState('');
+    const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
     let entries = orderBy(playlistEntries, ['orderIndex']);
     let entryDetails = [];
@@ -132,12 +134,15 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
         setPlaylistEntries(entries);
     }
 
+    // Small screens need a gap for scroll down (using thumb) to skip the song drag & drop.
+    const gridSize = isBiggerResolution ? 6 : 5;
+
     return (
         <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize}>
                 {songsList}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize}>
                 <div className={styles.playlist_songs_title}>
                     <Typography color="primary">
                         {'Playlist Songs'}
