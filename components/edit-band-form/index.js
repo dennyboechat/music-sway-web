@@ -46,6 +46,7 @@ const BandForm = () => {
                         title="Add Band"
                         variant={null}
                         icon={<AddIcon />}
+                        size="large"
                     />
                 </div>
                 <BandDialog

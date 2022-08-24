@@ -234,7 +234,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                                         className={styles.margin_top_10px}
                                         disabled={saving}
                                     >
-                                        {'Add another'}
+                                        {'Add other'}
                                     </Button>
                                 </Grid>
                             }

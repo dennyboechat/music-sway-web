@@ -73,6 +73,7 @@ const Home = () => {
           aria-label="addSong"
           href="song/new"
           title="Add Song"
+          size="large"
           variant={null}
           icon={<AddIcon />}
         />
@@ -86,6 +87,7 @@ const Home = () => {
           aria-label="addPlaylist"
           href="playlist/new"
           title="Add Playlist"
+          size="large"
           variant={null}
           icon={<AddIcon />}
         />

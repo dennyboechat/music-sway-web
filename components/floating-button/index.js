@@ -5,7 +5,7 @@ const FloatingButton = ({
     id,
     color = 'primary',
     variant = 'extended',
-    size = 'large',
+    size,
     disabled = false,
     label,
     title,
@@ -16,8 +16,12 @@ const FloatingButton = ({
 }) => {
 
     const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
-    if (!isBiggerResolution) {
-        size = 'small';
+    if (!size) {
+        if (isBiggerResolution) {
+            size = 'large';
+        } else {
+            size = 'small';
+        }
     }
 
     return (

@@ -41,8 +41,8 @@ const HeaderPanel = ({ children }) => {
     }
 
     let userData;
-    if (isBiggerResolution) {
-        if (loggedUser) {
+    if (loggedUser) {
+        if (isBiggerResolution) {
             userData = (
                 <>
                     <IconButton
@@ -69,7 +69,7 @@ const HeaderPanel = ({ children }) => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                     >
-                        <MenuItem disabled>
+                        <MenuItem disabled className={styles.general_header_user_menu_logged_user}>
                             {loggedUser.user?.name}
                         </MenuItem>
                         <MenuItem onClick={() => { signOut() }}>
@@ -81,13 +81,13 @@ const HeaderPanel = ({ children }) => {
                     </Menu>
                 </>
             );
-        } else {
-            userData = (
-                <MenuItem onClick={() => { setShowSignInDialog(true) }}>
-                    <ListItemText primary="Sign in" />
-                </MenuItem>
-            );
         }
+    } else {
+        userData = (
+            <MenuItem onClick={() => { setShowSignInDialog(true) }}>
+                <ListItemText primary="Sign in" />
+            </MenuItem>
+        );
     }
 
     return (

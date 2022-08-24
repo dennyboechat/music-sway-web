@@ -51,6 +51,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                 <div className={styles.drawer_menu_title}>
                     {'Music Sway'}
                 </div>
+                <br />
                 <List>
                     <ListItem key={'songs'} disablePadding>
                         <ListItemButton onClick={() => { goToMainPage({ pageNavigation: PageNavigation.SONGS }) }}>
