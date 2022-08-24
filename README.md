@@ -1,19 +1,19 @@
 <div align="center">
-    <img src="/ms_logo.png" alt="" width="200" height="auto" />
+    <img src="https://github.com/dennyboechat/music-sway-web/blob/main/public/ms_logo.png" alt="" width="200" height="auto" />
     <h1>MUSIC SWAY</h1>
     <p>Manage Music You Play</p>
     <p>
         <a href="https://github.com/dennyboechat/music-sway-web/graphs/contributors">
-            <img src="https://img.shields.io/github/contributors/Louis3797/awesome-readme-template" alt="contributors" />
+            <img src="https://img.shields.io/github/contributors/dennyboechat/music-sway-web" alt="contributors" />
         </a>
         <a href="">
-            <img src="https://img.shields.io/github/last-commit/Louis3797/awesome-readme-template" alt="last update" />
+            <img src="https://img.shields.io/github/last-commit/dennyboechat/music-sway-web" alt="last update" />
         </a>
         <a href="https://github.com/dennyboechat/music-sway-web/issues/">
-            <img src="https://img.shields.io/github/issues/Louis3797/awesome-readme-template" alt="open issues" />
+            <img src="https://img.shields.io/github/issues/dennyboechat/music-sway-web" alt="open issues" />
         </a>
         <a href="https://github.com/dennyboechat/music-sway-web/blob/master/LICENSE">
-            <img src="https://img.shields.io/github/license/Louis3797/awesome-readme-template.svg" alt="license" />
+            <img src="https://img.shields.io/github/license/dennyboechat/music-sway-web" alt="license" />
         </a>
     </p>
     <h4>
@@ -127,7 +127,7 @@ npm run drop-tables
 
 ### :warning: License
 
-Distributed under the MIT License.
+Distributed under the <a href="https://github.com/dennyboechat/music-sway-web/blob/main/LICENSE">MIT License</a>.
 
 
 ### :gem: Acknowledgements
