@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/dennyboechat/music-sway-web/blob/main/public/ms_logo.png" alt="" width="200" height="auto" />
+    <img src="https://github.com/dennyboechat/music-sway-web/blob/main/public/ms_logo.png" alt="" width="100" height="auto" />
     <h1>MUSIC SWAY</h1>
     <p>Manage Music You Play</p>
     <p>
@@ -46,6 +46,9 @@
 - Keep songs and playlists private, share them public or with your band(s).
 - Authentication performed via Spotify. We store no password!
 - Totally responsive: great in mobiles, tablets and laptops.
+
+<img src="https://user-images.githubusercontent.com/12437153/186416472-d23c9be6-2e58-4e54-abb7-1a00d44ffcd1.jpg" alt="" width="400" height="auto" />
+<img src="https://user-images.githubusercontent.com/12437153/186417468-0018fdcb-8f2d-41d2-8617-f4d67d06a3a8.jpg" alt="" width="400" height="auto" />
 
 
 ### :space_invader: Tech Stack
