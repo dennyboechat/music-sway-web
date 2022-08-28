@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router'
 import IconButton from '@mui/material/IconButton';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Menu from '@mui/material/Menu';
@@ -15,7 +16,7 @@ import { useConfigurationState } from '@/lib/configuration-store';
 import { useAuthProvider } from '@/lib/auth-provider';
 import SignInDialog from './signInDialog';
 
-const HeaderPanel = ({ children }) => {
+const HeaderPanel = ({ children, showSignInButton = true }) => {
     const { loggedUser } = useAuthProvider();
     const { setShowDrawerMenu } = useConfigurationState();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -38,7 +39,16 @@ const HeaderPanel = ({ children }) => {
 
     const onCloseSignInDialog = () => {
         setShowSignInDialog(false);
-    }
+    };
+
+    const onClickDrawerMenu = () => {
+        if (loggedUser) {
+            setShowDrawerMenu({ value: true });
+        } else {
+            setShowDrawerMenu({ value: false });
+            Router.push('/');
+        }
+    };
 
     let userData;
     if (loggedUser) {
@@ -82,7 +92,7 @@ const HeaderPanel = ({ children }) => {
                 </>
             );
         }
-    } else {
+    } else if (showSignInButton) {
         userData = (
             <MenuItem onClick={() => { setShowSignInDialog(true) }}>
                 <ListItemText primary="Sign in" />
@@ -95,8 +105,7 @@ const HeaderPanel = ({ children }) => {
             <span className={styles.header_logo}>
                 <IconButton
                     id="logo_button"
-                    onClick={() => setShowDrawerMenu({ value: loggedUser ? true : false })}
-                    disabled={loggedUser ? false : true}
+                    onClick={() => onClickDrawerMenu()}
                 >
                     <MsLogo />
                 </IconButton >

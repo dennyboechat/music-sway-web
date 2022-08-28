@@ -1,5 +1,15 @@
 import { gql } from "graphql-request";
 
+export const createUser = gql`
+  mutation ($input: UserAddInput!) {
+    addUser(input: $input) {
+      id,
+      name,
+      email,
+    }
+  }
+`;
+
 export const createSong = gql`
   mutation ($input: SongAddInput!) {
     addSong(input: $input) {
@@ -124,6 +134,16 @@ export const deleteBand = gql`
   mutation ($id: ID!) {
     removeBand(id: $id) {
       msg,
+    }
+  }
+`;
+
+export const updateUserInvitationBand = gql`
+  mutation ($input: UserInvitationBandInput!) {
+    editUserInvitationBand(input: $input) {
+      bandId,
+      userId,
+      invitationStatus,
     }
   }
 `;

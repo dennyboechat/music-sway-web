@@ -1,6 +1,8 @@
 import Skeleton from '@mui/material/Skeleton';
 import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 import Song from '@/components/songs/song';
+import AddIcon from '@mui/icons-material/Add';
 import { useSongsState } from '@/lib/songs-store';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import styles from '@/styles/general.module.css';
@@ -21,16 +23,32 @@ const Songs = () => {
                </Container>
           )
      } else {
-          const sortedSongs = filterSongs({ songs, songsFilterValue });
-          songsList = (
-               <Container>
-                    {sortedSongs.map(song => (
-                         <div key={song.id}>
-                              <Song song={song} />
-                         </div>
-                    ))}
-               </Container>
-          );
+          if (songs && songs.length) {
+               const sortedSongs = filterSongs({ songs, songsFilterValue });
+               songsList = (
+                    <Container>
+                         {sortedSongs.map(song => (
+                              <div key={song.id}>
+                                   <Song song={song} />
+                              </div>
+                         ))}
+                    </Container>
+               );
+          } else {
+               songsList = (
+                    <Container>
+                         <Button
+                              id="addFirstSongButton"
+                              aria-label="addFirstSong"
+                              href="song/new"
+                              variant="outlined"
+                              startIcon={<AddIcon />}
+                         >
+                              {'Add your first Song'}
+                         </Button>
+                    </Container>
+               );
+          }
      }
 
      return songsList;

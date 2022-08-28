@@ -2,6 +2,11 @@ import { gql } from 'apollo-server-micro';
 
 const typeDefs = gql`
 
+    input UserAddInput {
+        name: String
+        email: String
+    }
+
     input SongEntryInput {
         title: String
         content: String
@@ -44,6 +49,11 @@ const typeDefs = gql`
         observation: String
         restrictionId: Int
         entries: [PlaylistEntryInput]
+    }
+
+    input UserInvitationBandInput {
+        bandId: ID!
+        invitationStatus: ID!
     }
 
     type User {
@@ -114,6 +124,12 @@ const typeDefs = gql`
         members: [BandMember]
     }
 
+    type UserInvitationBand {
+        bandId: ID!
+        userId: ID!
+        invitationStatus: ID!
+    }
+
     type Query {
         user(email: String!): User
         song(id: ID!): Song
@@ -121,6 +137,7 @@ const typeDefs = gql`
         playlist(id: ID!): Playlist
         playlists: [Playlist]
         bands: [Band]
+        userInvitationBands: [Band]
     }
 
     type SongDeleted {
@@ -136,6 +153,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        addUser(input: UserAddInput!): User,
         addSong(input: SongAddInput!): Song,
         editSong(input: SongUpdateInput!): Song,
         removeSong(id: ID!): SongDeleted,
@@ -145,6 +163,7 @@ const typeDefs = gql`
         addBand(input: BandAddInput!): Band,
         editBand(input: BandUpdateInput!): Band,
         removeBand(id: ID!): BandDeleted,
+        editUserInvitationBand(input: UserInvitationBandInput!): UserInvitationBand,
     }
 `;
 

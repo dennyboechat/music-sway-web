@@ -20,5 +20,9 @@ export default NextAuth({
             return session;
         },
     },
+    pages: {
+        signIn: '/auth/new-user',
+        error: '/auth/error',
+    },
     secret: process.env.NEXTAUTH_SECRET,
 });

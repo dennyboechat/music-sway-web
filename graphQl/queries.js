@@ -101,3 +101,18 @@ export const bandsQuery = gql`
     }
   }
 `;
+
+export const userInvitationBandsQuery = gql`
+  query {
+    userInvitationBands {
+      id,
+      name,
+      ownerId,
+      members {
+        id,
+        invitationEmail,
+        status,
+      }
+    }
+  }
+`;

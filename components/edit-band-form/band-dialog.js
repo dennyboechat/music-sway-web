@@ -197,7 +197,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                             <Grid item xs={9}>
                                 <TextField
                                     id={`invitationEmail_${invitation.uuid}`}
-                                    label="Member Email"
+                                    label="Member Email (Same used in SPOTIFY)"
                                     defaultValue={invitation.invitationEmail || ''}
                                     onBlur={e => onChangeInvitationEmail({ invitation, invitationEmail: e.target.value })}
                                     fullWidth

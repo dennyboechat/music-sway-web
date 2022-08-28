@@ -31,19 +31,11 @@ const migrate = async () => {
     await query(`
       CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(255) NOT NULL,
         name VARCHAR(255),
         email VARCHAR(255) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
-    `);
-
-    await query(`
-      INSERT INTO 
-        user (username, name)
-      VALUES
-        ('admin', 'Admin')
     `);
 
     await query(`

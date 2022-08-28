@@ -5,7 +5,8 @@ import Grid from '@mui/material/Grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import TimerIcon from '@mui/icons-material/Timer';
 import ConfirmButtonGroup from '@/components/confirm-buttons/confirmButtonGroup';
 import Accordion from '@mui/material/Accordion';
@@ -53,11 +54,19 @@ const BandDetails = ({ band, onEditBand }) => {
 
     const getMemberStatus = ({ member }) => {
         let memberStatus = getBandUserStatusById(member.status);
-        switch (memberStatus) {
-            case BandUserStatus.APPROVED:
-                memberStatus.icon = <ThumbUpAltIcon />;
-            case BandUserStatus.PENDING:
+        if (!memberStatus) {
+            return null;
+        }
+        switch (memberStatus.name) {
+            case BandUserStatus.APPROVED.name:
+                memberStatus.icon = <ThumbUpOffAltIcon />;
+                break;
+            case BandUserStatus.DENIED.name:
+                memberStatus.icon = <ThumbDownOffAltIcon />;
+                break;
+            case BandUserStatus.PENDING.name:
                 memberStatus.icon = <TimerIcon />;
+                break;
         }
         return (
             <Tooltip title={memberStatus.label}>

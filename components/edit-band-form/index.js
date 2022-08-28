@@ -7,15 +7,33 @@ import AddIcon from '@mui/icons-material/Add';
 import BandDialog from './band-dialog';
 import Skeleton from '@mui/material/Skeleton';
 import { useBandsState } from '@/lib/bands-store';
+import { useUserInvitationBandsState } from '@/lib/user-invitation-bands-store';
 import BandDetails from './band-details';
+import UserInvitationBand from './user-invitation-band';
 import styles from '@/styles/general.module.css';
 
 const BandForm = () => {
     const { bands, isLoadingBands } = useBandsState();
+    const { userInvitationBands } = useUserInvitationBandsState();
     const [bandToChange, setBandToChange] = React.useState();
     const [showBandDialog, setShowBandDialog] = React.useState(false);
 
     let bandsData;
+    let invitationBandsData;
+
+    if (userInvitationBands) {
+        invitationBandsData = (
+            <>
+                {userInvitationBands.map(userInvitation => (
+                    <UserInvitationBand
+                        key={userInvitation.id}
+                        userInvitation={userInvitation}
+                    />
+                ))}
+            </>
+        );
+    }
+
     if (isLoadingBands) {
         bandsData = <Skeleton variant="rect" height={80} className={styles.playlists_skeleton} />;
     } else {
@@ -63,6 +81,8 @@ const BandForm = () => {
             <HeaderPanel />
             <Header />
             <Container className={styles.content_container}>
+                {invitationBandsData}
+                <br />
                 {bandsData}
             </Container>
         </>

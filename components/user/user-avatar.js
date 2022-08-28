@@ -12,7 +12,9 @@ const UserAvatar = () => {
         <Avatar
             id="user_main_menu_avatar"
             src={session.token.picture}
-        />
+        >
+            {session.token.name}
+        </Avatar>
     );
 }
 

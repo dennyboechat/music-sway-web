@@ -9,6 +9,7 @@ import { PlaylistsStateProvider } from '@/lib/playlists-store';
 import { ConfigurationStateProvider } from '@/lib/configuration-store';
 import { MessageStateProvider } from '@/lib/message-store';
 import { BandsStateProvider } from "@/lib/bands-store";
+import { UserInvitationBandsStateProvider } from "@/lib/user-invitation-bands-store";
 import { AuthProvider } from "@/lib/auth-provider";
 import AlertMessage from '@/components/alert';
 import '../styles/globals.css';
@@ -25,9 +26,11 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
                 <ConfigurationStateProvider>
                   <MessageStateProvider>
                     <BandsStateProvider>
-                      <CssBaseline />
-                      <Component {...pageProps} />
-                      <AlertMessage />
+                      <UserInvitationBandsStateProvider>
+                        <CssBaseline />
+                        <Component {...pageProps} />
+                        <AlertMessage />
+                      </UserInvitationBandsStateProvider>
                     </BandsStateProvider>
                   </MessageStateProvider>
                 </ConfigurationStateProvider>

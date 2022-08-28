@@ -20,7 +20,7 @@ const Playlists = () => {
     } else {
         playlistsData = (
             <Container>
-                {playlists.map(playlist => (
+                {playlists && playlists.map(playlist => (
                     <div key={playlist.id}>
                         <Playlist playlist={playlist} />
                     </div>
