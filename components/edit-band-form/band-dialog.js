@@ -21,6 +21,7 @@ import { createBand, updateBand } from '@/graphQl/mutations';
 import { bandsQuery } from '@/graphQl/queries';
 import { v4 } from 'uuid';
 import { cloneDeep, find, forEach, pick, remove, uniqBy } from 'lodash';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const getNewInvitationEmail = () => {
     return {
@@ -48,6 +49,7 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
     const [saving, setSaving] = React.useState(false);
     const { mutate } = useSWRConfig();
     const isUpdate = band && band.id;
+    const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
     React.useEffect(() => {
         if (dialogShown && band) {
@@ -212,30 +214,58 @@ const BandDialog = ({ band, dialogShown, onDialogClose }) => {
                             </Grid>
                             {invitation.id &&
                                 <Grid item xs={3} className={styles.text_align_right}>
-                                    <Button
-                                        id={`removeEmail_${index}`}
-                                        onClick={() => removeInvitationEmail({ id: invitation.id })}
-                                        variant="outlined"
-                                        startIcon={<DeleteIcon />}
-                                        className={styles.margin_top_10px}
-                                        disabled={saving}
-                                    >
-                                        {'Remove'}
-                                    </Button>
+                                    {isBiggerResolution &&
+                                        <Button
+                                            id={`removeEmail_${index}`}
+                                            onClick={() => removeInvitationEmail({ id: invitation.id })}
+                                            variant="outlined"
+                                            startIcon={<DeleteIcon />}
+                                            className={styles.margin_top_10px}
+                                            disabled={saving}
+                                        >
+                                            {'Remove'}
+                                        </Button>
+                                    }
+                                    {!isBiggerResolution &&
+                                        <Button
+                                            id={`removeEmail_${index}`}
+                                            onClick={() => removeInvitationEmail({ id: invitation.id })}
+                                            variant="outlined"
+                                            className={styles.margin_top_10px}
+                                            title={'Remove'}
+                                            disabled={saving}
+                                        >
+                                            <DeleteIcon />
+                                        </Button>
+                                    }
                                 </Grid>
                             }
                             {index + 1 === invitations.length &&
                                 <Grid item xs={3} className={styles.text_align_right}>
-                                    <Button
-                                        id="addEmail"
-                                        onClick={addInvitationEmail}
-                                        variant="outlined"
-                                        startIcon={<AddIcon />}
-                                        className={styles.margin_top_10px}
-                                        disabled={saving}
-                                    >
-                                        {'Add other'}
-                                    </Button>
+                                    {isBiggerResolution &&
+                                        <Button
+                                            id="addEmail"
+                                            onClick={addInvitationEmail}
+                                            variant="outlined"
+                                            startIcon={<AddIcon />}
+                                            className={styles.margin_top_10px}
+                                            disabled={saving}
+                                        >
+                                            {'Add other'}
+                                        </Button>
+                                    }
+                                    {!isBiggerResolution &&
+                                        <Button
+                                            id="addEmail"
+                                            onClick={addInvitationEmail}
+                                            variant="outlined"
+                                            className={styles.margin_top_10px}
+                                            title={'Add other'}
+                                            disabled={saving}
+                                        >
+                                            <AddIcon />
+                                        </Button>
+                                    }
                                 </Grid>
                             }
                         </Grid>

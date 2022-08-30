@@ -18,22 +18,24 @@ const EditPlaylistPage = ({ playlistId }) => {
         );
     }
 
+    let playlistForm;
     if (!playlist) {
-        return <span>{'Playlist not found'}</span>;
-    }
-
-    const playlistCopy = cloneDeep(playlist);
-    if (playlistCopy.entries && playlistCopy.entries.length) {
-        forEach(playlistCopy.entries, entry => {
-            entry.id = v4();
-            entry.songId = entry.song.id;
-        });
+        playlistForm = <span>{'Playlist not found or you have no access.'}</span>;
+    } else {
+        const playlistCopy = cloneDeep(playlist);
+        if (playlistCopy.entries && playlistCopy.entries.length) {
+            forEach(playlistCopy.entries, entry => {
+                entry.id = v4();
+                entry.songId = entry.song.id;
+            });
+        }
+        playlistForm = <PlaylistForm playlist={playlistCopy} apiEndpoint="/api/edit-playlist" />;
     }
 
     return (
         <>
             <HeaderPanel />
-            <PlaylistForm playlist={playlistCopy} apiEndpoint="/api/edit-playlist" />
+            {playlistForm}
         </>
     );
 }

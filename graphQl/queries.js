@@ -29,6 +29,7 @@ export const songQuery = gql`
       observation,
       restrictionId,
       ownerId,
+      ownerName,
       entries { 
         id,
         title,
@@ -46,6 +47,7 @@ export const playlistsQuery = gql`
       observation,
       restrictionId,
       ownerId,
+      ownerName,
       entries {
         id,
         orderIndex,
@@ -93,6 +95,7 @@ export const bandsQuery = gql`
       id,
       name,
       ownerId,
+      ownerName,
       members {
         id,
         invitationEmail,
@@ -108,6 +111,7 @@ export const userInvitationBandsQuery = gql`
       id,
       name,
       ownerId,
+      ownerName,
       members {
         id,
         invitationEmail,

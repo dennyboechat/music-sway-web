@@ -94,7 +94,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
 
             setPlaylistName('');
             setPlaylistObservation('');
-            setPlaylistRestrictionId(Restriction.PUBLIC.id);
+            setPlaylistRestrictionId(Restriction.BAND.id);
             setPlaylistEntries([]);
 
             setSavingAndAddingNew(false);
@@ -218,6 +218,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                             id="playlist_restriction"
                             selectedRestrictionId={playlistRestrictionId}
                             onChange={handleSetPlaylistRestrictionId}
+                            options={[Restriction.BAND, Restriction.PRIVATE]}
                         />
                     </Grid>
                 </Grid>

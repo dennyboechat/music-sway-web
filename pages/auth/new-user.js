@@ -50,7 +50,7 @@ const NewUserPage = () => {
             await graphQLClient.request(createUser, variables);
         } catch (error) {
             console.error(error);
-            setAlertMessage({ message: `Damn it!Some error occurred.`, severity: 'error' });
+            setAlertMessage({ message: `Damn it! Some error occurred.`, severity: 'error' });
             setSaving(false);
             return;
         }

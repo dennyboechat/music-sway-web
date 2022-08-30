@@ -83,6 +83,16 @@
   justify-content: center;
 }
 
+.general_header_user_menu_sing_in {
+  text-align: center;
+}
+
+.general_header_user_menu_sing_in_text {
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .fab_buttons {
   position: fixed;
   bottom: 20px;
@@ -227,4 +237,10 @@
 
 .band_details_row {
   display: flex;
+}
+
+.band_details_invitation_name {
+  color: #00BFFF;
+  font-weight: bold;
+  margin-right: 5px;
 }

@@ -7,42 +7,55 @@ import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import Restriction, { getRestrictions, getRestrictionById } from '@/lib/restriction';
 import { forEach } from 'lodash';
 
-const RestrictionSelection = ({ id, selectedRestrictionId, onChange }) => {
+const RestrictionSelection = ({
+    id,
+    selectedRestrictionId,
+    onChange,
+    options = [Restriction.BAND, Restriction.PRIVATE, Restriction.PUBLIC],
+}) => {
 
     const restrictions = [];
     forEach(getRestrictions(), restriction => {
         let icon;
         switch (restriction.name) {
             case Restriction.BAND.name:
-                icon = (
-                    <Tooltip title="BAND. Only members of your band can see this.">
-                        <LocalPlayIcon />
-                    </Tooltip>
-                );
+                if (options.includes(Restriction.BAND)) {
+                    icon = (
+                        <Tooltip title="BAND. Only members of your band can see this.">
+                            <LocalPlayIcon />
+                        </Tooltip>
+                    );
+                }
                 break;
             case Restriction.PRIVATE.name:
-                icon = (
-                    <Tooltip title="PRIVATE. Only you can see this.">
-                        <VisibilityOffIcon />
-                    </Tooltip>
-                )
+                if (options.includes(Restriction.PRIVATE)) {
+                    icon = (
+                        <Tooltip title="PRIVATE. Only you can see this.">
+                            <VisibilityOffIcon />
+                        </Tooltip>
+                    )
+                }
                 break;
             case Restriction.PUBLIC.name:
-                icon = (
-                    <Tooltip title="PUBLIC. Anyone can see this.">
-                        <VisibilityIcon />
-                    </Tooltip>
-                );
+                if (options.includes(Restriction.PUBLIC)) {
+                    icon = (
+                        <Tooltip title="PUBLIC. Anyone can see this.">
+                            <VisibilityIcon />
+                        </Tooltip>
+                    );
+                }
                 break;
         }
-        restrictions.push(
-            <ToggleButton
-                key={restriction.id}
-                value={restriction.name}
-            >
-                {icon}
-            </ToggleButton >
-        );
+        if (icon) {
+            restrictions.push(
+                <ToggleButton
+                    key={restriction.id}
+                    value={restriction.name}
+                >
+                    {icon}
+                </ToggleButton >
+            );
+        }
     });
 
     const restrictionName = getRestrictionById(selectedRestrictionId).name;

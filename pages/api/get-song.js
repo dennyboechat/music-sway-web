@@ -16,20 +16,23 @@ const resolvers = {
 
       const results = await query(`
           SELECT 
-            song.id as songId, 
-            song.title as songTitle,
-            song.artist as songArtist,
-            song.category as songCategory,
-            song.observation as songObservation,
-            song.restriction_id as songRestrictionId,
-            song.owner_id as songOwnerId,
-            song_entry.id as entryId, 
-            song_entry.title as entryTitle, 
-            song_entry.content as entryContent
+            song.id AS songId, 
+            song.title AS songTitle,
+            song.artist AS songArtist,
+            song.category AS songCategory,
+            song.observation AS songObservation,
+            song.restriction_id AS songRestrictionId,
+            song.owner_id AS songOwnerId,
+            song_entry.id AS entryId, 
+            song_entry.title AS entryTitle, 
+            song_entry.content AS entryContent,
+            user.name AS ownerName
           FROM 
             song
           LEFT JOIN 
             song_entry on song_entry.song_id = song.id
+          LEFT JOIN
+            user on user.id = song.owner_id
           WHERE 
             song.id = ? AND
             song.owner_id = ?

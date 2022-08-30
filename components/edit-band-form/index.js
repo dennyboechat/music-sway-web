@@ -11,25 +11,44 @@ import { useUserInvitationBandsState } from '@/lib/user-invitation-bands-store';
 import BandDetails from './band-details';
 import UserInvitationBand from './user-invitation-band';
 import styles from '@/styles/general.module.css';
+import { useAuthProvider } from '@/lib/auth-provider';
+import BandUserStatus from '@/lib/band-user-status';
+import { forEach, find } from 'lodash';
 
 const BandForm = () => {
     const { bands, isLoadingBands } = useBandsState();
     const { userInvitationBands } = useUserInvitationBandsState();
     const [bandToChange, setBandToChange] = React.useState();
     const [showBandDialog, setShowBandDialog] = React.useState(false);
+    const { loggedUser } = useAuthProvider();
 
     let bandsData;
     let invitationBandsData;
 
     if (userInvitationBands) {
-        invitationBandsData = (
-            <>
-                {userInvitationBands.map(userInvitation => (
+        const pendingInvitations = [];
+        const otherInvitations = [];
+        forEach(userInvitationBands, userInvitation => {
+            const currentUser = find(userInvitation.members, { invitationEmail: loggedUser.user.email });
+            const invitationComponent = (
+                <>
                     <UserInvitationBand
                         key={userInvitation.id}
                         userInvitation={userInvitation}
                     />
-                ))}
+                    <br />
+                </>
+            );
+            if (Number(currentUser.status) === BandUserStatus.PENDING.id) {
+                pendingInvitations.push(invitationComponent);
+            } else {
+                otherInvitations.push(invitationComponent);
+            }
+        });
+        invitationBandsData = (
+            <>
+                {pendingInvitations}
+                {otherInvitations}
             </>
         );
     }
@@ -50,11 +69,14 @@ const BandForm = () => {
         bandsData = (
             <form>
                 {bands && bands.map(band => (
-                    <BandDetails
-                        key={band.id}
-                        band={band}
-                        onEditBand={() => onEditBand({ band })}
-                    />
+                    <>
+                        <BandDetails
+                            key={band.id}
+                            band={band}
+                            onEditBand={() => onEditBand({ band })}
+                        />
+                        <br />
+                    </>
                 ))}
                 <div className={styles.fab_buttons}>
                     <FloatingButton
@@ -82,7 +104,6 @@ const BandForm = () => {
             <Header />
             <Container className={styles.content_container}>
                 {invitationBandsData}
-                <br />
                 {bandsData}
             </Container>
         </>

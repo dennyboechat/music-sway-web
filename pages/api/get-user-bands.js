@@ -21,11 +21,14 @@ const resolvers = {
                     band.owner_id as bandOwnerId,
                     user_band.id as bandMemberId, 
                     user_band.user_invitation_email as bandMemberInvitationEmail, 
-                    user_band.band_user_status_id as bandMemberStatusId
+                    user_band.band_user_status_id as bandMemberStatusId,
+                    user.name AS ownerName
                 FROM 
                     band
                 LEFT JOIN 
                     user_band on user_band.band_id = band.id
+                LEFT JOIN
+                    user on user.id = band.owner_id
                 WHERE 
                     band.owner_id = ?
                 `,

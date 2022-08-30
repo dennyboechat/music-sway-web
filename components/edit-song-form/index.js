@@ -16,14 +16,17 @@ const EditSongPage = ({ songId }) => {
         );
     }
 
-    if (!song) {
-        return <span>{'Song not found'}</span>;
+    let songForm;
+    if (song) {
+        songForm = <SongForm song={song} apiEndpoint="/api/edit-song" />;
+    } else {
+        songForm = <span>{'Song not found or you have no access.'}</span>;
     }
 
     return (
         <>
             <HeaderPanel />
-            <SongForm song={song} apiEndpoint="/api/edit-song" />
+            {songForm}
         </>
     );
 }

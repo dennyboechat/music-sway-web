@@ -16,24 +16,25 @@ const resolvers = {
 
       const results = await query(`
           SELECT 
-            playlist.id as playlistId, 
-            playlist.name as playlistName,
-            playlist.observation as playlistObservation,
-            playlist.restriction_id as playlistRestrictionId,
-            playlist.owner_id as playlistOwnerId,
-            playlist_entry.id as entryId, 
-            playlist_entry.song_id as entrySongId, 
-            playlist_entry.order_index as entryOrderIndex,
-            song.id as songId, 
-            song.title as songTitle,
-            song.artist as songArtist,
-            song.category as songCategory,
-            song.observation as songObservation,
-            song.restriction_id as songRestrictionId,
-            song.owner_id as songOwnerId,
-            song_entry.id as songEntryId, 
-            song_entry.title as songEntryTitle, 
-            song_entry.content as songEntryContent
+            playlist.id AS playlistId, 
+            playlist.name AS playlistName,
+            playlist.observation AS playlistObservation,
+            playlist.restriction_id AS playlistRestrictionId,
+            playlist.owner_id AS playlistOwnerId,
+            playlist_entry.id AS entryId, 
+            playlist_entry.song_id AS entrySongId, 
+            playlist_entry.order_index AS entryOrderIndex,
+            song.id AS songId, 
+            song.title AS songTitle,
+            song.artist AS songArtist,
+            song.category AS songCategory,
+            song.observation AS songObservation,
+            song.restriction_id AS songRestrictionId,
+            song.owner_id AS songOwnerId,
+            song_entry.id AS songEntryId, 
+            song_entry.title AS songEntryTitle, 
+            song_entry.content AS songEntryContent,
+            user.name AS ownerName
           FROM 
             playlist
           LEFT JOIN 
@@ -42,13 +43,33 @@ const resolvers = {
             song on song.id = playlist_entry.song_id
           LEFT JOIN  
             song_entry on song_entry.song_id = song.id
+          LEFT JOIN
+            user on user.id = playlist.owner_id
+          LEFT JOIN
+            band on band.owner_id = playlist.owner_id
           WHERE
-            playlist.owner_id = ?
+            playlist.owner_id = ? OR
+            (
+              playlist.restriction_id = 2 AND 
+              (
+                SELECT 
+                  user_band_subSelect.id 
+                FROM 
+                  user_band AS user_band_subSelect
+                WHERE 
+                  user_band_subSelect.band_id = band.id AND 
+                  user_band_subSelect.band_user_status_id = 1 AND
+                  user_band_subSelect.user_id = ?
+              ) IS NOT NULL
+            )
           ORDER BY 
             playlist.name,
             playlist_entry.order_index
       `,
-        [user.id]
+        [
+          user.id,
+          user.id
+        ]
       );
 
       let playlists = []
@@ -61,6 +82,7 @@ const resolvers = {
             observation: data.playlistObservation,
             restrictionId: data.playlistRestrictionId,
             ownerId: data.playlistOwnerId,
+            ownerName: data.ownerName,
             entries: [],
           }
           playlists.push(playlist);

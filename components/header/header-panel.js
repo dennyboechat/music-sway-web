@@ -9,18 +9,19 @@ import ListItemText from '@mui/material/ListItemText';
 import MsLogo from '@/components/ms-logo';
 import DrawerMenu from '@/components/drawer-menu';
 import UserAvatar from '@/components/user/user-avatar';
+import Button from '@mui/material/Button';
 import Logout from '@mui/icons-material/Logout';
 import styles from '@/styles/general.module.css';
-import { signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { useConfigurationState } from '@/lib/configuration-store';
 import { useAuthProvider } from '@/lib/auth-provider';
-import SignInDialog from './signInDialog';
+import Image from 'next/image';
 
 const HeaderPanel = ({ children, showSignInButton = true }) => {
     const { loggedUser } = useAuthProvider();
     const { setShowDrawerMenu } = useConfigurationState();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [showSignInDialog, setShowSignInDialog] = React.useState(false);
+    const [showSignInMenu, setShowSignInMenu] = React.useState(false);
     const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
 
     const onCloseDrawerMenu = () => {
@@ -35,10 +36,6 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
-    };
-
-    const onCloseSignInDialog = () => {
-        setShowSignInDialog(false);
     };
 
     const onClickDrawerMenu = () => {
@@ -94,9 +91,50 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
         }
     } else if (showSignInButton) {
         userData = (
-            <MenuItem onClick={() => { setShowSignInDialog(true) }}>
-                <ListItemText primary="Sign in" />
-            </MenuItem>
+            <>
+                <MenuItem
+                    id="signInMenuButton"
+                    onClick={() => setShowSignInMenu(!showSignInMenu)}
+                    variant="text"
+                >
+                    <ListItemText primary="Sign in" />
+                </MenuItem>
+                <Menu
+                    sx={{ mt: '45px' }}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={showSignInMenu}
+                    onClose={() => setShowSignInMenu(!showSignInMenu)}
+                    className={styles.general_header_user_menu_sing_in}
+                >
+                    <Button
+                        id="signInButton"
+                        onClick={() => { signIn('spotify') }}
+                        variant="outlined"
+                        startIcon={
+                            <Image
+                                src="/spotify_logo.png"
+                                height={30}
+                                width={30}
+                                alt=""
+                            />
+                        }
+                    >
+                        {'Sign in with Spotify'}
+                    </Button>
+                    <ListItemText
+                        secondary="You need SPOTIFY account to log in."
+                        className={styles.general_header_user_menu_sing_in_text}
+                    />
+                </Menu>
+            </>
         );
     }
 
@@ -118,10 +156,6 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
             {userData}
             <DrawerMenu
                 onClose={onCloseDrawerMenu}
-            />
-            <SignInDialog
-                showDialog={showSignInDialog}
-                onCloseDialog={onCloseSignInDialog}
             />
         </div>
     );

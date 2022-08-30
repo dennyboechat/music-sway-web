@@ -1,14 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import TimerIcon from '@mui/icons-material/Timer';
 import ConfirmButtonGroup from '@/components/confirm-buttons/confirmButtonGroup';
+import UserInvitationStatus from '@/components/edit-band-form/user-invitation-status';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -18,7 +15,6 @@ import { GraphQLClient } from 'graphql-request';
 import { bandsQuery } from '@/graphQl/queries';
 import { deleteBand } from '@/graphQl/mutations';
 import { useMessageState } from '@/lib/message-store';
-import BandUserStatus, { getBandUserStatusById } from '@/lib/band-user-status';
 import styles from '@/styles/general.module.css';
 
 const BandDetails = ({ band, onEditBand }) => {
@@ -51,29 +47,6 @@ const BandDetails = ({ band, onEditBand }) => {
         setAlertMessage({ message: `${band.name} is gone forever.`, severity: 'success' });
         setDeleting(false);
     }
-
-    const getMemberStatus = ({ member }) => {
-        let memberStatus = getBandUserStatusById(member.status);
-        if (!memberStatus) {
-            return null;
-        }
-        switch (memberStatus.name) {
-            case BandUserStatus.APPROVED.name:
-                memberStatus.icon = <ThumbUpOffAltIcon />;
-                break;
-            case BandUserStatus.DENIED.name:
-                memberStatus.icon = <ThumbDownOffAltIcon />;
-                break;
-            case BandUserStatus.PENDING.name:
-                memberStatus.icon = <TimerIcon />;
-                break;
-        }
-        return (
-            <Tooltip title={memberStatus.label}>
-                {memberStatus.icon}
-            </Tooltip>
-        );
-    };
 
     let editBandButton;
     let deleteBandButton;
@@ -130,7 +103,9 @@ const BandDetails = ({ band, onEditBand }) => {
                 <Grid container>
                     {band.members && band.members.map(member => (
                         <Grid item xs={12} key={member.id} className={styles.band_details_row}>
-                            <span className={styles.margin_right_10px}>{getMemberStatus({ member })}</span>
+                            <span className={styles.margin_right_10px}>
+                                <UserInvitationStatus member={member} />
+                            </span>
                             {member.invitationEmail}
                         </Grid>
                     ))}

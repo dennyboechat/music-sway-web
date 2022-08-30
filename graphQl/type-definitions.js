@@ -76,6 +76,7 @@ const typeDefs = gql`
         observation: String
         restrictionId: Int
         ownerId: Int
+        ownerName: String
         entries: [SongEntry]
     }
 
@@ -91,6 +92,7 @@ const typeDefs = gql`
         observation: String
         restrictionId: Int
         ownerId: Int
+        ownerName: String
         entries: [PlaylistEntry]
     }
 
@@ -121,6 +123,7 @@ const typeDefs = gql`
         id: ID!
         name: String!
         ownerId: Int
+        ownerName: String
         members: [BandMember]
     }
 
