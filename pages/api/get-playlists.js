@@ -99,7 +99,7 @@ const resolvers = {
               category: data.songCategory,
               observation: data.songObservation,
               restrictionId: data.songRestrictionId,
-              ownerId: data.ownerId,
+              ownerId: data.songOwnerId,
               entries: [],
             }
           };

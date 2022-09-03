@@ -1,3 +1,4 @@
+import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -10,7 +11,11 @@ import { filterSongs } from '@/lib/utils';
 
 const Songs = () => {
      const { songs, isLoadingSongs } = useSongsState();
-     const { songsFilterValue } = useSongsFilterState();
+     const { songsFilterValue, setSongsFilterValue } = useSongsFilterState();
+
+     React.useEffect(() => {
+          setSongsFilterValue('');
+     }, [setSongsFilterValue]);
 
      let songsList;
      if (isLoadingSongs) {

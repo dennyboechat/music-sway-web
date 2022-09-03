@@ -133,16 +133,6 @@ const typeDefs = gql`
         invitationStatus: ID!
     }
 
-    type Query {
-        user(email: String!): User
-        song(id: ID!): Song
-        songs: [Song]
-        playlist(id: ID!): Playlist
-        playlists: [Playlist]
-        bands: [Band]
-        userInvitationBands: [Band]
-    }
-
     type SongDeleted {
         msg: String,
     }
@@ -153,6 +143,17 @@ const typeDefs = gql`
 
     type BandDeleted {
         msg: String,
+    }
+
+    type Query {
+        user(email: String!): User
+        song(id: ID!): Song
+        songs: [Song]
+        bandsSongs: [Song]
+        playlist(id: ID!): Playlist
+        playlists: [Playlist]
+        bands: [Band]
+        userInvitationBands: [Band]
     }
 
     type Mutation {

@@ -16,6 +16,7 @@ import HtmlParser from '@/components/html-parser';
 import styles from '@/styles/general.module.css';
 import { autoPageScrollDownStart, autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
+import { useAuthProvider } from '@/lib/auth-provider';
 
 const AUTO_SCROLL_NO_SPEED = 0;
 const AUTO_SCROLL_FIRST_SPEED = 100;
@@ -24,6 +25,7 @@ const FONT_SIZE_BREAK = 2;
 const FONT_SIZE_DECREASE_LIMIT = 8;
 
 const Song = ({ song }) => {
+  const { loggedUser } = useAuthProvider();
   const [splitContent, setSplitContent] = React.useState(false);
   const [fontSize, setFontSize] = React.useState(16);
   const { autoScrollContentSpeed, setAutoScrollContentSpeed } = useConfigurationState();
@@ -77,16 +79,21 @@ const Song = ({ song }) => {
     }
   }
 
-  const editButton = (
-    <IconButton
-      id={`${song.id}_editButton`}
-      href={`/song/${song.id}`}
-      title="Edit Song"
-      color="primary"
-    >
-      <EditIcon />
-    </IconButton>
-  );
+  const isSongOwner = Number(loggedUser.user.id) === song.ownerId;
+
+  let editButton;
+  if (isSongOwner) {
+    editButton = (
+      <IconButton
+        id={`${song.id}_editButton`}
+        href={`/song/${song.id}`}
+        title="Edit Song"
+        color="primary"
+      >
+        <EditIcon />
+      </IconButton>
+    );
+  }
 
   let cardContent;
   if (song.entries && song.entries.length) {
@@ -145,6 +152,18 @@ const Song = ({ song }) => {
       </div>
     );
 
+    const songFooter = (
+      <>
+        {songObservation}
+        {!isSongOwner &&
+          <Typography variant="caption" display="block" gutterBottom>
+            <br />
+            {`By ${song.ownerName}`}
+          </Typography>
+        }
+      </>
+    );
+
     const actions = (
       <div>
         {editButton}
@@ -199,7 +218,7 @@ const Song = ({ song }) => {
             {actions}
             <div style={{ fontSize }}>
               <HtmlParser content={firstEntry.content} className={splitContent ? styles.song_card_content_split : ''} />
-              {songObservation}
+              {songFooter}
             </div>
           </AccordionDetails>
         </Accordion>
@@ -222,7 +241,7 @@ const Song = ({ song }) => {
                 {actions}
                 <div style={{ fontSize }}>
                   <HtmlParser content={entry.content} className={splitContent ? styles.song_card_content_split : ''} />
-                  {songObservation}
+                  {songFooter}
                 </div>
               </AccordionDetails>
             </Accordion>

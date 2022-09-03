@@ -27,7 +27,7 @@ const resolvers = {
 
       let results = await query(`
         INSERT INTO 
-            playlist (name, observation, restriction_id, owner_id)
+          playlist (name, observation, restriction_id, owner_id)
         VALUES 
           (?, ?, ?, ?)
         `,

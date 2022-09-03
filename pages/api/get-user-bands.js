@@ -16,12 +16,12 @@ const resolvers = {
 
             const results = await query(`
                 SELECT 
-                    band.id as bandId, 
-                    band.name as bandName,
-                    band.owner_id as bandOwnerId,
-                    user_band.id as bandMemberId, 
-                    user_band.user_invitation_email as bandMemberInvitationEmail, 
-                    user_band.band_user_status_id as bandMemberStatusId,
+                    band.id AS bandId, 
+                    band.name AS bandName,
+                    band.owner_id AS bandOwnerId,
+                    user_band.id AS bandMemberId, 
+                    user_band.user_invitation_email AS bandMemberInvitationEmail, 
+                    user_band.band_user_status_id AS bandMemberStatusId,
                     user.name AS ownerName
                 FROM 
                     band

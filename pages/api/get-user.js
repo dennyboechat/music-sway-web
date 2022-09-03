@@ -11,9 +11,9 @@ const resolvers = {
             }
             const results = await query(`
                 SELECT 
-                    user.id as userId, 
-                    user.name as userName,
-                    user.email as userEmail
+                    user.id AS userId, 
+                    user.name AS userName,
+                    user.email AS userEmail
                 FROM 
                     user
                 WHERE 

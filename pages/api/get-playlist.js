@@ -16,14 +16,14 @@ const resolvers = {
 
             const results = await query(`
                 SELECT 
-                    playlist.id as playlistId, 
-                    playlist.name as playlistName,
-                    playlist.observation as playlistObservation,
-                    playlist.restriction_id as playlistRestrictionId,
-                    playlist.owner_id as playlistOwnerId,
-                    playlist_entry.id as entryId, 
-                    playlist_entry.song_id as entrySongId, 
-                    playlist_entry.order_index as entryOrderIndex
+                    playlist.id AS playlistId, 
+                    playlist.name AS playlistName,
+                    playlist.observation AS playlistObservation,
+                    playlist.restriction_id AS playlistRestrictionId,
+                    playlist.owner_id AS playlistOwnerId,
+                    playlist_entry.id AS entryId, 
+                    playlist_entry.song_id AS entrySongId, 
+                    playlist_entry.order_index AS entryOrderIndex
                 FROM 
                     playlist
                 LEFT JOIN 

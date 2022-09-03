@@ -10,6 +10,27 @@ export const songsQuery = gql`
       observation,
       restrictionId,
       ownerId,
+      ownerName,
+      entries { 
+        id,
+        title,
+        content,
+      }
+    }
+  }
+`;
+
+export const bandsSongsQuery = gql`
+  query {
+    bandsSongs {
+      id,
+      title,
+      artist,
+      category,
+      observation,
+      restrictionId,
+      ownerId,
+      ownerName,
       entries { 
         id,
         title,

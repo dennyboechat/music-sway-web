@@ -9,6 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import Logout from '@mui/icons-material/Logout';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import LocalPlayIcon from '@mui/icons-material/LocalPlay';
@@ -64,9 +65,17 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                     <ListItem key={'playlists'} disablePadding>
                         <ListItemButton onClick={() => goToMainPage({ pageNavigation: PageNavigation.PLAYLISTS })}>
                             <ListItemIcon>
-                                <LibraryMusicIcon />
+                                <QueueMusicIcon />
                             </ListItemIcon>
                             <ListItemText primary={'Playlists'} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key={'bandsSongs'} disablePadding>
+                        <ListItemButton onClick={() => { goTo({ path: '/bands-songs' }) }}>
+                            <ListItemIcon>
+                                <LibraryMusicIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Bands Songs'} />
                         </ListItemButton>
                     </ListItem>
                     <ListItem key={'bands'} disablePadding>

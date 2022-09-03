@@ -58,7 +58,7 @@ const resolvers = {
         song.category = data.songCategory;
         song.observation = data.songObservation;
         song.restrictionId = data.songRestrictionId;
-        song.ownerId = data.ownerId;
+        song.ownerId = data.songOwnerId;
         if (data.entryId) {
           song.entries.push({
             id: data.entryId,

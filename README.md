@@ -33,7 +33,8 @@
 - [:space_invader: Tech Stack](#space_invader-tech-stack)
 - [:key: Environment Variables](#key-environment-variables)
 - [:gear: Installing/Running Locally](#gear-installingrunning-locally)
-- [:compass: Roadmap](#compass-roadmap)
+- [:compass: Features Roadmap](#compass-features-roadmap)
+  - [Tech Roadmap](#tech-roadmap)
 - [:warning: License](#warning-license)
 - [:gem: Acknowledgements](#gem-acknowledgements)
 
@@ -43,7 +44,7 @@
 - Create/copy lyrics and playlists freely, your way!
 - Hands free: auto scroll songs, split screens, enlarge/reduce font.
 - Display always visible (screen never locks).
-- Keep songs and playlists private, share them public or with your band(s).
+- Keep songs and playlists private, share them publicly or with your band(s).
 - Authentication performed via Spotify. We store no password!
 - Totally responsive: great in mobiles, tablets and laptops.
 
@@ -111,21 +112,29 @@ npm run migrate
 npm run drop-tables
 ```
 
-### :compass: Roadmap
+### :compass: Features Roadmap
 
-* [x] Songs list and search.
-* [x] Auto scroll, screen split, enlarge/reduce font.
-* [x] Playlist list.
 * [x] CRUD Songs.
+* [x] Display of songs list and search.
 * [x] CRUD Playlists.
+* [x] Display of playlists list and internal songs.
+* [x] Auto scroll, screen split, enlarge/reduce font.
 * [x] CRUD Bands.
-* [ ] Users credentials and invitations.
-* [ ] Songs copy feature.
-* [ ] Bands setup improvement.
+* [x] Bands invitations.
+* [x] Users authentication.
 * [ ] Main page content.
+* [ ] Songs copy feature.
+* [ ] Notifications (in app and email).
 * [ ] Playlist temp sharing.
 * [ ] Auto lyrics import.
+* [ ] User manual.
 * [ ] Premium mode.
+
+#### Tech Roadmap
+
+* [ ] Refactor code for TypeScript.
+* [ ] Add unit tests.
+* [ ] Add UI tests.
 
 
 ### :warning: License
