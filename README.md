@@ -34,7 +34,7 @@
 - [:key: Environment Variables](#key-environment-variables)
 - [:gear: Installing/Running Locally](#gear-installingrunning-locally)
 - [:compass: Features Roadmap](#compass-features-roadmap)
-  - [Tech Roadmap](#tech-roadmap)
+- [:compass: Tech Roadmap](#compass-tech-roadmap)
 - [:warning: License](#warning-license)
 - [:gem: Acknowledgements](#gem-acknowledgements)
 
@@ -130,7 +130,7 @@ npm run drop-tables
 * [ ] User manual.
 * [ ] Premium mode.
 
-#### Tech Roadmap
+### :compass: Tech Roadmap
 
 * [ ] Refactor code for TypeScript.
 * [ ] Add unit tests.

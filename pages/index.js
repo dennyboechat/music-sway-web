@@ -6,6 +6,7 @@ import Filter from '@/components/songs/filter';
 import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
 import HeaderPanel from '@/components/header/header-panel';
+import HomePage from '@/components/home-page';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
@@ -36,12 +37,7 @@ const Home = () => {
   const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
 
   if (!loggedUser) {
-    return (
-      <>
-        <Header />
-        <HeaderPanel />
-      </>
-    );
+    return <HomePage />;
   }
 
   const onSwipeReachBeginning = () => () => {

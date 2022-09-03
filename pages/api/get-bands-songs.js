@@ -48,7 +48,7 @@ const resolvers = {
                             FROM 
                                 user_band AS user_band_subSelect
                             WHERE 
-                                user_band_subSelect.band_id = band.id AND 
+                                user_band_subSelect.band_id in (band.id, band.owner_id) AND 
                                 user_band_subSelect.band_user_status_id = 1 AND 
                                 user_band_subSelect.user_id = ?
                         ) IS NOT NULL

@@ -58,7 +58,6 @@
 }
 
 .general_header {
-  margin: 5px;
   display: flex;
   align-items: center;
   height: 60px;
@@ -243,4 +242,19 @@
   color: #00BFFF;
   font-weight: bold;
   margin-right: 5px;
+}
+
+.home_page_wrapper {
+  max-width: 1920px;
+  min-height: 1280px;
+  margin: auto;
+  background-image: url("/guitar_player_1.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+.home_page_main_text {
+  font-size: 5vw;
+  font-family: 'Brush Script MT', cursive;
+
 }
