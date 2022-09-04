@@ -256,5 +256,8 @@
 .home_page_main_text {
   font-size: 5vw;
   font-family: 'Brush Script MT', cursive;
+}
 
+.home_page_footer {
+  text-align: center;
 }

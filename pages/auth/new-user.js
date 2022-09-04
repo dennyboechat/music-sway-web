@@ -12,7 +12,7 @@ import styles from '@/styles/general.module.css';
 import { createUser } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 import { useMessageState } from '@/lib/message-store';
-import { songsQuery } from '@/graphQl/queries';
+import { songsQuery, userInvitationBandsQuery, bandsQuery } from '@/graphQl/queries';
 import { validateUser } from '@/lib/utils';
 import { useSWRConfig } from 'swr';
 
@@ -55,6 +55,8 @@ const NewUserPage = () => {
             return;
         }
         mutate(songsQuery);
+        mutate(bandsQuery);
+        mutate(userInvitationBandsQuery);
         setAlertMessage({ message: `${userName} was saved.`, severity: 'success' });
         setSaving(false);
         Router.push('/');

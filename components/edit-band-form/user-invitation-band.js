@@ -11,7 +11,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Grid from '@mui/material/Grid';
 import UserInvitationStatus from '@/components/edit-band-form/user-invitation-status';
 import { GraphQLClient } from 'graphql-request';
-import { userInvitationBandsQuery, playlistsQuery } from '@/graphQl/queries';
+import { userInvitationBandsQuery, playlistsQuery, bandsSongsQuery } from '@/graphQl/queries';
 import { updateUserInvitationBand } from '@/graphQl/mutations';
 import { useSWRConfig } from 'swr';
 import { useMessageState } from '@/lib/message-store';
@@ -45,6 +45,7 @@ const UserInvitationBand = ({ userInvitation }) => {
             throw Error(error);
         }
         mutate(userInvitationBandsQuery);
+        mutate(bandsSongsQuery);
         mutate(playlistsQuery);
         setAlertMessage({ message: `${userInvitation.name} status changed.`, severity: 'success' });
         setMakeStatusChange(false);

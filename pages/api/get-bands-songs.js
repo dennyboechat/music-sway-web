@@ -29,14 +29,15 @@ const resolvers = {
                     user.name AS ownerName
                 FROM 
                     song
+                INNER JOIN
+                    user on user.id = song.owner_id
                 LEFT JOIN 
                     song_entry on song_entry.song_id = song.id
                 LEFT JOIN
-                    user on user.id = song.owner_id
-                LEFT JOIN
                     user_band on user_band.user_id = song.owner_id
                 LEFT JOIN
-                    band on band.id = user_band.band_id
+                    band on band.id = user_band.band_id OR 
+                    band.owner_id = song.owner_id
                 WHERE
                     song.owner_id <> ? AND
                     song.restriction_id IN (2, 3) AND
@@ -44,11 +45,11 @@ const resolvers = {
                         band.owner_id = ? OR
                         (
                             SELECT
-                                user_band_subSelect.id 
+                                user_band_subSelect.id
                             FROM 
                                 user_band AS user_band_subSelect
                             WHERE 
-                                user_band_subSelect.band_id in (band.id, band.owner_id) AND 
+                                user_band_subSelect.band_id = band.id AND
                                 user_band_subSelect.band_user_status_id = 1 AND 
                                 user_band_subSelect.user_id = ?
                         ) IS NOT NULL
