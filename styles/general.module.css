@@ -19,6 +19,7 @@
 
 .song_card_multiple_accordion {
   margin: 1px;
+  width: 100%;
 }
 
 .song_card_title_header {
@@ -29,6 +30,15 @@
 
 .song_card_content_split {
   column-count: 2;
+}
+
+.song_card_wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.song_card_checkbox {
+  margin-top: 5px;
 }
 
 .search {
@@ -246,18 +256,9 @@
 
 .home_page_wrapper {
   max-width: 1920px;
-  min-height: 1280px;
+  min-height: 100vh;
   margin: auto;
   background-image: url("/guitar_player_1.jpg");
   background-repeat: no-repeat;
   background-size: 100% auto;
-}
-
-.home_page_main_text {
-  font-size: 5vw;
-  font-family: 'Brush Script MT', cursive;
-}
-
-.home_page_footer {
-  text-align: center;
 }

@@ -133,15 +133,7 @@ const typeDefs = gql`
         invitationStatus: ID!
     }
 
-    type SongDeleted {
-        msg: String,
-    }
-
-    type PlaylistDeleted {
-        msg: String,
-    }
-
-    type BandDeleted {
+    type Message {
         msg: String,
     }
 
@@ -160,13 +152,14 @@ const typeDefs = gql`
         addUser(input: UserAddInput!): User,
         addSong(input: SongAddInput!): Song,
         editSong(input: SongUpdateInput!): Song,
-        removeSong(id: ID!): SongDeleted,
+        removeSong(id: ID!): Message,
+        addSongs(ids: [Int]!): Message,
         addPlaylist(input: PlaylistAddInput!): Playlist,
         editPlaylist(input: PlaylistUpdateInput!): Playlist,
-        removePlaylist(id: ID!): PlaylistDeleted,
+        removePlaylist(id: ID!): Message,
         addBand(input: BandAddInput!): Band,
         editBand(input: BandUpdateInput!): Band,
-        removeBand(id: ID!): BandDeleted,
+        removeBand(id: ID!): Message,
         editUserInvitationBand(input: UserInvitationBandInput!): UserInvitationBand,
     }
 `;

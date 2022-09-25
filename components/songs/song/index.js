@@ -2,6 +2,7 @@ import React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import FlipIcon from '@mui/icons-material/Flip';
@@ -24,11 +25,15 @@ const AUTO_SCROLL_SPEED_BREAK = 20;
 const FONT_SIZE_BREAK = 2;
 const FONT_SIZE_DECREASE_LIMIT = 8;
 
-const Song = ({ song }) => {
+const Song = ({ song, onSelectSong, disableSelectSong }) => {
   const { loggedUser } = useAuthProvider();
   const [splitContent, setSplitContent] = React.useState(false);
   const [fontSize, setFontSize] = React.useState(16);
   const { autoScrollContentSpeed, setAutoScrollContentSpeed } = useConfigurationState();
+
+  if (!loggedUser) {
+    return null;
+  }
 
   const cardHeader = (
     <div className={styles.song_card_title_header}>
@@ -92,6 +97,18 @@ const Song = ({ song }) => {
       >
         <EditIcon />
       </IconButton>
+    );
+  }
+
+  let accordionSufix;
+  if (onSelectSong) {
+    accordionSufix = (
+      <Checkbox
+        id={`checkbox_${song.id}`}
+        className={styles.song_card_checkbox}
+        onChange={(e) => onSelectSong({ song, selected: e.target.checked })}
+        disabled={disableSelectSong}
+      />
     );
   }
 
@@ -266,7 +283,12 @@ const Song = ({ song }) => {
     )
   }
 
-  return cardContent;
+  return (
+    <div className={styles.song_card_wrapper}>
+      {accordionSufix}
+      {cardContent}
+    </div>
+  );
 }
 
 export default Song;

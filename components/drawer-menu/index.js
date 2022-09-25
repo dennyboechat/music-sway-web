@@ -17,23 +17,30 @@ import { useConfigurationState } from '@/lib/configuration-store';
 import PageNavigation from '@/lib/page-navigation';
 import { signOut } from 'next-auth/react';
 import { useAuthProvider } from '@/lib/auth-provider';
+import { autoPageScrollDownStop } from '@/lib/utils';
 import styles from '@/styles/general.module.css';
 import { cloneDeep } from 'lodash';
 
 const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
     const { loggedUser } = useAuthProvider();
-    const { showDrawerMenu, setShowDrawerMenu, configurationData, setConfigurationData } = useConfigurationState();
+    const { showDrawerMenu, configurationData, setConfigurationData } = useConfigurationState();
 
     const goToMainPage = ({ pageNavigation }) => {
         let configurationDataCopy = cloneDeep(configurationData);
         configurationDataCopy.pageNavigation = pageNavigation;
+        configurationDataCopy.autoScrollContentSpeed = 0;
         configurationDataCopy.showDrawerMenu = false;
         setConfigurationData(configurationDataCopy);
+        autoPageScrollDownStop();
         Router.push('/');
     };
 
     const goTo = ({ path }) => {
-        setShowDrawerMenu({ value: false });
+        autoPageScrollDownStop();
+        let configurationDataCopy = cloneDeep(configurationData);
+        configurationDataCopy.autoScrollContentSpeed = 0;
+        configurationDataCopy.showDrawerMenu = false;
+        setConfigurationData(configurationDataCopy);
         Router.push(path);
     };
 
@@ -54,12 +61,12 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
                 </div>
                 <br />
                 <List>
-                    <ListItem key={'songs'} disablePadding>
+                    <ListItem key={'mySongs'} disablePadding>
                         <ListItemButton onClick={() => { goToMainPage({ pageNavigation: PageNavigation.SONGS }) }}>
                             <ListItemIcon>
                                 <MusicNoteIcon />
                             </ListItemIcon>
-                            <ListItemText primary={'Songs'} />
+                            <ListItemText primary={'My Songs'} />
                         </ListItemButton>
                     </ListItem>
                     <ListItem key={'playlists'} disablePadding>

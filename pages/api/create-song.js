@@ -29,7 +29,7 @@ const resolvers = {
 
       let results = await query(`
         INSERT INTO 
-            song (title, artist, category, observation, restriction_id, owner_id)
+          song (title, artist, category, observation, restriction_id, owner_id)
         VALUES 
           (?, ?, ?, ?, ?, ?)
         `,

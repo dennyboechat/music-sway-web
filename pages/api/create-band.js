@@ -29,7 +29,10 @@ const resolvers = {
                 VALUES 
                     (?, ?)
                 `,
-                [band.name, band.ownerId]
+                [
+                    band.name, 
+                    band.ownerId,
+                ]
             );
 
             const bandIdResults = await query(`

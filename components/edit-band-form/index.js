@@ -69,14 +69,13 @@ const BandForm = () => {
         bandsData = (
             <form>
                 {bands && bands.map(band => (
-                    <>
+                    <React.Fragment key={band.id}>
                         <BandDetails
-                            key={band.id}
                             band={band}
                             onEditBand={() => onEditBand({ band })}
                         />
                         <br />
-                    </>
+                    </React.Fragment>
                 ))}
                 <div className={styles.fab_buttons}>
                     <FloatingButton

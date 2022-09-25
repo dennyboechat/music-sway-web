@@ -56,6 +56,14 @@ export const deleteSong = gql`
   }
 `;
 
+export const copySongs = gql`
+  mutation ($ids: [Int]!) {
+    addSongs(ids: $ids) {
+      msg,
+    }
+  }
+`;
+
 export const createPlaylist = gql`
   mutation ($input: PlaylistAddInput!) {
     addPlaylist(input: $input) {

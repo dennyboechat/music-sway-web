@@ -1,21 +1,56 @@
 import React from 'react';
+import Router from 'next/router'
 import Container from '@mui/material/Container';
 import Skeleton from '@mui/material/Skeleton';
+import FloatingButton from '@/components/floating-button';
 import HeaderPanel from '@/components/header/header-panel';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useBandsSongsState } from '@/lib/bands-songs-store';
 import styles from '@/styles/general.module.css';
 import Song from '@/components/songs/song';
 import Filter from '@/components/songs/filter';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import { filterSongs } from '@/lib/utils';
+import { cloneDeep, forEach, remove } from 'lodash';
+import { useMessageState } from '@/lib/message-store';
+import { copySongs } from '@/graphQl/mutations';
+import { GraphQLClient } from 'graphql-request';
+import { songsQuery } from '@/graphQl/queries';
+import { useSWRConfig } from 'swr';
 
-const BandsSongs = ({ }) => {
+const BandsSongs = () => {
     const { bandsSongs, isLoadingBandsSongs } = useBandsSongsState();
     const { songsFilterValue, setSongsFilterValue } = useSongsFilterState();
+    const [selectedSongs, setSelectedSongs] = React.useState([]);
+    const { setAlertMessage } = useMessageState();
+    const [isCopying, setIsCopying] = React.useState(false);
+    const { mutate } = useSWRConfig();
 
     React.useEffect(() => {
         setSongsFilterValue('');
     }, [setSongsFilterValue]);
+
+    const onCopySelectedSongs = () => async () => {
+        if (!selectedSongs || !selectedSongs.length) {
+            return;
+        }
+        setIsCopying(true);
+        const songsIds = [];
+        forEach(selectedSongs, song => {
+            songsIds.push(Number(song.id));
+        });
+        try {
+            const graphQLClient = new GraphQLClient('/api/copy-songs');
+            await graphQLClient.request(copySongs, { ids: songsIds });
+        } catch (error) {
+            throw Error(error);
+        }
+        mutate(songsQuery);
+        Router.push('/');
+        setIsCopying(false);
+        setSelectedSongs([]);
+        setAlertMessage({ message: `Songs copied. They are yours now!`, severity: 'success' });
+    };
 
     let songsList;
     if (isLoadingBandsSongs) {
@@ -29,12 +64,25 @@ const BandsSongs = ({ }) => {
         )
     } else {
         if (bandsSongs && bandsSongs.length) {
+            const onSelectSong = ({ song, selected }) => {
+                let selectedSongsCopy = cloneDeep(selectedSongs);
+                if (selected) {
+                    selectedSongsCopy.push(song);
+                } else {
+                    remove(selectedSongsCopy, { id: song.id });
+                }
+                setSelectedSongs(selectedSongsCopy);
+            }
             const sortedSongs = filterSongs({ songs: bandsSongs, songsFilterValue });
             songsList = sortedSongs.map(song => (
                 <div key={song.id}>
-                    <Song song={song} />
+                    <Song
+                        song={song}
+                        onSelectSong={onSelectSong}
+                        disableSelectSong={isCopying}
+                    />
                 </div>
-            ))
+            ));
         } else {
             songsList = 'No songs shared from your band(s).';
         }
@@ -47,6 +95,16 @@ const BandsSongs = ({ }) => {
             </HeaderPanel>
             <Container className={styles.content_container}>
                 {songsList}
+                <div className={styles.fab_buttons}>
+                    <FloatingButton
+                        id="copySelectedSongsButton"
+                        aria-label="CopySelectedSongs"
+                        onClick={onCopySelectedSongs()}
+                        label="Copy to My Songs"
+                        icon={<ContentCopyIcon />}
+                        disabled={isCopying || !selectedSongs || !selectedSongs.length}
+                    />
+                </div>
             </Container>
         </>
     );

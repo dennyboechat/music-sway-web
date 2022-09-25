@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'next/router'
+import Router from 'next/router';
 import Header from '@/components/header';
 import SongEntryForm from '@/components/song-form/song-entry-form';
 import RestrictionSelection from '@/components/restriction-selection';

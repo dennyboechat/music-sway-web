@@ -135,6 +135,7 @@ npm run drop-tables
 * [ ] Refactor code for TypeScript.
 * [ ] Add unit tests.
 * [ ] Add UI tests.
+* [ ] Implement Storybook for components.
 
 
 ### :warning: License
