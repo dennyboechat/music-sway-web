@@ -257,8 +257,36 @@
 .home_page_wrapper {
   max-width: 1920px;
   min-height: 100vh;
-  margin: auto;
   background-image: url("/guitar_player_1.jpg");
   background-repeat: no-repeat;
-  background-size: 100% auto;
+  background-size: cover;
+  background-position: top;
+}
+
+.home_page_hero {
+  width: 100%;
+  padding-left: 5%;
+  padding-top: 5%;
+  font-family: Oswald, sans-serif;
+  font-size: 24px;
+}
+
+.home_page_hero ul {
+  list-style: none;
+}
+
+.home_page_hero ul li:before {
+  content: '✓ ';
+}
+
+@media (max-width: 991px) {
+  .home_page_hero {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .home_page_hero {
+    font-size: 12px;
+  } 
 }

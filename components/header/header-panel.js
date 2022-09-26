@@ -121,8 +121,8 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
                         startIcon={
                             <Image
                                 src="/spotify_logo.png"
-                                height={30}
-                                width={30}
+                                height={20}
+                                width={20}
                                 alt=""
                             />
                         }
