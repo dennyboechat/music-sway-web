@@ -122,8 +122,8 @@ npm run drop-tables
 * [x] CRUD Bands.
 * [x] Bands invitations.
 * [x] Users authentication.
+* [x] Songs copy feature.
 * [ ] Main page content.
-* [ ] Songs copy feature.
 * [ ] Notifications (in app and email).
 * [ ] Playlist temp sharing.
 * [ ] Auto lyrics import.

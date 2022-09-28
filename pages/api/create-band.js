@@ -30,7 +30,7 @@ const resolvers = {
                     (?, ?)
                 `,
                 [
-                    band.name, 
+                    band.name,
                     band.ownerId,
                 ]
             );
