@@ -1,4 +1,5 @@
 import mysql from 'serverless-mysql';
+import { Query } from 'types';
 
 export const db = mysql({
   config: {
@@ -9,7 +10,7 @@ export const db = mysql({
   },
 });
 
-export const query = async (q, values = []) => {
+export const query: Query = async (q, values = []) => {
   try {
     const results = await db.query(q, values);
     await db.end();

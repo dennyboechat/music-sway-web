@@ -1,8 +1,11 @@
 import { v4 } from 'uuid';
 import Restriction from '@/lib/restriction';
 import { orderBy, forEach } from 'lodash';
+import { NewSongEntry, NewSong, Song, NewPlaylist, User, Context, Query } from 'types';
 
-export const getNewSongEntry = () => {
+let scroll: NodeJS.Timer;
+
+export const getNewSongEntry = (): NewSongEntry => {
     return {
         uuid: v4(),
         id: null,
@@ -11,7 +14,7 @@ export const getNewSongEntry = () => {
     }
 }
 
-export const getNewSong = ({ addEntry }) => {
+export const getNewSong = ({ addEntry }: { addEntry: boolean }): NewSong => {
     const entries = [];
     if (addEntry) {
         entries.push(getNewSongEntry());
@@ -27,7 +30,7 @@ export const getNewSong = ({ addEntry }) => {
     };
 }
 
-export const getNewPlaylist = () => {
+export const getNewPlaylist = (): NewPlaylist => {
     return {
         id: null,
         name: '',
@@ -37,7 +40,7 @@ export const getNewPlaylist = () => {
     };
 }
 
-export const validateSong = ({ songTitle, songRestrictionId }) => {
+export const validateSong = ({ songTitle, songRestrictionId }: { songTitle: string, songRestrictionId: number }): string[] => {
     const invalidMessages = [];
     if (!songTitle || songTitle.trim.length) {
         invalidMessages.push('Title');
@@ -48,7 +51,7 @@ export const validateSong = ({ songTitle, songRestrictionId }) => {
     return invalidMessages;
 }
 
-export const validatePlaylist = ({ playlistName, playlistRestrictionId }) => {
+export const validatePlaylist = ({ playlistName, playlistRestrictionId }): string[] => {
     const invalidMessages = [];
     if (!playlistName || playlistName.trim.length) {
         invalidMessages.push('Playlist Name');
@@ -59,7 +62,7 @@ export const validatePlaylist = ({ playlistName, playlistRestrictionId }) => {
     return invalidMessages;
 }
 
-export const validateBand = ({ bandName }) => {
+export const validateBand = ({ bandName }): string[] => {
     const invalidMessages = [];
     if (!bandName || bandName.trim.length) {
         invalidMessages.push('Band Name');
@@ -67,7 +70,7 @@ export const validateBand = ({ bandName }) => {
     return invalidMessages;
 }
 
-export const validateUser = ({ userName }) => {
+export const validateUser = ({ userName }: { userName: string }): string[] => {
     const invalidMessages = [];
     if (!userName || userName.trim.length) {
         invalidMessages.push('Your Name');
@@ -75,7 +78,7 @@ export const validateUser = ({ userName }) => {
     return invalidMessages;
 }
 
-export const getParsedCharacterText = ({ text }) => {
+export const getParsedCharacterText = ({ text }: { text: string }): string => {
     if (text) {
         return text.toLowerCase()
             .replace(/[àáâãäå]/g, 'a')
@@ -92,31 +95,31 @@ export const getParsedCharacterText = ({ text }) => {
     return '';
 }
 
-export const scrollToPageTop = () => {
+export const scrollToPageTop = (): void => {
     window.scrollTo({
         top: 0,
     });
 }
 
-export const scrollSmoothlyToPageTop = () => {
+export const scrollSmoothlyToPageTop = (): void => {
     window.scrollTo({
         top: 0,
         behavior: 'smooth',
     });
 }
 
-export const autoPageScrollDownStart = (speed = 100) => {
+export const autoPageScrollDownStart = (speed = 100): void => {
     scroll = setInterval(
         () => { window.scrollBy(0, 1); },
         speed
     );
 }
 
-export const autoPageScrollDownStop = () => {
+export const autoPageScrollDownStop = (): void => {
     clearInterval(scroll);
 }
 
-export const filterSongs = ({ songs, songsFilterValue }) => {
+export const filterSongs = ({ songs, songsFilterValue }: { songs: Song[], songsFilterValue: string }): Song[] => {
     let sortedSongs = [];
     if (songs && songs.length) {
         if (songsFilterValue && songsFilterValue.length) {
@@ -152,7 +155,7 @@ export const filterSongs = ({ songs, songsFilterValue }) => {
     return sortedSongs;
 }
 
-export const validateEmail = ({ email }) => {
+export const validateEmail = ({ email }: { email: string }): string | null => {
     if (email && email.trim().length) {
         const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
         if (!regexExp.test(email)) {
@@ -162,18 +165,17 @@ export const validateEmail = ({ email }) => {
     return null;
 }
 
-export const focusLastElement = ({ rootElemRef, elementRef }) => {
+export const focusLastElement = ({ rootElemRef, elementRef }: { rootElemRef: string, elementRef: string }): void => {
     const rootElem = document.querySelector(rootElemRef);
     if (rootElem) {
-        const foundElements = rootElem.querySelectorAll(elementRef);
-        if (foundElements) {
-            return foundElements[foundElements.length - 1].focus();
+        const foundElements = rootElem.querySelectorAll(elementRef) as NodeListOf<HTMLElement>;
+        if (foundElements && foundElements.length > 0) {
+            foundElements[foundElements.length - 1].focus();
         }
     }
-    return null;
 }
 
-export const getUserByEmail = async ({ context, query }) => {
+export const getUserByEmail = async ({ context, query }: { context: Context, query: Query }): Promise<User | null> => {
     if (!context || !context.session || !context.session.token) {
         console.error('User not authenticate.');
         return null;
