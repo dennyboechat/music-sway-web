@@ -3,8 +3,12 @@
   scrollbar-color: #2A2A2A #000;
 }
 
-*::-webkit-scrollbar {
+:not(.large_scrollbar)::-webkit-scrollbar {
   width: 8px;
+}
+
+.large_scrollbar::-webkit-scrollbar {
+  width: 23px;
 }
 
 *::-webkit-scrollbar-track {
@@ -120,7 +124,7 @@ body div.MuiCardContent-root {
 
 .song_entry_form_wrapper_highlighted .default_half_bottom_margin,
 .song_entry_form_wrapper_highlighted .song_entry_rich_text_editor_wrapper {
-  opacity: .5;
+  opacity: .3;
 }
 
 body div.default_bottom_margin {

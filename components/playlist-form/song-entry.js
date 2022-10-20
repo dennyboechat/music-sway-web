@@ -13,6 +13,7 @@ import { orderBy, filter, forEach, remove } from 'lodash';
 import FilterInput from '@/components/filter-input';
 import { filterSongs } from '@/lib/utils';
 import { deepOrange } from '@mui/material/colors';
+import classnames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButtons = false }) => {
@@ -92,9 +93,10 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
             }
 
             const filteredSongs = filterSongs({ songs, songsFilterValue });
+            const songsListClassNames = classnames(styles.playlist_pick_songs, isBiggerResolution ? '' : 'large_scrollbar');
 
             songsList = (
-                <div>
+                <div className="ms_scrollbar">
                     <FilterInput
                         id="filterSongForPlaylist"
                         placeholder="title, artist, content ..."
@@ -113,7 +115,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
                         delayOnTouchStart={true}
                         delay={2}
                         sort={false}
-                        className={styles.playlist_pick_songs}
+                        className={songsListClassNames}
                         disabled={disabledButtons}
                     >
                         {filteredSongs.map(item => getSongDisplayData(item))}

@@ -41,6 +41,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
 
     const onCancelDeleteEntry = () => {
         setShowDeleteConfirmation(false);
+        setWrapperClassName('');
     };
 
     const onConfirmDeleteEntry = () => {
