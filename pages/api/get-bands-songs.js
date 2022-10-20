@@ -30,13 +30,13 @@ const resolvers = {
                 FROM 
                     song
                 INNER JOIN
-                    user on user.id = song.owner_id
+                    user ON user.id = song.owner_id
                 LEFT JOIN 
-                    song_entry on song_entry.song_id = song.id
+                    song_entry ON song_entry.song_id = song.id
                 LEFT JOIN
-                    user_band on user_band.user_id = song.owner_id
+                    user_band ON user_band.user_id = song.owner_id
                 LEFT JOIN
-                    band on band.id = user_band.band_id OR 
+                    band ON band.id = user_band.band_id OR 
                     band.owner_id = song.owner_id
                 WHERE
                     song.owner_id <> ? AND

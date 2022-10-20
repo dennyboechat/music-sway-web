@@ -30,9 +30,9 @@ const resolvers = {
           FROM 
             song
           LEFT JOIN 
-            song_entry on song_entry.song_id = song.id
+            song_entry ON song_entry.song_id = song.id
           LEFT JOIN
-            user on user.id = song.owner_id
+            user ON user.id = song.owner_id
           WHERE 
             song.id = ? AND
             song.owner_id = ?

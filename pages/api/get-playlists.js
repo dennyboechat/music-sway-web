@@ -38,37 +38,57 @@ const resolvers = {
           FROM 
             playlist
           LEFT JOIN 
-            playlist_entry on playlist_entry.playlist_id = playlist.id
+            playlist_entry ON playlist_entry.playlist_id = playlist.id
           LEFT JOIN  
-            song on song.id = playlist_entry.song_id
+            song ON song.id = playlist_entry.song_id
           LEFT JOIN  
-            song_entry on song_entry.song_id = song.id
+            song_entry ON song_entry.song_id = song.id
           LEFT JOIN
-            user on user.id = playlist.owner_id
+            user ON user.id = playlist.owner_id
           LEFT JOIN
-            band on band.owner_id = playlist.owner_id
+            band ON band.owner_id = playlist.owner_id
           WHERE
             playlist.owner_id = ? OR
             (
               playlist.restriction_id = 2 AND 
               (
                 SELECT 
-                  user_band_subSelect.id 
+                  band_subSelect.id
                 FROM 
-                  user_band AS user_band_subSelect
+                  band AS band_subSelect
+                INNER JOIN
+                  user_band AS user_band_subSelect ON user_band_subSelect.band_id = band_subSelect.id
                 WHERE 
-                  user_band_subSelect.band_id = band.id AND 
-                  user_band_subSelect.band_user_status_id = 1 AND
-                  user_band_subSelect.user_id = ?
+                  band_subSelect.id IN (
+                    SELECT 
+                      band.id 
+                    FROM 
+                      band
+                    LEFT JOIN 
+                      user_band ON user_band.band_id = band.id
+                    WHERE 
+                      band.owner_id = playlist.owner_id OR
+                      user_band.user_id = playlist.owner_id
+                  )
+                  AND
+                  (
+                    (
+                      user_band_subSelect.band_user_status_id = 1 AND
+                      user_band_subSelect.user_id = ?
+                    ) OR
+                    band_subSelect.owner_id = ?
+                  )
+                  LIMIT 1
               ) IS NOT NULL
             )
           ORDER BY 
             playlist.name,
             playlist_entry.order_index
-      `,
+        `,
         [
           user.id,
-          user.id
+          user.id,
+          user.id,
         ]
       );
 

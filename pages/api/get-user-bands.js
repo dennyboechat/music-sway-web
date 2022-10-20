@@ -26,9 +26,9 @@ const resolvers = {
                 FROM 
                     band
                 LEFT JOIN 
-                    user_band on user_band.band_id = band.id
+                    user_band ON user_band.band_id = band.id
                 LEFT JOIN
-                    user on user.id = band.owner_id
+                    user ON user.id = band.owner_id
                 WHERE 
                     band.owner_id = ?
                 `,

@@ -25,7 +25,7 @@ const resolvers = {
                 INSERT INTO 
                     user (name, email)
                 VALUES 
-                (?, ?)
+                    (?, ?)
                 `,
                 [
                     user.name,

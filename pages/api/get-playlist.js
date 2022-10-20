@@ -27,7 +27,7 @@ const resolvers = {
                 FROM 
                     playlist
                 LEFT JOIN 
-                    playlist_entry on playlist_entry.playlist_id = playlist.id
+                    playlist_entry ON playlist_entry.playlist_id = playlist.id
                 WHERE 
                     playlist.id = ? AND
                     owner_id = ?
