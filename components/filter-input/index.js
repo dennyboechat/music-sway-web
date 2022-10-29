@@ -9,9 +9,19 @@ import classnames from 'classnames';
 
 const FilterInput = ({ id, placeholder, value, setValue, className }) => {
     const inputRef = React.useRef();
+    const [inputValue, setInputValue] = React.useState(value);
+
+    React.useEffect(() => {
+        const updateData = setTimeout(() => {
+            setValue(inputValue);
+        }, 1000);
+
+        return () => clearTimeout(updateData);
+    }, [inputValue])
 
     const onCleanButtonClick = () => {
         setValue('');
+        setInputValue('');
         if (inputRef && inputRef.current) {
             inputRef.current.focus();
         }
@@ -25,9 +35,9 @@ const FilterInput = ({ id, placeholder, value, setValue, className }) => {
                 id={id}
                 placeholder={placeholder}
                 autoComplete="off"
-                value={value}
+                value={inputValue}
                 fullWidth={true}
-                onChange={e => setValue(e.target.value)}
+                onChange={e => setInputValue(e.target.value)}
                 inputRef={inputRef}
                 InputProps={{
                     startAdornment:

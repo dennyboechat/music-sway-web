@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import themeDark from '@/styles/themeDark';
 import { SongsStateProvider } from '@/lib/songs-store';
 import { SongsFilterStateProvider } from '@/lib/songsFilter-store';
+import { PlaylistsFilterStateProvider } from '@/lib/playlistsFilter-store';
 import { PlaylistsStateProvider } from '@/lib/playlists-store';
 import { ConfigurationStateProvider } from '@/lib/configuration-store';
 import { MessageStateProvider } from '@/lib/message-store';
@@ -24,19 +25,21 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
           <SongsStateProvider>
             <SongsFilterStateProvider>
               <PlaylistsStateProvider>
-                <ConfigurationStateProvider>
-                  <MessageStateProvider>
-                    <BandsStateProvider>
-                      <UserInvitationBandsStateProvider>
-                        <BandsSongsStateProvider>
-                          <CssBaseline />
-                          <Component {...pageProps} />
-                          <AlertMessage />
-                        </BandsSongsStateProvider>
-                      </UserInvitationBandsStateProvider>
-                    </BandsStateProvider>
-                  </MessageStateProvider>
-                </ConfigurationStateProvider>
+                <PlaylistsFilterStateProvider>
+                  <ConfigurationStateProvider>
+                    <MessageStateProvider>
+                      <BandsStateProvider>
+                        <UserInvitationBandsStateProvider>
+                          <BandsSongsStateProvider>
+                            <CssBaseline />
+                            <Component {...pageProps} />
+                            <AlertMessage />
+                          </BandsSongsStateProvider>
+                        </UserInvitationBandsStateProvider>
+                      </BandsStateProvider>
+                    </MessageStateProvider>
+                  </ConfigurationStateProvider>
+                </PlaylistsFilterStateProvider>
               </PlaylistsStateProvider>
             </SongsFilterStateProvider>
           </SongsStateProvider>

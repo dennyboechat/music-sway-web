@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '@/components/header';
 import Songs from '@/components/songs';
 import Playlists from '@/components/playlists';
+import PlaylistFilter from '@/components/playlists/filter';
 import Filter from '@/components/songs/filter';
 import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
@@ -76,6 +77,9 @@ const Home = () => {
       </div>
     );
   } else {
+    filter = (
+      <PlaylistFilter />
+    );
     createRecordButton = (
       <div className={styles.fab_buttons}>
         <FloatingButton

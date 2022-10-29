@@ -11,7 +11,7 @@ import Song from '@/components/songs/song';
 import Filter from '@/components/songs/filter';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import { filterSongs } from '@/lib/utils';
-import { cloneDeep, forEach, remove } from 'lodash';
+import { cloneDeep, forEach, remove, orderBy } from 'lodash';
 import { useMessageState } from '@/lib/message-store';
 import { copySongs } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
@@ -73,16 +73,27 @@ const BandsSongs = () => {
                 }
                 setSelectedSongs(selectedSongsCopy);
             }
-            const sortedSongs = filterSongs({ songs: bandsSongs, songsFilterValue });
-            songsList = sortedSongs.map(song => (
-                <div key={song.id}>
-                    <Song
-                        song={song}
-                        onSelectSong={onSelectSong}
-                        disableSelectSong={isCopying}
-                    />
-                </div>
-            ));
+            let sortedSongs = filterSongs({ songs: bandsSongs, songsFilterValue });
+            sortedSongs = orderBy(sortedSongs, ['ownerName']);
+            songsList = [];
+            let owner;
+            forEach(sortedSongs, song => {
+                if (owner != song.ownerName) {
+                    songsList.push(
+                        <h4>{song.ownerName}</h4>
+                    );
+                    owner = song.ownerName;
+                }
+                songsList.push(
+                    <div key={song.id}>
+                        <Song
+                            song={song}
+                            onSelectSong={onSelectSong}
+                            disableSelectSong={isCopying}
+                        />
+                    </div>
+                );
+            });
         } else {
             songsList = 'No songs shared from your band(s).';
         }
