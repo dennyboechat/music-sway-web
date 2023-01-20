@@ -18,11 +18,18 @@ import { useAuthProvider } from '@/lib/auth-provider';
 import Image from 'next/image';
 
 const HeaderPanel = ({ children, showSignInButton = true }) => {
-    const { loggedUser } = useAuthProvider();
+    const { loggedUser, status } = useAuthProvider();
     const { setShowDrawerMenu } = useConfigurationState();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [showSignInMenu, setShowSignInMenu] = React.useState(false);
+    const [signInProgress, setSignInProgress] = React.useState(false);
     const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+
+    React.useEffect(() => {
+        if (status === 'unauthenticated') {
+            setSignInProgress(false);
+        }
+    }, [status]);
 
     const onCloseDrawerMenu = () => {
         setShowDrawerMenu({ value: false });
@@ -46,6 +53,11 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
             Router.push('/');
         }
     };
+
+    const signInWithSpotify = () => {
+        setSignInProgress(true);
+        signIn('spotify');
+    }
 
     let userData;
     if (loggedUser) {
@@ -96,6 +108,7 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
                     id="signInMenuButton"
                     onClick={() => setShowSignInMenu(!showSignInMenu)}
                     variant="text"
+                    disabled={signInProgress}
                 >
                     <ListItemText primary="Sign in" />
                 </MenuItem>
@@ -116,8 +129,9 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
                 >
                     <Button
                         id="signInButton"
-                        onClick={() => { signIn('spotify') }}
+                        onClick={signInWithSpotify}
                         variant="outlined"
+                        disabled={signInProgress}
                         startIcon={
                             <Image
                                 src="/spotify_logo.png"
@@ -127,7 +141,7 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
                             />
                         }
                     >
-                        {'Sign in with Spotify'}
+                        {signInProgress ? ' Sign in ...' : 'Sign in with Spotify'}
                     </Button>
                     <ListItemText
                         secondary="You need SPOTIFY account to log in."

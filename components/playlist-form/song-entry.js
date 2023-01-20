@@ -56,6 +56,13 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
         );
     }
 
+    const onPlaylistItemClick = ({ buttonId }) => {
+        const deleteButton = document.getElementById(buttonId);
+        if (deleteButton) {
+            deleteButton.focus();
+        }
+    }
+
     if (isLoadingSongs) {
         songsList = new Array(8).fill().map((v, i) =>
             <Skeleton key={i} variant="rect" height={70} className={styles.songs_list_skeleton} />
@@ -66,11 +73,13 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
                 forEach(entries, entry => {
                     const foundSong = songs.find(song => song.id === entry.songId);
                     if (foundSong) {
+                        const deleteButtonId = `deleteEntry_${entry.id}`;
                         entryDetails.push(
                             <div
                                 key={entry.id}
                                 id={entry.id}
                                 className={styles.playlist_entry_toggle}
+                                onClick={onPlaylistItemClick({ buttonId: deleteButtonId })}
                             >
                                 <div>
                                     {foundSong.title}
@@ -79,7 +88,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
                                     </Typography>
                                 </div>
                                 <IconButton
-                                    id={`deleteEntry_${entry.id}`}
+                                    id={deleteButtonId}
                                     onClick={() => removePlaylistEntry({ entryId: entry.id })}
                                     className={styles.playlist_entry_toggle_delete_button}
                                     disabled={disabledButtons}
@@ -150,7 +159,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
                         {'Playlist Songs'}
                     </Typography>
                     <Typography variant="caption" display="block" gutterBottom color="textSecondary">
-                        {'(drag and drop the songs bellow)'}
+                        {isBiggerResolution ? '(drag and drop the songs bellow)' : '(drop bellow)'}
                     </Typography>
                 </div>
                 {entries &&
