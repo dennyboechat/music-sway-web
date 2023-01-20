@@ -21,7 +21,7 @@ import PageNavigation from '@/lib/page-navigation';
 import { useAuthProvider } from '@/lib/auth-provider';
 
 const Home = () => {
-  const { status } = useAuthProvider();
+  const { loggedUser, status } = useAuthProvider();
   const { pageNavigation, setPageNavigation, setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
   const swiperRef = React.useRef();
@@ -37,7 +37,7 @@ const Home = () => {
 
   const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
 
-  if (status !== 'authenticated') {
+  if (status !== 'authenticated' || !loggedUser) {
     return <HomePage />;
   }
 
