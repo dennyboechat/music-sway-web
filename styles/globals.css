@@ -122,6 +122,10 @@ body div.MuiCardContent-root {
   min-height: 400px;
 }
 
+.song_entry_rich_text_editor_wrapper .tox div.tox-toolbar__primary {
+  background-color: #fff;
+}
+
 .song_entry_form_wrapper_highlighted .default_half_bottom_margin,
 .song_entry_form_wrapper_highlighted .song_entry_rich_text_editor_wrapper {
   opacity: .3;

@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import RichTextEditor from '@/components/rich-text-editor';
+import { RichTextEditor } from '@/components/rich-text-editor';
 import ConfirmButtonGroup from '@/components/confirm-buttons/confirmButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSongsState } from '@/lib/songs-store';

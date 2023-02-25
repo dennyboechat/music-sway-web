@@ -8,7 +8,7 @@ const LoadingSong = () => {
     const inputSkeletons = new Array(5).fill().map((v, i) =>
         <React.Fragment key={i}>
             <Grid item xs={12} lg={6}>
-                <Skeleton variant="rect" height={60} />
+                <Skeleton variant="rectangular" height={60} />
             </Grid>
             <Grid item xs={12} lg={6}>
                 <div />
@@ -24,7 +24,7 @@ const LoadingSong = () => {
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <Skeleton variant="rect" height={400} />
+                <Skeleton variant="rectangular" height={400} />
             </Grid>
         </Container>
     );

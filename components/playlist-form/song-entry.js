@@ -65,7 +65,7 @@ const PlaylistSongEntry = ({ playlistEntries, setPlaylistEntries, disabledButton
 
     if (isLoadingSongs) {
         songsList = new Array(8).fill().map((v, i) =>
-            <Skeleton key={i} variant="rect" height={70} className={styles.songs_list_skeleton} />
+            <Skeleton key={i} variant="rectangular" height={70} className={styles.songs_list_skeleton} />
         );
     } else {
         if (songs) {

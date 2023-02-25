@@ -14,7 +14,7 @@ const Playlists = () => {
     let playlistsData;
     if (isLoadingPlaylists) {
         const playlistsListSkeleton = new Array(4).fill().map((v, i) =>
-            <Skeleton key={i} variant="rect" height={80} className={styles.playlists_skeleton} />
+            <Skeleton key={i} variant="rectangular" height={80} className={styles.playlists_skeleton} />
         );
         playlistsData = (
             <Container className={styles.content_container}>

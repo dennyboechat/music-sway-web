@@ -54,7 +54,7 @@ const BandForm = () => {
     }
 
     if (isLoadingBands) {
-        bandsData = <Skeleton variant="rect" height={80} className={styles.playlists_skeleton} />;
+        bandsData = <Skeleton variant="rectangular" height={80} className={styles.playlists_skeleton} />;
     } else {
         const onAddBand = () => {
             setBandToChange(null);

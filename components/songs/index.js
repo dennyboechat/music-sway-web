@@ -20,7 +20,7 @@ const Songs = () => {
      let songsList;
      if (isLoadingSongs) {
           const songsListSkeleton = new Array(15).fill().map((v, i) =>
-               <Skeleton key={i} variant="rect" height={60} className={styles.songs_list_skeleton} />
+               <Skeleton key={i} variant="rectangular" height={60} className={styles.songs_list_skeleton} />
           );
           songsList = (
                <Container className={styles.content_container}>

@@ -9,13 +9,13 @@ const LoadingPlaylist = () => {
         <Container className={styles.content_container}>
             <Grid container rowSpacing={1}>
                 <Grid item xs={12} lg={6}>
-                    <Skeleton variant="rect" height={60} />
+                    <Skeleton variant="rectangular" height={60} />
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <div />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                    <Skeleton variant="rect" height={60} />
+                    <Skeleton variant="rectangular" height={60} />
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <div />
@@ -27,22 +27,22 @@ const LoadingPlaylist = () => {
             <Grid container columnSpacing={1}>
                 <Grid container item xs={12} lg={6} rowSpacing={0.5}>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                 </Grid>
                 <Grid container item xs={12} lg={6} rowSpacing={0.5}>
@@ -50,19 +50,19 @@ const LoadingPlaylist = () => {
                         <div style={{ height: '60px' }} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rect" height={60} />
+                        <Skeleton variant="rectangular" height={60} />
                     </Grid>
                 </Grid>
             </Grid>
