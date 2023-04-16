@@ -51,7 +51,7 @@ export const validateSong = ({ songTitle, songRestrictionId }: { songTitle: stri
     return invalidMessages;
 }
 
-export const validatePlaylist = ({ playlistName, playlistRestrictionId }): string[] => {
+export const validatePlaylist = ({ playlistName, playlistRestrictionId }: { playlistName: string, playlistRestrictionId: string }): string[] => {
     const invalidMessages = [];
     if (!playlistName || playlistName.trim.length) {
         invalidMessages.push('Playlist Name');
@@ -62,7 +62,7 @@ export const validatePlaylist = ({ playlistName, playlistRestrictionId }): strin
     return invalidMessages;
 }
 
-export const validateBand = ({ bandName }): string[] => {
+export const validateBand = ({ bandName }: { bandName: string }): string[] => {
     const invalidMessages = [];
     if (!bandName || bandName.trim.length) {
         invalidMessages.push('Band Name');
@@ -120,7 +120,7 @@ export const autoPageScrollDownStop = (): void => {
 }
 
 export const filterSongs = ({ songs, songsFilterValue }: { songs: Song[], songsFilterValue: string }): Song[] => {
-    let sortedSongs = [];
+    let sortedSongs: Song[] = [];
     if (songs && songs.length) {
         if (songsFilterValue && songsFilterValue.length) {
             forEach(songs, song => {

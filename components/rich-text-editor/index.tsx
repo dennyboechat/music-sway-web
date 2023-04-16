@@ -1,9 +1,16 @@
 import React from 'react';
+
+// Components
 import { Editor } from "@tinymce/tinymce-react";
 import Skeleton from '@mui/material/Skeleton';
+
+// Styles
 import styles from '@/styles/general.module.css';
 
-export const RichTextEditor = ({ id, value, onChange, className }) => {
+// Types
+import { RichTextEditorProps } from '@/components/rich-text-editor/types/RichTextEditorProps';
+
+export const RichTextEditor = ({ id, value, onChange, className }: RichTextEditorProps) => {
     const [loading, setLoading] = React.useState(true);
     const apiKey = 'k3b0j7q1x0idx8wn23lnultfh5fruhyftlj60f0bydzj2rkc';
 

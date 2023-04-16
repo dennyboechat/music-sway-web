@@ -17,7 +17,7 @@ const FilterInput = ({ id, placeholder, value, setValue, className }) => {
         }, 1000);
 
         return () => clearTimeout(updateData);
-    }, [inputValue])
+    }, [inputValue, setValue])
 
     const onCleanButtonClick = () => {
         setValue('');

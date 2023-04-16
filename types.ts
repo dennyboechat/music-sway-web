@@ -23,6 +23,7 @@ export type Song = {
     observation: string,
     entries: NewSongEntry[],
     restrictionId: number,
+    filterOrder?: number, 
 }
 
 export type NewPlaylistEntry = {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const PlaylistsFilterStateContext = React.createContext(true);
 
-export const PlaylistsFilterStateProvider = (props) => {
+export const PlaylistsFilterStateProvider = (props: any) => {
     const [playlistsFilterValue, setPlaylistsFilterValue] = React.useState(true);
     const value = React.useMemo(() => ({ playlistsFilterValue, setPlaylistsFilterValue }), [playlistsFilterValue]);
     return (

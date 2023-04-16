@@ -35,8 +35,10 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/react": "^18.0.35",
     "@types/sortablejs": "1.10.7",
+    "@types/uuid": "^9.0.1",
     "eslint": "^8.38.0",
     "eslint-config-next": "^13.3.0",
     "typescript": "5.0.4"
