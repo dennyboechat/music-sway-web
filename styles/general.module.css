@@ -267,6 +267,13 @@
   background-position: top;
 }
 
+.home_page_footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
 .home_page_hero {
   width: 100%;
   padding-left: 5%;

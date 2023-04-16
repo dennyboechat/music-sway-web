@@ -12,7 +12,6 @@ import { RichTextEditorProps } from '@/components/rich-text-editor/types/RichTex
 
 export const RichTextEditor = ({ id, value, onChange, className }: RichTextEditorProps) => {
     const [loading, setLoading] = React.useState(true);
-    const apiKey = 'k3b0j7q1x0idx8wn23lnultfh5fruhyftlj60f0bydzj2rkc';
 
     return (
         <div id="rich_text_editor_wrapper" className={className}>
@@ -21,7 +20,7 @@ export const RichTextEditor = ({ id, value, onChange, className }: RichTextEdito
             }
             <Editor
                 id={id}
-                apiKey={apiKey}
+                apiKey={process.env.RICH_TEXT_API_KEY}
                 initialValue={value}
                 onBlur={(e) => onChange(e.target.getContent())}
                 init={{
