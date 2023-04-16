@@ -112,4 +112,4 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: "/api/get-bands-songs" });
+export default server.createHandler({ path: '/api/get-bands-songs' });

@@ -5,6 +5,7 @@ import { usePlaylistsFilterState } from '@/lib/playlistsFilter-store';
 import { useAuthProvider } from '@/lib/auth-provider';
 import Playlist from '@/components/playlists/playlist';
 import styles from '@/styles/general.module.css';
+import { cloneDeep } from 'lodash';
 
 const Playlists = () => {
     const { playlists, isLoadingPlaylists } = usePlaylistsState();
@@ -22,12 +23,13 @@ const Playlists = () => {
             </Container>
         )
     } else {
+        let filteredPlaylists = cloneDeep(playlists);
         if (playlists && playlistsFilterValue) {
-            playlists = playlists.filter(obj => { return obj.ownerId === Number(loggedUser.user.id); });
+            filteredPlaylists = playlists.filter(obj => { return obj.ownerId === Number(loggedUser.user.id); });
         }
         playlistsData = (
             <Container>
-                {playlists && playlists.map(playlist => (
+                {filteredPlaylists && filteredPlaylists.map(playlist => (
                     <div key={playlist.id}>
                         <Playlist playlist={playlist} />
                     </div>

@@ -176,7 +176,7 @@ export const focusLastElement = ({ rootElemRef, elementRef }: { rootElemRef: str
 }
 
 export const getUserByEmail = async ({ context, query }: { context: Context, query: Query }): Promise<User | null> => {
-    if (!context || !context.session || !context.session.token) {
+    if (!context || !context.session || !context.session.user) {
         console.error('User not authenticate.');
         return null;
     }
@@ -189,7 +189,7 @@ export const getUserByEmail = async ({ context, query }: { context: Context, que
           user 
         WHERE 
           email = ?
-      `, [context.session.token.email]
+      `, [context.session.user.email]
     );
 
     if (!userResult || !userResult.length) {

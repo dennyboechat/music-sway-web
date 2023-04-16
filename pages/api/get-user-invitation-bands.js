@@ -77,4 +77,4 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: "/api/get-user-invitation-bands" });
+export default server.createHandler({ path: '/api/get-user-invitation-bands' });

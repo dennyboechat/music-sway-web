@@ -56,4 +56,4 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: "/api/delete-playlist" });
+export default server.createHandler({ path: '/api/delete-playlist' });

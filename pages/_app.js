@@ -1,4 +1,3 @@
-import React from "react";
 import { SessionProvider } from 'next-auth/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -16,8 +15,7 @@ import { AuthProvider } from "@/lib/auth-provider";
 import AlertMessage from '@/components/alert';
 import '../styles/globals.css';
 
-const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
-
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       <ThemeProvider theme={themeDark}>
@@ -48,5 +46,3 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
     </SessionProvider>
   );
 }
-
-export default MyApp;

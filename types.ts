@@ -42,14 +42,14 @@ export type User = {
     email: string,
 }
 
-export type Token = {
+export type SessionUser = {
     name: string,
     email: string,
-    picture: string,
+    image: string,
 }
 
 export type Session = {
-    token: Token,
+    user: SessionUser,
 }
 
 export type Context = {

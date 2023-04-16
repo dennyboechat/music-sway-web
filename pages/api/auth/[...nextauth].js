@@ -8,18 +8,6 @@ export default NextAuth({
             clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
         }),
     ],
-    callbacks: {
-        async jwt({ token, account }) {
-            if (account) {
-                token.accessToken = account.refresh_token;
-            }
-            return token;
-        },
-        async session(session, user) {
-            session.user = user;
-            return session;
-        },
-    },
     pages: {
         signIn: '/auth/new-user',
         error: '/auth/error',

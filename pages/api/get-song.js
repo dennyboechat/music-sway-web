@@ -88,4 +88,4 @@ const server = new ApolloServer({
   },
 });
 
-export default server.createHandler({ path: "/api/get-song" });
+export default server.createHandler({ path: '/api/get-song' });

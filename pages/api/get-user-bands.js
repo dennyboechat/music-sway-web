@@ -76,4 +76,4 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: "/api/get-user-bands" });
+export default server.createHandler({ path: '/api/get-user-bands' });

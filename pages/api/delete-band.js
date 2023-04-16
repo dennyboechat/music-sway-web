@@ -56,4 +56,4 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: "/api/delete-band" });
+export default server.createHandler({ path: '/api/delete-band' });

@@ -4,14 +4,14 @@ import { useSession } from 'next-auth/react';
 const UserAvatar = () => {
     const { data: session } = useSession();
 
-    if (!session || !session.token) {
+    if (!session || !session.user) {
         return null;
     }
 
     return (
         <Avatar
             id="user_main_menu_avatar"
-            src={session.token.picture}
+            src={session.user.image}
         />
     );
 }

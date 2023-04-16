@@ -44,4 +44,4 @@ export const config = {
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-export default server.createHandler({ path: "/api/get-user" });
+export default server.createHandler({ path: '/api/get-user' });
