@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const MsLogo = ({ className }) => {
+const MsLogo = ({ className }: { className?: string }) => {
     return (
         <Image
             src="/ms_logo.png"

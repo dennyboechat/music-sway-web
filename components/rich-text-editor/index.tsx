@@ -1,13 +1,7 @@
 import React from 'react';
-
-// Components
 import { Editor } from "@tinymce/tinymce-react";
 import Skeleton from '@mui/material/Skeleton';
-
-// Styles
 import styles from '@/styles/general.module.css';
-
-// Types
 import { RichTextEditorProps } from '@/components/rich-text-editor/types/RichTextEditorProps';
 
 export const RichTextEditor = ({ id, value, onChange, className }: RichTextEditorProps) => {

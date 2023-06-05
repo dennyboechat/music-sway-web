@@ -11,7 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from '@mui/icons-material/Delete';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMediaQuery, Theme } from '@mui/material';
 import { useMessageState } from '@/lib/message-store';
 import RestrictionSelection from '@/components/restriction-selection';
 import styles from '@/styles/general.module.css';
@@ -23,13 +23,14 @@ import { GraphQLClient } from 'graphql-request';
 import { useSWRConfig } from 'swr';
 import { playlistsQuery } from '@/graphQl/queries';
 import { useConfigurationState } from '@/lib/configuration-store';
-import PageNavigation from '@/lib/page-navigation';
+import { PageNavigation } from '@/lib/page-navigation';
+import type { Playlist, PlaylistEntry } from '@/components/types/PlaylistProps';
 
-const PlaylistForm = ({ playlist, apiEndpoint }) => {
+const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoint: string }) => {
     const [playlistName, setPlaylistName] = React.useState(playlist?.name);
     const [playlistObservation, setPlaylistObservation] = React.useState(playlist?.observation);
     const [playlistRestrictionId, setPlaylistRestrictionId] = React.useState(playlist?.restrictionId);
-    const [playlistEntries, setPlaylistEntries] = React.useState(playlist.entries || []);
+    const [playlistEntries, setPlaylistEntries] = React.useState<PlaylistEntry[]>(playlist.entries || []);
     const [saving, setSaving] = React.useState(false);
     const [savingAndAddingNew, setSavingAndAddingNew] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
@@ -38,7 +39,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     const [hasErrors, setHasErrors] = React.useState(false);
     const { setAlertMessage } = useMessageState();
     const { setPageNavigation } = useConfigurationState();
-    const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+    const isLgResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
     if (!playlist) {
@@ -46,11 +47,11 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
     }
 
     const backToMainPage = () => {
-        setPageNavigation({ value: PageNavigation.PLAYLISTS });
+        setPageNavigation(PageNavigation.PLAYLISTS);
         Router.push('/');
     }
 
-    const onSave = ({ addsNew }) => async () => {
+    const onSave = ({ addsNew }: { addsNew: boolean }) => async () => {
         const invalidMessages = validatePlaylist({ playlistName, playlistRestrictionId });
         if (invalidMessages.length) {
             setAlertMessage({ message: `Yoo fill mandatory fields: ${invalidMessages.join(', ')}`, severity: 'error' });
@@ -68,15 +69,12 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
 
         let variables = {
             input: {
+                id: playlist.id,
                 name: playlistName,
                 observation: playlistObservation,
                 restrictionId: playlistRestrictionId,
                 entries: entries,
             }
-        }
-
-        if (playlist.id) {
-            variables.input.id = playlist.id;
         }
 
         try {
@@ -118,7 +116,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             const graphQLClient = new GraphQLClient('/api/delete-playlist');
             await graphQLClient.request(deletePlaylist, { id: playlist.id });
         } catch (error) {
-            throw Error(error);
+            throw Error(String(error));
         }
         mutate(playlistsQuery);
         backToMainPage();
@@ -131,9 +129,9 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         setCanceling(true);
     }
 
-    const handleSetPlaylistRestrictionId = (name) => {
+    const handleSetPlaylistRestrictionId = (name: string) => {
         const restriction = getRestrictionByName(name);
-        setPlaylistRestrictionId(restriction.id);
+        setPlaylistRestrictionId(restriction?.id);
     }
 
     const disabled = saving || savingAndAddingNew || deleting || canceling;
@@ -156,11 +154,14 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
         saveAndAddNewButton =
             <FloatingButton
                 id="saveAndAddNewPlaylistButton"
-                aria-label="saveAndAddNew"
+                ariaLabel="saveAndAddNew"
                 disabled={disabled}
                 label={buttonLabel}
                 icon={<SaveAsIcon />}
                 onClick={onSave({ addsNew: true })}
+                size={undefined}
+                title={undefined}
+                href={undefined}
             />;
     }
 
@@ -178,12 +179,15 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
             deleteButton = (
                 <FloatingButton
                     id="deletePlaylistButton"
-                    aria-label="deletePlaylist"
+                    ariaLabel="deletePlaylist"
                     color="secondary"
                     disabled={disabled}
                     label='Delete'
                     icon={<DeleteIcon />}
                     onClick={onDelete}
+                    size={undefined}
+                    title={undefined}
+                    href={undefined}
                 />
             );
         }
@@ -245,11 +249,14 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                     {!showDeleteConfirmation &&
                         <FloatingButton
                             id="savePlaylistButton"
-                            aria-label="save"
+                            ariaLabel="save"
                             disabled={disabled}
                             label={saving ? 'Saving' : 'Save'}
                             icon={<SaveIcon />}
                             onClick={onSave({ addsNew: false })}
+                            size={undefined}
+                            title={undefined}
+                            href={undefined}
                         />
                     }
                     {saveAndAddNewButton}
@@ -257,11 +264,14 @@ const PlaylistForm = ({ playlist, apiEndpoint }) => {
                         <FloatingButton
                             id="cancelPlaylistButton"
                             color="secondary"
-                            aria-label="cancel"
+                            ariaLabel="cancel"
                             disabled={disabled}
                             label='Cancel'
                             icon={<HighlightOffIcon />}
                             onClick={onCancel}
+                            size={undefined}
+                            title={undefined}
+                            href={undefined}
                         />
                     }
                 </div>

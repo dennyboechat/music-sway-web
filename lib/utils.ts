@@ -51,7 +51,7 @@ export const validateSong = ({ songTitle, songRestrictionId }: { songTitle: stri
     return invalidMessages;
 }
 
-export const validatePlaylist = ({ playlistName, playlistRestrictionId }: { playlistName: string, playlistRestrictionId: string }): string[] => {
+export const validatePlaylist = ({ playlistName, playlistRestrictionId }: { playlistName: string, playlistRestrictionId?: number }): string[] => {
     const invalidMessages = [];
     if (!playlistName || playlistName.trim.length) {
         invalidMessages.push('Playlist Name');
@@ -98,13 +98,6 @@ export const getParsedCharacterText = ({ text }: { text: string }): string => {
 export const scrollToPageTop = (): void => {
     window.scrollTo({
         top: 0,
-    });
-}
-
-export const scrollSmoothlyToPageTop = (): void => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
     });
 }
 

@@ -14,18 +14,18 @@ import Logout from '@mui/icons-material/Logout';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import { useConfigurationState } from '@/lib/configuration-store';
-import PageNavigation from '@/lib/page-navigation';
+import { PageNavigation } from '@/lib/page-navigation';
 import { signOut } from 'next-auth/react';
 import { useAuthProvider } from '@/lib/auth-provider';
 import { autoPageScrollDownStop } from '@/lib/utils';
 import styles from '@/styles/general.module.css';
 import { cloneDeep } from 'lodash';
 
-const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
+const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose = () => { } }) => {
     const { loggedUser } = useAuthProvider();
     const { showDrawerMenu, configurationData, setConfigurationData } = useConfigurationState();
 
-    const goToMainPage = ({ pageNavigation }) => {
+    const goToMainPage = ({ pageNavigation }: { pageNavigation: PageNavigation }) => {
         let configurationDataCopy = cloneDeep(configurationData);
         configurationDataCopy.pageNavigation = pageNavigation;
         configurationDataCopy.autoScrollContentSpeed = 0;
@@ -35,7 +35,7 @@ const DrawerMenu = ({ id = 'mainDrawerMenu', onOpen = () => { }, onClose }) => {
         Router.push('/');
     };
 
-    const goTo = ({ path }) => {
+    const goTo = ({ path }: { path: string }) => {
         autoPageScrollDownStop();
         let configurationDataCopy = cloneDeep(configurationData);
         configurationDataCopy.autoScrollContentSpeed = 0;

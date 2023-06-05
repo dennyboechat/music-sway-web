@@ -1,14 +1,9 @@
-// Components
 import Typography from '@mui/material/Typography';
 import Header from '@/components/header';
 import HeaderPanel from '@/components/header/header-panel';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
-
-// Utils
 import { signIn } from 'next-auth/react';
-
-// Styles
 import styles from '@/styles/general.module.css';
 
 const HomePage = () => (

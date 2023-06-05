@@ -3,11 +3,11 @@ import { typeDefs } from '@/graphQl/type-definitions';
 import { query, db } from '@/lib/db';
 import { getSession } from 'next-auth/react';
 import { getUserByEmail } from '@/lib/utils';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const resolvers = {
     Mutation: {
-        addSongs: async (root, { ids }, context) => {
-
+        addSongs: async (root: any, { ids }: { ids: string | string[] }, context: any) => {
             const user = await getUserByEmail({ context, query });
             if (!user) {
                 return null;
@@ -22,15 +22,16 @@ const resolvers = {
                 ids = ids.split(',');
             }
 
-            ids.forEach(async (songId) => {
+            ids.forEach(async (songId: string) => {
                 await db.transaction()
-                    .query(`
-                        INSERT INTO 
+                    .query(
+                        `
+                        INSERT INTO
                             song (title, artist, category, observation, restriction_id, owner_id)
                         SELECT
-                            title, 
-                            artist, 
-                            category, 
+                            title,
+                            artist,
+                            category,
                             observation,
                             restriction_id,
                             ?
@@ -39,27 +40,22 @@ const resolvers = {
                         WHERE
                             id = ?
                         `,
-                        [
-                            user.id,
-                            songId,
-                        ]
+                        [user.id, songId]
                     )
-                    .query((r) => [`
-                        INSERT INTO 
+                    .query((r: { insertId: number }) => [
+                        `
+                        INSERT INTO
                             song_entry (title, content, song_id)
                         SELECT
-                            title, 
-                            content, 
+                            title,
+                            content,
                             ?
                         FROM
                             song_entry
                         WHERE
                             song_id = ?
-                        `
-                        , [
-                            r.insertId,
-                            songId
-                        ]
+                        `,
+                        [r.insertId, songId]
                     ])
                     .commit();
                 await db.end();
@@ -70,19 +66,21 @@ const resolvers = {
     }
 };
 
+const apolloServerConfig = {
+    typeDefs,
+    resolvers,
+    context: async ({ req }: { req: NextApiRequest }): Promise<any> => {
+        const session = await getSession({ req });
+        return { session };
+    },
+};
+
+const server = new ApolloServer(apolloServerConfig);
+
 export const config = {
     api: {
         bodyParser: false,
     },
-}
-
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: async ({ req }) => {
-        const session = await getSession({ req });
-        return { session };
-    },
-});
+};
 
 export default server.createHandler({ path: '/api/copy-songs' });

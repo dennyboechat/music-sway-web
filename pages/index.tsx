@@ -8,7 +8,7 @@ import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
 import HeaderPanel from '@/components/header/header-panel';
 import HomePage from '@/components/home-page';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
 import "swiper/css/navigation";
@@ -16,26 +16,26 @@ import { Navigation } from "swiper";
 import { scrollToPageTop } from '@/lib/utils';
 import { autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import PageNavigation from '@/lib/page-navigation';
+import { useMediaQuery, Theme } from '@mui/material';
+import { PageNavigation } from '@/lib/page-navigation';
 import { useAuthProvider } from '@/lib/auth-provider';
 
 const Home = () => {
   const { loggedUser, status } = useAuthProvider();
   const { pageNavigation, setPageNavigation, setAutoScrollContentSpeed } = useConfigurationState();
   const [showSongs, setShowSongs] = React.useState(true);
-  const swiperRef = React.useRef();
+  const swiperRef = React.useRef<SwiperRef>(null);
 
   React.useEffect(() => {
     const showSongs = !pageNavigation || pageNavigation === PageNavigation.SONGS ? true : false;
     setShowSongs(showSongs);
-    if (swiperRef && swiperRef.current && swiperRef.current.swiper) {
+    if (swiperRef?.current?.swiper) {
       const swiperIndex = showSongs ? 0 : 1;
       swiperRef.current.swiper.slideTo(swiperIndex);
     }
   }, [pageNavigation]);
 
-  const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('1300'));
+  const isBiggerResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up(1300));
 
   if (status !== 'authenticated' || !loggedUser) {
     return <HomePage />;
@@ -43,17 +43,17 @@ const Home = () => {
 
   const onSwipeReachBeginning = () => () => {
     autoPageScrollDownStop();
-    setAutoScrollContentSpeed({ value: 0 });
+    setAutoScrollContentSpeed(0);
     setShowSongs(true);
-    setPageNavigation({ value: PageNavigation.SONGS });
+    setPageNavigation(PageNavigation.SONGS);
     scrollToPageTop();
   }
 
   const onSwipeReachEnd = () => () => {
     autoPageScrollDownStop();
-    setAutoScrollContentSpeed({ value: 0 });
+    setAutoScrollContentSpeed(0);
     setShowSongs(false);
-    setPageNavigation({ value: PageNavigation.PLAYLISTS });
+    setPageNavigation(PageNavigation.PLAYLISTS);
     scrollToPageTop();
   }
 
@@ -67,12 +67,13 @@ const Home = () => {
       <div className={styles.fab_buttons}>
         <FloatingButton
           id="addSongButton"
-          aria-label="addSong"
+          ariaLabel="addSong"
           href="song/new"
           title="Add Song"
           size="large"
-          variant={null}
           icon={<AddIcon />}
+          label=""
+          onClick={undefined}
         />
       </div>
     );
@@ -84,12 +85,13 @@ const Home = () => {
       <div className={styles.fab_buttons}>
         <FloatingButton
           id="addPlaylistButton"
-          aria-label="addPlaylist"
+          ariaLabel="addPlaylist"
           href="playlist/new"
           title="Add Playlist"
           size="large"
-          variant={null}
           icon={<AddIcon />}
+          label=""
+          onClick={undefined}
         />
       </div>
     );

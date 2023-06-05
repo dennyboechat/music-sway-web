@@ -1,7 +1,6 @@
 import { gql } from 'apollo-server-micro';
 
-const typeDefs = gql`
-
+export const typeDefs = gql`
     input UserAddInput {
         name: String
         email: String

@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'next/router'
 import IconButton from '@mui/material/IconButton';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMediaQuery, Theme } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -17,13 +17,14 @@ import { useConfigurationState } from '@/lib/configuration-store';
 import { useAuthProvider } from '@/lib/auth-provider';
 import Image from 'next/image';
 
-const HeaderPanel = ({ children, showSignInButton = true }) => {
+const HeaderPanel = ({ children, showSignInButton = true }: { children?: JSX.Element, showSignInButton?: boolean }) => {
     const { loggedUser, status } = useAuthProvider();
     const { setShowDrawerMenu } = useConfigurationState();
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState<HTMLButtonElement | null>(null);
     const [showSignInMenu, setShowSignInMenu] = React.useState(false);
     const [signInProgress, setSignInProgress] = React.useState(false);
-    const isBiggerResolution = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+    const isBiggerResolution: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
+
 
     React.useEffect(() => {
         if (status === 'unauthenticated') {
@@ -32,10 +33,10 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
     }, [status]);
 
     const onCloseDrawerMenu = () => {
-        setShowDrawerMenu({ value: false });
+        setShowDrawerMenu(false);
     }
 
-    const handleOpenUserMenu = (event) => {
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (loggedUser) {
             setAnchorElUser(event.currentTarget);
         }
@@ -47,9 +48,9 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
 
     const onClickDrawerMenu = () => {
         if (loggedUser) {
-            setShowDrawerMenu({ value: true });
+            setShowDrawerMenu(true);
         } else {
-            setShowDrawerMenu({ value: false });
+            setShowDrawerMenu(false);
             Router.push('/');
         }
     };
@@ -107,7 +108,7 @@ const HeaderPanel = ({ children, showSignInButton = true }) => {
                 <MenuItem
                     id="signInMenuButton"
                     onClick={() => setShowSignInMenu(!showSignInMenu)}
-                    variant="text"
+                    component="li"
                     disabled={signInProgress}
                 >
                     <ListItemText primary="Sign in" />
