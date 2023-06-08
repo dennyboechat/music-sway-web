@@ -28,7 +28,7 @@ export const useBandsSongs = () => {
   }
 }
 
-export const useSong = (id) => {
+export const useSong = (id: number) => {
   const { data, error } = useSWRImmutable(songQuery, query => request('/api/get-song', query, { id }));
   return {
     song: data ? data.song : null,
@@ -46,7 +46,7 @@ export const usePlaylists = () => {
   }
 }
 
-export const usePlaylist = (id) => {
+export const usePlaylist = (id: number) => {
   const { data, error } = useSWRImmutable(playlistQuery, query => request('/api/get-playlist', query, { id }));
   return {
     playlist: data ? data.playlist : null,

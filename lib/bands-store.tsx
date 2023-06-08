@@ -6,7 +6,7 @@ const BandsStateContext = React.createContext({
     isLoadingBands: false,
 });
 
-export const BandsStateProvider = (props) => {
+export const BandsStateProvider: React.FC = (props) => {
     const { bands, isLoadingBands } = useUserBands();
     const value = React.useMemo(() => ({ bands, isLoadingBands }), [bands, isLoadingBands]);
     return (

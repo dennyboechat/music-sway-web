@@ -8,7 +8,7 @@ const AlertMessage = () => {
         return null;
     }
 
-    const onCloseAlert = (e, reason) => {
+    const onCloseSnackbar = (e: any, reason: string) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -19,11 +19,11 @@ const AlertMessage = () => {
         <Snackbar
             open={true}
             autoHideDuration={6000}
-            onClose={onCloseAlert}
+            onClose={onCloseSnackbar}
         >
             <Alert
                 severity={alertMessage?.severity}
-                onClose={onCloseAlert}
+                onClose={() => setAlertMessage({})}
             >
                 {alertMessage?.message}
             </Alert>

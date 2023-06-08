@@ -6,7 +6,7 @@ const SongsStateContext = React.createContext({
     isLoadingSongs: false,
 });
 
-export const SongsStateProvider = (props) => {
+export const SongsStateProvider: React.FC = (props) => {
     const { songs, isLoadingSongs } = useSongs();
     const value = React.useMemo(() => ({ songs, isLoadingSongs }), [songs, isLoadingSongs]);
     return (

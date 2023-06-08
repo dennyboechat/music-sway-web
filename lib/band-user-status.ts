@@ -1,4 +1,5 @@
 import { map, find } from 'lodash';
+import type { BandUserStatus } from 'types';
 
 const singleton = Object.freeze({
     APPROVED: { name: 'APPROVED', id: 1, label: 'Confirmed' },
@@ -18,7 +19,7 @@ export const getBandUserStatuses = () => {
     });
 };
 
-export const getBandUserStatusById = (id) => {
+export const getBandUserStatusById = (id: BandUserStatus) => {
     if (id) {
         return find(singleton, key => { return key.id === Number(id) });
     }

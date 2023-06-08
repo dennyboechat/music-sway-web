@@ -14,20 +14,19 @@ const db = mysql({
   },
 });
 
-const query = async (q) => {
+const query = async (q: string) => {
   try {
     const results = await db.query(q);
     await db.end();
     return results;
-  } catch (e) {
-    throw Error(e.message)
+  } catch (error: any) {
+    throw Error(error)
   }
 }
 
 // Create tables if don't exist
 const migrate = async () => {
   try {
-
     await query(`
       CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,

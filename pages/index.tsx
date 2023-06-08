@@ -35,7 +35,7 @@ const Home = () => {
     }
   }, [pageNavigation]);
 
-  const isBiggerResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up(1300));
+  const isBiggerResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
   if (status !== 'authenticated' || !loggedUser) {
     return <HomePage />;

@@ -115,8 +115,8 @@ const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoi
         try {
             const graphQLClient = new GraphQLClient('/api/delete-playlist');
             await graphQLClient.request(deletePlaylist, { id: playlist.id });
-        } catch (error) {
-            throw Error(String(error));
+        } catch (error: any) {
+            throw Error(error);
         }
         mutate(playlistsQuery);
         backToMainPage();

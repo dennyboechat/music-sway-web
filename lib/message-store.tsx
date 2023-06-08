@@ -2,7 +2,7 @@ import React, { createContext, useState, useMemo, useContext } from 'react';
 
 interface Message {
   message?: string,
-  severity?: string,
+  severity?: 'success' | 'info' | 'warning' | 'error',
 }
 
 interface MessageState {

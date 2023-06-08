@@ -60,3 +60,7 @@ export type Context = {
 export interface Query {
     (q: string, values: string[]): any;
 }
+
+export interface BandUserStatus {
+    id?: number
+}

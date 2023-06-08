@@ -6,7 +6,7 @@ const PlaylistsStateContext = React.createContext({
     isLoadingPlaylists: false,
 });
 
-export const PlaylistsStateProvider = (props) => {
+export const PlaylistsStateProvider: React.FC = (props) => {
     const { playlists, isLoadingPlaylists } = usePlaylists();
     const value = React.useMemo(() => ({ playlists, isLoadingPlaylists }), [playlists, isLoadingPlaylists]);
     return (

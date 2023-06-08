@@ -15,7 +15,7 @@ export const query: Query = async (q, values = []) => {
     const results = await db.query(q, values);
     await db.end();
     return results;
-  } catch (e: any) {
-    throw Error(e.message);
+  } catch (error: any) {
+    throw Error(error);
   }
 };

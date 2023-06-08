@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import Restriction from '@/lib/restriction';
 import { orderBy, forEach } from 'lodash';
-import { NewSongEntry, NewSong, Song, NewPlaylist, User, Context, Query } from 'types';
+import type { NewSongEntry, NewSong, Song, NewPlaylist, User, Context, Query } from 'types';
 
 let scroll: NodeJS.Timer;
 

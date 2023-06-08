@@ -18,10 +18,10 @@ export const getRestrictions = () => {
     });
 };
 
-export const getRestrictionByName = (name) => {
+export const getRestrictionByName = (name: string) => {
     return find(singleton, key => { return key.name === name });
 };
 
-export const getRestrictionById = (id) => {
+export const getRestrictionById = (id: number) => {
     return find(singleton, key => { return key.id === id });
 };

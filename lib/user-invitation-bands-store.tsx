@@ -6,7 +6,7 @@ const UserInvitationBandsStateContext = React.createContext({
     isLoadingUserInvitationBands: false,
 });
 
-export const UserInvitationBandsStateProvider = (props) => {
+export const UserInvitationBandsStateProvider: React.FC = (props) => {
     const { userInvitationBands, isLoadingUserInvitationBands } = useUserInvitationBands();
     const value = React.useMemo(() => ({ userInvitationBands, isLoadingUserInvitationBands }), [userInvitationBands, isLoadingUserInvitationBands]);
     return (

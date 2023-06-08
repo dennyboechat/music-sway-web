@@ -19,7 +19,6 @@ const themeDark = createTheme({
             sm: 600,
             md: 900,
             lg: 1200,
-            1300: 1300,
             xl: 1536,
         },
     },
