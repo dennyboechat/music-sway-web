@@ -8,7 +8,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useBandsSongsState } from '@/lib/bands-songs-store';
 import styles from '@/styles/general.module.css';
 import Song from '@/components/songs/song';
-import Filter from '@/components/songs/filter';
+import { SearchInput } from '@/components/songs/filter';
 import { useSongsFilterState } from '@/lib/songsFilter-store';
 import { filterSongs } from '@/lib/utils';
 import { cloneDeep, forEach, remove, orderBy } from 'lodash';
@@ -102,7 +102,7 @@ const BandsSongs = () => {
     return (
         <>
             <HeaderPanel>
-                <Filter />
+                <SearchInput />
             </HeaderPanel>
             <Container className={styles.content_container}>
                 {songsList}
