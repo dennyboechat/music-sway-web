@@ -147,10 +147,11 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
         Router.push('/');
     }
 
-    const onSongEntryValueChanged = ({ field, value, entry }: { field: string, value: string, entry: SongEntry }) => {
+    const onSongEntryValueChanged = ({ field, value, entry }: { field: string, value: string, entry: SongEntry }): {} => {
         let entriesCopy = cloneDeep(songEntries);
         entriesCopy = entriesCopy.map(obj => obj.uuid === entry.uuid ? { ...obj, [field]: value } : obj);
         setSongEntries(entriesCopy);
+        return entriesCopy;
     };
 
     const onRemoveSongEntry = ({ entry }: { entry: SongEntry }) => {
