@@ -6,15 +6,15 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import Restriction, { getRestrictions, getRestrictionById } from '@/lib/restriction';
 import { forEach } from 'lodash';
+import { RestrictionSelection } from '@/components/types/RestrictionSelectionProps';
 
 const RestrictionSelection = ({
     id,
     selectedRestrictionId,
     onChange,
-    options = [Restriction.BAND, Restriction.PRIVATE, Restriction.PUBLIC],
-}) => {
-
-    const restrictions = [];
+    options,
+}: RestrictionSelection) => {
+    const restrictions: React.ReactElement[] = [];
     forEach(getRestrictions(), restriction => {
         let icon;
         switch (restriction.name) {
@@ -58,7 +58,7 @@ const RestrictionSelection = ({
         }
     });
 
-    const restrictionName = getRestrictionById(selectedRestrictionId).name;
+    const restrictionName = getRestrictionById(selectedRestrictionId)?.name;
 
     return (
         <ToggleButtonGroup

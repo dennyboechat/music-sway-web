@@ -1,7 +1,7 @@
 import Avatar from '@mui/material/Avatar';
 import { useSession } from 'next-auth/react';
 
-const UserAvatar = () => {
+export const UserAvatar = () => {
     const { data: session } = useSession();
 
     if (!session || !session.user) {
@@ -11,9 +11,7 @@ const UserAvatar = () => {
     return (
         <Avatar
             id="user_main_menu_avatar"
-            src={session.user.image}
+            src={session.user.image ?? undefined}
         />
     );
 }
-
-export default UserAvatar;

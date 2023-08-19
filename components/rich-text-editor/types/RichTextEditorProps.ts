@@ -1,5 +1,5 @@
 export interface RichTextEditorProps {
-    id: string;
+    id?: string;
     value: string;
     onChange: (content: string) => {};
     className: string;

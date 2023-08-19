@@ -1,7 +1,13 @@
 import React from 'react';
 import { useSongs } from './swr-hooks';
+import { Song } from '@/components/types/SongProps';
 
-const SongsStateContext = React.createContext({
+interface SongsState {
+    songs: Song[];
+    isLoadingSongs: boolean;
+}
+
+const SongsStateContext = React.createContext<SongsState>({
     songs: [],
     isLoadingSongs: false,
 });

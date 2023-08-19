@@ -15,7 +15,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from '@mui/icons-material/Delete';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMediaQuery, Theme } from '@mui/material';
 import { useSongsState } from '@/lib/songs-store';
 import { useMessageState } from '@/lib/message-store';
 import styles from '@/styles/general.module.css';
@@ -27,8 +27,9 @@ import { createSong, updateSong, deleteSong } from '@/graphQl/mutations';
 import { GraphQLClient } from 'graphql-request';
 import { useSWRConfig } from 'swr';
 import { songsQuery } from '@/graphQl/queries';
+import { Song, SongArtist, SongCategory, SongEntry } from '@/components/types/SongProps';
 
-const SongForm = ({ song, apiEndpoint }) => {
+const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) => {
     const { songs } = useSongsState();
     const [songTitle, setSongTitle] = React.useState(song?.title);
     const [songArtist, setSongArtist] = React.useState(song?.artist);
@@ -43,7 +44,7 @@ const SongForm = ({ song, apiEndpoint }) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
     const [hasErrors, setHasErrors] = React.useState(false);
     const { setAlertMessage } = useMessageState();
-    const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+    const isLgResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const { mutate } = useSWRConfig();
 
     if (!song) {
@@ -64,7 +65,7 @@ const SongForm = ({ song, apiEndpoint }) => {
         setSongEntries(entries);
     }
 
-    const onSave = ({ addsNew }) => async () => {
+    const onSave = ({ addsNew }: { addsNew: boolean }) => async () => {
         const invalidMessages = validateSong({ songTitle, songRestrictionId });
         if (invalidMessages.length) {
             setAlertMessage({ message: `Yoo forgot mandatory fields: ${invalidMessages.join(', ')}`, severity: 'error' });
@@ -82,6 +83,7 @@ const SongForm = ({ song, apiEndpoint }) => {
 
         let variables = {
             input: {
+                id: song.id,
                 title: songTitle.trim(),
                 artist: songArtist ? songArtist.trim() : null,
                 category: songCategory ? songCategory.trim() : null,
@@ -89,10 +91,6 @@ const SongForm = ({ song, apiEndpoint }) => {
                 restrictionId: songRestrictionId,
                 entries: entries,
             }
-        }
-
-        if (song.id) {
-            variables.input.id = song.id;
         }
 
         try {
@@ -135,7 +133,7 @@ const SongForm = ({ song, apiEndpoint }) => {
         try {
             const graphQLClient = new GraphQLClient('/api/delete-song');
             await graphQLClient.request(deleteSong, { id: song.id });
-        } catch (error) {
+        } catch (error: any) {
             throw Error(error);
         }
         mutate(songsQuery);
@@ -149,20 +147,20 @@ const SongForm = ({ song, apiEndpoint }) => {
         Router.push('/');
     }
 
-    const onSongEntryValueChanged = ({ field, value, entry }) => {
+    const onSongEntryValueChanged = ({ field, value, entry }: { field: string, value: string, entry: SongEntry }) => {
         let entriesCopy = cloneDeep(songEntries);
         entriesCopy = entriesCopy.map(obj => obj.uuid === entry.uuid ? { ...obj, [field]: value } : obj);
         setSongEntries(entriesCopy);
     };
 
-    const onRemoveSongEntry = ({ entry }) => {
+    const onRemoveSongEntry = ({ entry }: { entry: SongEntry }) => {
         let entriesCopy = cloneDeep(songEntries);
         entriesCopy = filter(entriesCopy, e => { return e.uuid !== entry.uuid });
         setSongEntries(entriesCopy);
     };
 
-    let artists = [];
-    let categories = [];
+    let artists: (null | undefined | SongArtist)[] = [];
+    let categories: (null | undefined | SongCategory)[] = [];
     if (songs && songs.length) {
         artists = without(map(uniqBy(songs, s => { return s.artist; }), 'artist'), null, undefined, '');
         artists = orderBy(artists);
@@ -170,9 +168,9 @@ const SongForm = ({ song, apiEndpoint }) => {
         categories = orderBy(categories);
     }
 
-    const handleSetSongRestrictionId = (name) => {
+    const handleSetSongRestrictionId = (name: string) => {
         const restriction = getRestrictionByName(name);
-        setSongRestrictionId(restriction.id);
+        setSongRestrictionId(restriction ? restriction.id : Restriction.PUBLIC.id);
     }
 
     const disabled = saving || savingAndAddingNew || deleting || canceling;
@@ -195,11 +193,14 @@ const SongForm = ({ song, apiEndpoint }) => {
         saveAndAddNewButton = (
             <FloatingButton
                 id="saveAndAddNewSongButton"
-                aria-label="saveAndAddNew"
+                ariaLabel="saveAndAddNew"
                 disabled={disabled}
                 label={buttonLabel}
                 icon={<SaveAsIcon />}
                 onClick={onSave({ addsNew: true })}
+                size={undefined}
+                title={undefined}
+                href={undefined}
             />
         );
     }
@@ -219,11 +220,14 @@ const SongForm = ({ song, apiEndpoint }) => {
                 <FloatingButton
                     id="deleteSongButton"
                     color="secondary"
-                    aria-label="delete"
+                    ariaLabel="delete"
                     disabled={disabled}
                     label='Delete'
                     icon={<DeleteIcon />}
                     onClick={onDelete}
+                    size={undefined}
+                    title={undefined}
+                    href={undefined}
                 />
             );
         }
@@ -258,6 +262,7 @@ const SongForm = ({ song, apiEndpoint }) => {
                             id="song_restriction"
                             selectedRestrictionId={songRestrictionId}
                             onChange={handleSetSongRestrictionId}
+                            options={[Restriction.PUBLIC, Restriction.PRIVATE, Restriction.BAND]}
                         />
                     </Grid>
                 </Grid>
@@ -347,11 +352,14 @@ const SongForm = ({ song, apiEndpoint }) => {
                     {!showDeleteConfirmation &&
                         <FloatingButton
                             id="saveSongButton"
-                            aria-label="save"
+                            ariaLabel="save"
                             disabled={disabled}
                             label={saving ? 'Saving' : 'Save'}
                             icon={<SaveIcon />}
                             onClick={onSave({ addsNew: false })}
+                            size={undefined}
+                            title={undefined}
+                            href={undefined}
                         />
                     }
                     {saveAndAddNewButton}
@@ -359,11 +367,14 @@ const SongForm = ({ song, apiEndpoint }) => {
                         <FloatingButton
                             id="cancelSongButton"
                             color="secondary"
-                            aria-label="cancel"
+                            ariaLabel="cancel"
                             disabled={disabled}
                             label='Cancel'
                             icon={<HighlightOffIcon />}
                             onClick={onCancel}
+                            size={undefined}
+                            title={undefined}
+                            href={undefined}
                         />
                     }
                 </div>

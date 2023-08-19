@@ -2,6 +2,7 @@ import React from 'react';
 
 const SongsFilterStateContext = React.createContext({
     songsFilterValue: '',
+    setSongsFilterValue: (value: string) => { },
 });
 
 export const SongsFilterStateProvider: React.FC = (props) => {

@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MsLogo from '@/components/ms-logo';
 import DrawerMenu from '@/components/drawer-menu';
-import UserAvatar from '@/components/user/user-avatar';
+import { UserAvatar } from '@/components/user/user-avatar';
 import Button from '@mui/material/Button';
 import Logout from '@mui/icons-material/Logout';
 import styles from '@/styles/general.module.css';

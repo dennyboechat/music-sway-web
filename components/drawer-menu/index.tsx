@@ -1,6 +1,6 @@
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import MsLogo from '@/components/ms-logo';
-import UserAvatar from '@/components/user/user-avatar';
+import { UserAvatar } from '@/components/user/user-avatar';
 import Router from 'next/router'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';

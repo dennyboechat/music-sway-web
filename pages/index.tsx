@@ -3,7 +3,7 @@ import Header from '@/components/header';
 import Songs from '@/components/songs';
 import Playlists from '@/components/playlists';
 import PlaylistFilter from '@/components/playlists/filter';
-import Filter from '@/components/songs/filter';
+import { SearchInput } from '@/components/songs/filter';
 import FloatingButton from '@/components/floating-button';
 import AddIcon from '@mui/icons-material/Add';
 import HeaderPanel from '@/components/header/header-panel';
@@ -61,7 +61,7 @@ const Home = () => {
   let createRecordButton;
   if (showSongs) {
     filter = (
-      <Filter />
+      <SearchInput />
     );
     createRecordButton = (
       <div className={styles.fab_buttons}>

@@ -3,22 +3,34 @@ import Grid from '@mui/material/Grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMediaQuery, Theme } from '@mui/material';
 import { RichTextEditor } from '@/components/rich-text-editor';
 import ConfirmButtonGroup from '@/components/confirm-buttons/confirmButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSongsState } from '@/lib/songs-store';
 import { uniq, map, forEach, without, orderBy } from 'lodash';
 import styles from '@/styles/general.module.css';
+import { SongEntry, SongEntryTitle } from '@/components/types/SongProps';
 import classnames from 'classnames';
 
-const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = false }) => {
+const SongEntryForm = ({
+    entry,
+    onValueChanged,
+    onRemoveSong,
+    disabledButtons = false
+}:
+    {
+        entry: SongEntry,
+        onValueChanged: ({ field, value, entry }: { field: string, value: string, entry: SongEntry }) => {},
+        onRemoveSong: ({ entry }: { entry: SongEntry }) => void,
+        disabledButtons: boolean
+    }) => {
     const { songs } = useSongsState();
-    const [wrapperClassName, setWrapperClassName] = React.useState();
+    const [wrapperClassName, setWrapperClassName] = React.useState<undefined | string>(undefined);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
-    const isLgResolution = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+    const isLgResolution = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
-    let entryTitles = [];
+    let entryTitles: (null | undefined | SongEntryTitle)[] = [];
     if (songs && songs.length) {
         forEach(songs, s => {
             entryTitles = map(s.entries, e => { return e.title; });
@@ -32,7 +44,7 @@ const SongEntryForm = ({ entry, onValueChanged, onRemoveSong, disabledButtons = 
     };
 
     const onMouseOutDeleteButton = () => {
-        setWrapperClassName(null);
+        setWrapperClassName(undefined);
     };
 
     const onDeleteEntry = () => {
