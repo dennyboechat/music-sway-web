@@ -28,7 +28,7 @@ const NewUserPage = () => {
         return null;
     }
 
-    const onSave = ({ }) => async () => {
+    const onSave = () => async () => {
         const invalidMessages = validateUser({ userName });
         if (invalidMessages.length) {
             setHasErrors(true);
