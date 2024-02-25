@@ -14,7 +14,7 @@ export const RichTextEditor = ({ id, value, onChange, className }: RichTextEdito
             }
             <Editor
                 id={id}
-                apiKey={process.env.RICH_TEXT_API_KEY}
+                apiKey='k3b0j7q1x0idx8wn23lnultfh5fruhyftlj60f0bydzj2rkc'
                 initialValue={value}
                 onBlur={(e) => onChange(e.target.getContent())}
                 init={{
