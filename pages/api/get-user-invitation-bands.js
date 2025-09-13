@@ -8,56 +8,60 @@ import { getUserByEmail } from '@/lib/utils';
 const resolvers = {
     Query: {
         userInvitationBands: async (root, { }, context) => {
+            try {
+                const user = await getUserByEmail({ context, query });
+                if (!user) {
+                    return null;
+                }
 
-            const user = await getUserByEmail({ context, query });
-            if (!user) {
-                return null;
-            }
+                const results = await query(`
+                    SELECT 
+                        band.id, 
+                        band.name,
+                        band.owner_id,
+                        user_band.id as member_id,
+                        user_band.user_invitation_email as member_invitation_email, 
+                        user_band.band_user_status_id as member_status_id,
+                        "user".name as owner_name
+                    FROM 
+                        band
+                    LEFT JOIN 
+                        user_band ON user_band.band_id = band.id
+                    LEFT JOIN
+                        "user" ON "user".id = band.owner_id
+                    WHERE 
+                        user_band.user_invitation_email = $1
+                    `,
+                    [user.email]
+                )
 
-            const results = await query(`
-                SELECT 
-                    band.id AS bandId, 
-                    band.name AS bandName,
-                    band.owner_id AS bandOwnerId,
-                    user_band.id AS bandMemberId,
-                    user_band.user_invitation_email AS bandMemberInvitationEmail, 
-                    user_band.band_user_status_id AS bandMemberStatusId,
-                    user.name AS ownerName
-                FROM 
-                    band
-                LEFT JOIN 
-                    user_band ON user_band.band_id = band.id
-                LEFT JOIN
-                    user ON user.id = band.owner_id
-                WHERE 
-                    user_band.user_invitation_email = ?
-                `,
-                [user.email]
-            )
-
-            let bands = [];
-            forEach(results, data => {
-                let band = bands.find(e => e.id === data.bandId);
-                if (!band) {
-                    band = {
-                        id: data.bandId,
-                        name: data.bandName,
-                        ownerId: data.bandOwnerId,
-                        ownerName: data.ownerName,
-                        members: [],
+                let bands = [];
+                forEach(results, data => {
+                    let band = bands.find(e => e.id === data.id);
+                    if (!band) {
+                        band = {
+                            id: data.id,
+                            name: data.name,
+                            ownerId: data.owner_id,
+                            ownerName: data.owner_name,
+                            members: [],
+                        }
+                        bands.push(band);
                     }
-                    bands.push(band);
-                }
-                if (data.bandMemberId) {
-                    band.members.push({
-                        id: data.bandMemberId,
-                        invitationEmail: data.bandMemberInvitationEmail,
-                        status: data.bandMemberStatusId
-                    });
-                }
-            });
+                    if (data.member_id) {
+                        band.members.push({
+                            id: data.member_id,
+                            invitationEmail: data.member_invitation_email,
+                            status: data.member_status_id
+                        });
+                    }
+                });
 
-            return bands;
+                return bands;
+            } catch (error) {
+                console.error('Error in userInvitationBands resolver:', error);
+                throw error;
+            }
         }
     }
 };

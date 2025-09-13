@@ -67,13 +67,28 @@ const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoi
 
         const entries = playlistEntries.map(obj => pick(obj, ['songId', 'orderIndex']));
 
-        let variables = {
-            input: {
-                id: playlist.id,
-                name: playlistName,
-                observation: playlistObservation,
-                restrictionId: playlistRestrictionId,
-                entries: entries,
+        let variables;
+        
+        if (playlist.id) {
+            // Update existing playlist
+            variables = {
+                input: {
+                    id: playlist.id,
+                    name: playlistName,
+                    observation: playlistObservation,
+                    restrictionId: playlistRestrictionId,
+                    entries: entries,
+                }
+            }
+        } else {
+            // Create new playlist
+            variables = {
+                input: {
+                    name: playlistName,
+                    observation: playlistObservation,
+                    restrictionId: playlistRestrictionId,
+                    entries: entries,
+                }
             }
         }
 

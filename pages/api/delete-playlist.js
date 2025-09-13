@@ -27,8 +27,8 @@ const resolvers = {
                 DELETE FROM 
                     playlist
                 WHERE 
-                    id = ? AND
-                    owner_id = ?
+                    id = $1 AND
+                    owner_id = $2
                 `,
                 [
                     id,

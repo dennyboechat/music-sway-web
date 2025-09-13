@@ -8,33 +8,33 @@ import { getUserByEmail } from '@/lib/utils';
 const resolvers = {
   Query: {
     playlists: async (root, { }, context) => {
+      try {
+        const user = await getUserByEmail({ context, query });
+        if (!user) {
+          return null;
+        }
 
-      const user = await getUserByEmail({ context, query });
-      if (!user) {
-        return null;
-      }
-
-      const results = await query(`
+        const results = await query(`
           SELECT 
-            playlist.id AS playlistId, 
-            playlist.name AS playlistName,
-            playlist.observation AS playlistObservation,
-            playlist.restriction_id AS playlistRestrictionId,
-            playlist.owner_id AS playlistOwnerId,
-            playlist_entry.id AS entryId, 
-            playlist_entry.song_id AS entrySongId, 
-            playlist_entry.order_index AS entryOrderIndex,
-            song.id AS songId, 
-            song.title AS songTitle,
-            song.artist AS songArtist,
-            song.category AS songCategory,
-            song.observation AS songObservation,
-            song.restriction_id AS songRestrictionId,
-            song.owner_id AS songOwnerId,
-            song_entry.id AS songEntryId, 
-            song_entry.title AS songEntryTitle, 
-            song_entry.content AS songEntryContent,
-            user.name AS ownerName
+            playlist.id, 
+            playlist.name,
+            playlist.observation,
+            playlist.restriction_id,
+            playlist.owner_id,
+            playlist_entry.id as entry_id, 
+            playlist_entry.song_id as entry_song_id, 
+            playlist_entry.order_index as entry_order_index,
+            song.id as song_id, 
+            song.title as song_title,
+            song.artist as song_artist,
+            song.category as song_category,
+            song.observation as song_observation,
+            song.restriction_id as song_restriction_id,
+            song.owner_id as song_owner_id,
+            song_entry.id as song_entry_id, 
+            song_entry.title as song_entry_title, 
+            song_entry.content as song_entry_content,
+            "user".name as owner_name
           FROM 
             playlist
           LEFT JOIN 
@@ -44,11 +44,11 @@ const resolvers = {
           LEFT JOIN  
             song_entry ON song_entry.song_id = song.id
           LEFT JOIN
-            user ON user.id = playlist.owner_id
+            "user" ON "user".id = playlist.owner_id
           LEFT JOIN
             band ON band.owner_id = playlist.owner_id
           WHERE
-            playlist.owner_id = ? OR
+            playlist.owner_id = $1 OR
             (
               playlist.restriction_id = 2 AND 
               (
@@ -74,9 +74,9 @@ const resolvers = {
                   (
                     (
                       user_band_subSelect.band_user_status_id = 1 AND
-                      user_band_subSelect.user_id = ?
+                      user_band_subSelect.user_id = $2
                     ) OR
-                    band_subSelect.owner_id = ?
+                    band_subSelect.owner_id = $3
                   )
                   LIMIT 1
               ) IS NOT NULL
@@ -94,51 +94,55 @@ const resolvers = {
 
       let playlists = []
       forEach(results, data => {
-        let playlist = playlists.find(e => e.id === data.playlistId);
+        let playlist = playlists.find(e => e.id === data.id);
         if (!playlist) {
           playlist = {
-            id: data.playlistId,
-            name: data.playlistName,
-            observation: data.playlistObservation,
-            restrictionId: data.playlistRestrictionId,
-            ownerId: data.playlistOwnerId,
-            ownerName: data.ownerName,
+            id: data.id,
+            name: data.name,
+            observation: data.observation,
+            restrictionId: data.restriction_id,
+            ownerId: data.owner_id,
+            ownerName: data.owner_name,
             entries: [],
           }
           playlists.push(playlist);
         }
-        let playlistEntry = playlist.entries.find(e => e.id === data.entryId);
-        if (!playlistEntry && data.entryId) {
+        let playlistEntry = playlist.entries.find(e => e.id === data.entry_id);
+        if (!playlistEntry && data.entry_id) {
           playlistEntry = {
-            id: data.entryId,
-            orderIndex: data.entryOrderIndex,
+            id: data.entry_id,
+            orderIndex: data.entry_order_index,
             song: {
-              id: data.songId,
-              title: data.songTitle,
-              artist: data.songArtist,
-              category: data.songCategory,
-              observation: data.songObservation,
-              restrictionId: data.songRestrictionId,
-              ownerId: data.songOwnerId,
+              id: data.song_id,
+              title: data.song_title,
+              artist: data.song_artist,
+              category: data.song_category,
+              observation: data.song_observation,
+              restrictionId: data.song_restriction_id,
+              ownerId: data.song_owner_id,
               entries: [],
             }
           };
           playlist.entries.push(playlistEntry);
         }
-        if (playlistEntry && playlistEntry.song && data.songEntryId) {
-          let songEntry = playlistEntry.song.entries.find(e => e.id === data.songEntryId);
+        if (playlistEntry && playlistEntry.song && data.song_entry_id) {
+          let songEntry = playlistEntry.song.entries.find(e => e.id === data.song_entry_id);
           if (!songEntry) {
             songEntry = {
-              id: data.songEntryId,
-              title: data.songEntryTitle,
-              content: data.songEntryContent
+              id: data.song_entry_id,
+              title: data.song_entry_title,
+              content: data.song_entry_content
             };
             playlistEntry.song.entries.push(songEntry);
           }
         }
       });
 
-      return playlists;
+        return playlists;
+      } catch (error) {
+        console.error('Error in playlists resolver:', error);
+        throw error;
+      }
     }
   }
 };

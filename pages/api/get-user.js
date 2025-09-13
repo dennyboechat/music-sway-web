@@ -6,32 +6,47 @@ import { typeDefs } from '@/graphQl/type-definitions';
 const resolvers = {
     Query: {
         user: async (root, { email }) => {
-            if (!email) {
-                return null;
-            }
-            const results = await query(`
-                SELECT 
-                    user.id AS userId, 
-                    user.name AS userName,
-                    user.email AS userEmail
-                FROM 
-                    user
-                WHERE 
-                    user.email = ?
-                `,
-                email
-            )
-
-            let user;
-            forEach(results, data => {
-                user = {
-                    id: data.userId,
-                    name: data.userName,
-                    email: data.userEmail,
+            try {
+                if (!email) {
+                    return null;
                 }
-            });
+                
+                const results = await query(`
+                    SELECT 
+                        id, 
+                        name,
+                        email
+                    FROM 
+                        "user"
+                    WHERE 
+                        email = $1
+                    `,
+                    [email]
+                )
 
-            return user;
+                if (results.length === 0) {
+                    return null;
+                }
+
+                const data = results[0];
+                
+                // Ensure all required fields have valid values
+                if (!data.id || !data.email) {
+                    throw new Error(`Missing required user data. id: ${data.id}, email: ${data.email}`);
+                }
+                
+                // Handle nullable name field - use empty string if null
+                const userName = data.name || '';
+                
+                return {
+                    id: data.id.toString(),
+                    name: userName,
+                    email: data.email,
+                };
+            } catch (error) {
+                console.error('Error in user query:', error);
+                throw error;
+            }
         }
     }
 };

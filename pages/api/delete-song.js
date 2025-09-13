@@ -27,8 +27,8 @@ const resolvers = {
                 DELETE FROM 
                     song
                 WHERE 
-                    id = ? AND
-                    owner_id = ?
+                    id = $1 AND
+                    owner_id = $2
                 `,
                 [
                     id,

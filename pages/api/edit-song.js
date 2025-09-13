@@ -13,7 +13,7 @@ const resolvers = {
                 return null;
             }
 
-            if (!id || !title || title.trim.length) {
+            if (!id || !title || title.trim().length === 0) {
                 console.error('`id` and `title` are required.');
                 return null;
             }
@@ -32,14 +32,14 @@ const resolvers = {
                 UPDATE 
                     song 
                 SET 
-                    title = ?, 
-                    artist = ?, 
-                    category = ?, 
-                    observation = ?,
-                    restriction_id = ?
+                    title = $1, 
+                    artist = $2, 
+                    category = $3, 
+                    observation = $4,
+                    restriction_id = $5
                 WHERE 
-                    id = ? AND
-                    owner_id = ?
+                    id = $6 AND
+                    owner_id = $7
                 `,
                 [
                     song.title,
@@ -61,21 +61,22 @@ const resolvers = {
                 DELETE FROM 
                     song_entry
                 WHERE 
-                    song_id = ?
+                    song_id = $1
                 `,
                 [song.id]
             );
 
             if (entries && entries.length) {
-                const entryRows = entries.map(entry => [entry.title, entry.content, song.id]);
-                results = await query(`
-                    INSERT INTO 
-                        song_entry (title, content, song_id)
-                    VALUES 
-                        ?
-                    `,
-                    [entryRows]
-                );
+                for (const entry of entries) {
+                    results = await query(`
+                        INSERT INTO 
+                            song_entry (title, content, song_id)
+                        VALUES 
+                            ($1, $2, $3)
+                        `,
+                        [entry.title, entry.content, song.id]
+                    );
+                }
             }
 
             return song;

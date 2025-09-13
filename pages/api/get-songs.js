@@ -8,66 +8,69 @@ import { getUserByEmail } from '@/lib/utils';
 const resolvers = {
   Query: {
     songs: async (roots, { }, context) => {
+      try {
+        const user = await getUserByEmail({ context, query });
+        if (!user) {
+          return null;
+        }
 
-      const user = await getUserByEmail({ context, query });
-      if (!user) {
-        return null;
-      }
+        const results = await query(`
+          SELECT 
+            song.id, 
+            song.title,
+            song.artist,
+            song.category,
+            song.observation,
+            song.restriction_id,
+            song.owner_id,
+            song_entry.id as entry_id, 
+            song_entry.title as entry_title, 
+            song_entry.content as entry_content,
+            "user".name as owner_name
+          FROM 
+            song
+          LEFT JOIN 
+            song_entry ON song_entry.song_id = song.id
+          LEFT JOIN
+            "user" ON "user".id = song.owner_id
+          WHERE
+            song.owner_id = $1
+          ORDER BY 
+            song.id DESC
+          `,
+          [user.id]
+        );
 
-      const results = await query(`
-        SELECT 
-          song.id AS songId, 
-          song.title AS songTitle,
-          song.artist AS songArtist,
-          song.category AS songCategory,
-          song.observation AS songObservation,
-          song.restriction_id AS songRestrictionId,
-          song.owner_id AS songOwnerId,
-          song_entry.id AS entryId, 
-          song_entry.title AS entryTitle, 
-          song_entry.content AS entryContent,
-          user.name AS ownerName
-        FROM 
-          song
-        LEFT JOIN 
-          song_entry ON song_entry.song_id = song.id
-        LEFT JOIN
-          user ON user.id = song.owner_id
-        WHERE
-          song.owner_id = ?
-        ORDER BY 
-          song.id DESC
-        `,
-        user.id
-      );
-
-      let songs = []
-      forEach(results, data => {
-        let song = songs.find(e => e.id === data.songId);
-        if (!song) {
-          song = {
-            id: data.songId,
-            title: data.songTitle,
-            artist: data.songArtist,
-            category: data.songCategory,
-            observation: data.songObservation,
-            restrictionId: data.songRestrictionId,
-            ownerId: data.songOwnerId,
-            ownerName: data.ownerName,
-            entries: [],
+        let songs = []
+        forEach(results, data => {
+          let song = songs.find(e => e.id === data.id);
+          if (!song) {
+            song = {
+              id: data.id,
+              title: data.title,
+              artist: data.artist,
+              category: data.category,
+              observation: data.observation,
+              restrictionId: data.restriction_id,
+              ownerId: data.owner_id,
+              ownerName: data.owner_name,
+              entries: [],
+            }
+            songs.push(song);
           }
-          songs.push(song);
-        }
-        if (data.entryId) {
-          song.entries.push({
-            id: data.entryId,
-            title: data.entryTitle,
-            content: data.entryContent
-          });
-        }
-      });
+          if (data.entry_id) {
+            song.entries.push({
+              id: data.entry_id,
+              title: data.entry_title,
+              content: data.entry_content
+            });
+          }
+        });
 
-      return songs;
+        return songs;
+      } catch (error) {
+        throw error;
+      }
     }
   }
 };

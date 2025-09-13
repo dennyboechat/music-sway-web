@@ -27,7 +27,8 @@ const resolvers = {
                 INSERT INTO 
                     band (name, owner_id)
                 VALUES 
-                    (?, ?)
+                    ($1, $2)
+                RETURNING id
                 `,
                 [
                     band.name,
@@ -35,24 +36,20 @@ const resolvers = {
                 ]
             );
 
-            const bandIdResults = await query(`
-                SELECT 
-                    LAST_INSERT_ID() AS bandId
-            `
-            );
-            band.id = bandIdResults[0].bandId;
+            band.id = results[0].id;
 
             if (members && members.length) {
                 const pendingStatusId = 2;
-                const memberRows = members.map(member => [band.id, member.invitationEmail, pendingStatusId]);
-                results = await query(`
-                    INSERT INTO 
-                        user_band (band_id, user_invitation_email, band_user_status_id)
-                    VALUES 
-                        ?
-                    `,
-                    [memberRows]
-                );
+                for (const member of members) {
+                    await query(`
+                        INSERT INTO 
+                            user_band (band_id, user_invitation_email, band_user_status_id)
+                        VALUES 
+                            ($1, $2, $3)
+                        `,
+                        [band.id, member.invitationEmail, pendingStatusId]
+                    );
+                }
             }
 
             return band;

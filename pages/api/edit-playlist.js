@@ -13,7 +13,7 @@ const resolvers = {
                 return null;
             }
 
-            if (!id || !name || name.trim.length) {
+            if (!id || !name || !name.trim().length) {
                 console.error('`id` and `name` are required.');
                 return null;
             }
@@ -29,12 +29,12 @@ const resolvers = {
                 UPDATE 
                     playlist 
                 SET 
-                    name = ?, 
-                    observation = ?,
-                    restriction_id = ?
+                    name = $1, 
+                    observation = $2,
+                    restriction_id = $3
                 WHERE 
-                    id = ? AND
-                    owner_id = ?
+                    id = $4 AND
+                    owner_id = $5
                 `,
                 [
                     playlist.name,
@@ -54,21 +54,23 @@ const resolvers = {
                 DELETE FROM 
                     playlist_entry
                 WHERE 
-                    playlist_id = ?
+                    playlist_id = $1
                 `,
                 [playlist.id]
             );
 
             if (entries && entries.length) {
-                const entryRows = entries.map(entry => [entry.songId, entry.orderIndex, playlist.id]);
-                results = await query(`
-                    INSERT INTO 
-                        playlist_entry (song_id, order_index, playlist_id)
-                    VALUES 
-                        ?
-                    `,
-                    [entryRows]
-                );
+                for (let i = 0; i < entries.length; i++) {
+                    const entry = entries[i];
+                    await query(`
+                        INSERT INTO 
+                            playlist_entry (song_id, order_index, playlist_id)
+                        VALUES 
+                            ($1, $2, $3)
+                        `,
+                        [entry.songId, entry.orderIndex, playlist.id]
+                    );
+                }
             }
 
             return playlist;

@@ -16,26 +16,26 @@ const resolvers = {
 
       const results = await query(`
           SELECT 
-            song.id AS songId, 
-            song.title AS songTitle,
-            song.artist AS songArtist,
-            song.category AS songCategory,
-            song.observation AS songObservation,
-            song.restriction_id AS songRestrictionId,
-            song.owner_id AS songOwnerId,
-            song_entry.id AS entryId, 
-            song_entry.title AS entryTitle, 
-            song_entry.content AS entryContent,
-            user.name AS ownerName
+            song.id AS song_id, 
+            song.title AS song_title,
+            song.artist AS song_artist,
+            song.category AS song_category,
+            song.observation AS song_observation,
+            song.restriction_id AS song_restriction_id,
+            song.owner_id AS song_owner_id,
+            song_entry.id AS entry_id, 
+            song_entry.title AS entry_title, 
+            song_entry.content AS entry_content,
+            u.name AS owner_name
           FROM 
             song
           LEFT JOIN 
             song_entry ON song_entry.song_id = song.id
           LEFT JOIN
-            user ON user.id = song.owner_id
+            "user" u ON u.id = song.owner_id
           WHERE 
-            song.id = ? AND
-            song.owner_id = ?
+            song.id = $1 AND
+            song.owner_id = $2
           `,
         [
           id,
@@ -43,27 +43,36 @@ const resolvers = {
         ]
       );
 
-      if (!results) {
-        console.error('User cannot get this song.');
+      if (!results || results.length === 0) {
+        return null;
+      }
+
+      // Get the first result to extract song data
+      const firstResult = results[0];
+      
+      // If the first result doesn't have a song ID, return null
+      if (!firstResult.song_id) {
         return null;
       }
 
       let song = {
+        id: firstResult.song_id,
+        title: firstResult.song_title,
+        artist: firstResult.song_artist,
+        category: firstResult.song_category,
+        observation: firstResult.song_observation,
+        restrictionId: firstResult.song_restriction_id,
+        ownerId: firstResult.song_owner_id,
         entries: [],
       };
+      
+      // Add all entries from the results
       forEach(results, data => {
-        song.id = data.songId;
-        song.title = data.songTitle;
-        song.artist = data.songArtist;
-        song.category = data.songCategory;
-        song.observation = data.songObservation;
-        song.restrictionId = data.songRestrictionId;
-        song.ownerId = data.songOwnerId;
-        if (data.entryId) {
+        if (data.entry_id) {
           song.entries.push({
-            id: data.entryId,
-            title: data.entryTitle,
-            content: data.entryContent
+            id: data.entry_id,
+            title: data.entry_title,
+            content: data.entry_content
           });
         }
       });

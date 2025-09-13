@@ -1,21 +1,14 @@
-import mysql from 'serverless-mysql';
-import { Query } from 'types';
+import { createPool } from '@vercel/postgres';
 
-export const db = mysql({
-  config: {
-    host: process.env.MYSQL_HOST,
-    database: process.env.MYSQL_DATABASE,
-    user: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
-  },
-});
+// Create a PostgreSQL connection pool using Vercel environment variables
+const pool = createPool();
 
-export const query: Query = async (q, values = []) => {
+export const query = async (q: string, values: any[] = []) => {
+  const client = await pool.connect();
   try {
-    const results = await db.query(q, values);
-    await db.end();
-    return results;
-  } catch (error: any) {
-    throw Error(error);
+    const result = await client.query(q, values);
+    return result.rows;
+  } finally {
+    client.release();
   }
 };

@@ -179,9 +179,9 @@ export const getUserByEmail = async ({ context, query }: { context: Context, que
           id,
           email 
         FROM 
-          user 
+          "user" 
         WHERE 
-          email = ?
+          email = $1
       `, [context.session.user.email]
     );
 

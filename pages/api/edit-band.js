@@ -13,7 +13,7 @@ const resolvers = {
                 return null;
             }
 
-            if (!id || !name || name.trim.length) {
+            if (!id || !name || !name.trim().length) {
                 console.error('`id` and `name` are required.');
                 return null;
             }
@@ -28,10 +28,10 @@ const resolvers = {
                 UPDATE 
                     band 
                 SET 
-                    name = ?
+                    name = $1
                 WHERE 
-                    id = ? AND
-                    owner_id = ?
+                    id = $2 AND
+                    owner_id = $3
                 `,
                 [
                     band.name,
@@ -49,21 +49,23 @@ const resolvers = {
                 DELETE FROM 
                     user_band
                 WHERE 
-                    band_id = ?
+                    band_id = $1
                 `,
                 [band.id]
             );
 
             if (members && members.length) {
-                const memberRows = members.map(member => [band.id, member.invitationEmail, member.status]);
-                results = await query(`
-                    INSERT INTO 
-                        user_band (band_id, user_invitation_email, band_user_status_id)
-                    VALUES 
-                        ?
-                    `,
-                    [memberRows]
-                );
+                for (let i = 0; i < members.length; i++) {
+                    const member = members[i];
+                    await query(`
+                        INSERT INTO 
+                            user_band (band_id, user_invitation_email, band_user_status_id)
+                        VALUES 
+                            ($1, $2, $3)
+                        `,
+                        [band.id, member.invitationEmail, member.status]
+                    );
+                }
             }
 
             return band;

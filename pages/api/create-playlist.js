@@ -13,7 +13,7 @@ const resolvers = {
         return null;
       }
 
-      if (!name || name.trim.length || !restrictionId) {
+      if (!name || name.trim().length === 0 || !restrictionId) {
         console.error('`name` and `restriction id` are required.');
         return null;
       }
@@ -29,28 +29,25 @@ const resolvers = {
         INSERT INTO 
           playlist (name, observation, restriction_id, owner_id)
         VALUES 
-          (?, ?, ?, ?)
+          ($1, $2, $3, $4)
+        RETURNING id
         `,
         [playlist.name, playlist.observation, playlist.restrictionId, playlist.ownerId]
       );
 
-      const playlistIdResults = await query(`
-        SELECT 
-            LAST_INSERT_ID() as playlistId
-      `
-      );
-      playlist.id = playlistIdResults[0].playlistId;
+      playlist.id = results[0].id;
 
       if (entries && entries.length) {
-        const entryRows = entries.map(entry => [entry.songId, entry.orderIndex, playlist.id]);
-        results = await query(`
-          INSERT INTO 
-              playlist_entry (song_id, order_index, playlist_id)
-          VALUES 
-              ?
-          `,
-          [entryRows]
-        );
+        for (const entry of entries) {
+          await query(`
+            INSERT INTO 
+                playlist_entry (song_id, order_index, playlist_id)
+            VALUES 
+                ($1, $2, $3)
+            `,
+            [entry.songId, entry.orderIndex, playlist.id]
+          );
+        }
       }
 
       return playlist;

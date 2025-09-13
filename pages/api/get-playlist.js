@@ -16,21 +16,21 @@ const resolvers = {
 
             const results = await query(`
                 SELECT 
-                    playlist.id AS playlistId, 
-                    playlist.name AS playlistName,
-                    playlist.observation AS playlistObservation,
-                    playlist.restriction_id AS playlistRestrictionId,
-                    playlist.owner_id AS playlistOwnerId,
-                    playlist_entry.id AS entryId, 
-                    playlist_entry.song_id AS entrySongId, 
-                    playlist_entry.order_index AS entryOrderIndex
+                    playlist.id AS playlist_id, 
+                    playlist.name AS playlist_name,
+                    playlist.observation AS playlist_observation,
+                    playlist.restriction_id AS playlist_restriction_id,
+                    playlist.owner_id AS playlist_owner_id,
+                    playlist_entry.id AS entry_id, 
+                    playlist_entry.song_id AS entry_song_id, 
+                    playlist_entry.order_index AS entry_order_index
                 FROM 
                     playlist
                 LEFT JOIN 
                     playlist_entry ON playlist_entry.playlist_id = playlist.id
                 WHERE 
-                    playlist.id = ? AND
-                    owner_id = ?
+                    playlist.id = $1 AND
+                    playlist.owner_id = $2
                 `,
                 [
                     id,
@@ -38,26 +38,33 @@ const resolvers = {
                 ]
             );
 
-            if (!results) {
-                console.error('User cannot update this playlist.');
+            if (!results || results.length === 0) {
+                console.error('Playlist not found or user does not have access.');
                 return null;
             }
 
             let playlist = {
                 entries: [],
             };
+            
+            // Initialize playlist data from first result (they're all the same for playlist info)
+            if (results.length > 0) {
+                const firstResult = results[0];
+                playlist.id = firstResult.playlist_id;
+                playlist.name = firstResult.playlist_name;
+                playlist.observation = firstResult.playlist_observation;
+                playlist.restrictionId = firstResult.playlist_restriction_id;
+                playlist.ownerId = firstResult.playlist_owner_id;
+            }
+            
+            // Add entries if they exist
             forEach(results, data => {
-                playlist.id = data.playlistId;
-                playlist.name = data.playlistName;
-                playlist.observation = data.playlistObservation;
-                playlist.restrictionId = data.playlistRestrictionId;
-                playlist.ownerId = data.playlistOwnerId;
-                if (data.entryId) {
+                if (data.entry_id) {
                     playlist.entries.push({
-                        id: data.entryId,
-                        orderIndex: data.entryOrderIndex,
+                        id: data.entry_id,
+                        orderIndex: data.entry_order_index,
                         song: {
-                            id: data.entrySongId,
+                            id: data.entry_song_id,
                         }
                     });
                 }

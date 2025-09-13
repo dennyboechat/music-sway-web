@@ -83,7 +83,7 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
 
         let variables = {
             input: {
-                id: song.id,
+                ...(song.id && { id: song.id }), // Only include id if it exists (for updates)
                 title: songTitle.trim(),
                 artist: songArtist ? songArtist.trim() : null,
                 category: songCategory ? songCategory.trim() : null,

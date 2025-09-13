@@ -21,11 +21,12 @@ const resolvers = {
                 email,
             }
 
-            await query(`
+            const results = await query(`
                 INSERT INTO 
-                    user (name, email)
+                    "user" (name, email)
                 VALUES 
-                    (?, ?)
+                    ($1, $2)
+                RETURNING id
                 `,
                 [
                     user.name,
@@ -33,12 +34,7 @@ const resolvers = {
                 ]
             );
 
-            const userIdResults = await query(`
-                SELECT 
-                    LAST_INSERT_ID() AS userId
-            `
-            );
-            user.id = userIdResults[0].userId;
+            user.id = results[0].id;
 
             return user;
         }

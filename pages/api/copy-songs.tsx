@@ -1,6 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
-import { query, db } from '@/lib/db';
+import { query } from '@/lib/db';
 import { getSession } from 'next-auth/react';
 import { getUserByEmail } from '@/lib/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -22,44 +22,49 @@ const resolvers = {
                 ids = ids.split(',');
             }
 
-            ids.forEach(async (songId: string) => {
-                await db.transaction()
-                    .query(
-                        `
-                        INSERT INTO
-                            song (title, artist, category, observation, restriction_id, owner_id)
-                        SELECT
-                            title,
-                            artist,
-                            category,
-                            observation,
-                            restriction_id,
-                            ?
-                        FROM
-                            song
-                        WHERE
-                            id = ?
-                        `,
-                        [user.id, songId]
-                    )
-                    .query((r: { insertId: number }) => [
+            for (const songId of ids) {
+                // Insert the song and get the new ID
+                const songResult = await query(
+                    `
+                    INSERT INTO
+                        song (title, artist, category, observation, restriction_id, owner_id)
+                    SELECT
+                        title,
+                        artist,
+                        category,
+                        observation,
+                        restriction_id,
+                        $1
+                    FROM
+                        song
+                    WHERE
+                        id = $2
+                    RETURNING id
+                    `,
+                    [user.id, songId]
+                );
+
+                if (songResult && songResult.length > 0) {
+                    const newSongId = songResult[0].id;
+                    
+                    // Copy all song entries for this song
+                    await query(
                         `
                         INSERT INTO
                             song_entry (title, content, song_id)
                         SELECT
                             title,
                             content,
-                            ?
+                            $1
                         FROM
                             song_entry
                         WHERE
-                            song_id = ?
+                            song_id = $2
                         `,
-                        [r.insertId, songId]
-                    ])
-                    .commit();
-                await db.end();
-            });
+                        [newSongId, songId]
+                    );
+                }
+            }
 
             return { msg: `Songs ${ids} copied.` };
         }

@@ -22,11 +22,11 @@ const resolvers = {
                 UPDATE 
                     user_band 
                 SET 
-                    user_id = ?,
-                    band_user_status_id = ?
+                    user_id = $1,
+                    band_user_status_id = $2
                 WHERE 
-                    band_id = ? AND
-                    user_invitation_email = ?
+                    band_id = $3 AND
+                    user_invitation_email = $4
                 `,
                 [
                     user.id,
