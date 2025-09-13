@@ -162,5 +162,3 @@ export const typeDefs = gql`
         editUserInvitationBand(input: UserInvitationBandInput!): UserInvitationBand,
     }
 `;
-
-module.exports = { typeDefs };

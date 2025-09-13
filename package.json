@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "22.x"
+    "node": ">=20.x"
   },
   "scripts": {
     "dev": "next dev",
@@ -18,7 +18,7 @@
     "@emotion/styled": "11.8.1",
     "@mui/icons-material": "5.8.4",
     "@mui/material": "5.9.0",
-    "@tinymce/tinymce-react": "^4.3.2",
+    "@tinymce/tinymce-react": "^6.3.0",
     "@vercel/postgres": "^0.10.0",
     "apollo-server-micro": "^2.26.0",
     "dotenv": "10.0.0",
@@ -26,8 +26,8 @@
     "graphql-request": "3.6.1",
     "html-react-parser": "3.0.9",
     "lodash": "4.17.21",
-    "next": "^13.3.0",
-    "next-auth": "^4.24.6",
+    "next": "^15.5.3",
+    "next-auth": "^4.24.11",
     "nosleep.js": "0.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
