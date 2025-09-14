@@ -72,8 +72,13 @@ const resolvers = {
 const apolloServerConfig = {
     typeDefs,
     resolvers,
-    context: async ({ req }: { req: NextApiRequest }): Promise<any> => {
-        const session = await getSession({ req });
+    context: async ({ req, res }: { req: NextApiRequest, res: NextApiResponse }): Promise<any> => {
+        let session = null;
+        try {
+            session = await getServerSession(req, res, authOptions);
+        } catch (error) {
+            session = await getSession({ req });
+        }
         return { session };
     },
 };
