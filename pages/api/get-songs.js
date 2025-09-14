@@ -2,15 +2,30 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db'
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
+import { authOptions } from './auth/[...nextauth]';
 import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
   Query: {
     songs: async (roots, { }, context) => {
       try {
+        // Debug logging for production
+        console.log('get-songs context:', {
+          hasContext: !!context,
+          hasSession: !!context?.session,
+          hasUser: !!context?.session?.user,
+          userEmail: context?.session?.user?.email,
+          sessionKeys: context?.session ? Object.keys(context.session) : 'no session',
+          userKeys: context?.session?.user ? Object.keys(context.session.user) : 'no user'
+        });
+        
         const user = await getUserByEmail({ context, query });
+        console.log('getUserByEmail result:', user);
+        
         if (!user) {
+          console.log('No user found, returning null');
           return null;
         }
 
@@ -84,8 +99,18 @@ export const config = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
-    const session = await getSession({ req });
+  context: async ({ req, res }) => {
+    // Try the newer Next.js 15 compatible method first
+    let session = null;
+    try {
+      session = await getServerSession(req, res, authOptions);
+      console.log('Session from getServerSession:', session);
+    } catch (error) {
+      console.log('getServerSession failed, trying fallback:', error.message);
+      // Fallback to the old method
+      session = await getSession({ req });
+      console.log('Session from getSession fallback:', session);
+    }
     return { session };
   },
 });
