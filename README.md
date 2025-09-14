@@ -62,18 +62,12 @@
     <li><a href="https://graphql.org/" target="_blank">GraphQL</a></li>
     <li><a href="https://mui.com/" target="_blank">Material UI</a></li>
     <li><a href="https://swr.vercel.app/" target="_blank">SWR</a></li>
-    <li><a href="https://www.mysql.com/" target="_blank">MySQL</a></li>
 </ul>
 
 
 ### :key: Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
-
-`MYSQL_HOST`  
-`MYSQL_DATABASE`  
-`MYSQL_USERNAME`  
-`MYSQL_PASSWORD`  
 
 `SPOTIFY_CLIENT_ID`  
 `SPOTIFY_CLIENT_SECRET`  
