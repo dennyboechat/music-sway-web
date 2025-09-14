@@ -90,4 +90,12 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: '/api/get-playlist' });
+export default async function graphqlHandler(req, res) {
+    if (!server.startedPromise) {
+        server.startedPromise = server.start();
+    }
+    await server.startedPromise;
+    
+    const handler = server.createHandler({ path: '/api/get-playlist' });
+    return handler(req, res);
+}

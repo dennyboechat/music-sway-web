@@ -7,19 +7,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const resolvers = {
     Mutation: {
-        addSongs: async (root: any, { ids }: { ids: string | string[] }, context: any) => {
+        addSongs: async (root: any, { ids }: { ids: number[] }, context: any) => {
             const user = await getUserByEmail({ context, query });
             if (!user) {
                 return null;
             }
 
-            if (!ids) {
-                console.error('`ids` is required.');
+            if (!ids || !Array.isArray(ids)) {
+                console.error('`ids` is required and must be an array.');
                 return null;
-            }
-
-            if (typeof ids === 'string') {
-                ids = ids.split(',');
             }
 
             for (const songId of ids) {
@@ -88,4 +84,12 @@ export const config = {
     },
 };
 
-export default server.createHandler({ path: '/api/copy-songs' });
+export default async function graphqlHandler(req: any, res: any) {
+    if (!(server as any).startedPromise) {
+        (server as any).startedPromise = server.start();
+    }
+    await (server as any).startedPromise;
+    
+    const handler = server.createHandler({ path: '/api/copy-songs' });
+    return handler(req, res);
+}

@@ -80,4 +80,12 @@ const server = new ApolloServer({
     },
 });
 
-export default server.createHandler({ path: '/api/get-user-bands' });
+export default async function graphqlHandler(req, res) {
+    if (!server.startedPromise) {
+        server.startedPromise = server.start();
+    }
+    await server.startedPromise;
+    
+    const handler = server.createHandler({ path: '/api/get-user-bands' });
+    return handler(req, res);
+}

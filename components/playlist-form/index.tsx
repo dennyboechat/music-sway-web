@@ -67,34 +67,33 @@ const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoi
 
         const entries = playlistEntries.map(obj => pick(obj, ['songId', 'orderIndex']));
 
-        let variables;
-        
-        if (playlist.id) {
-            // Update existing playlist
-            variables = {
-                input: {
-                    id: playlist.id,
-                    name: playlistName,
-                    observation: playlistObservation,
-                    restrictionId: playlistRestrictionId,
-                    entries: entries,
-                }
-            }
-        } else {
-            // Create new playlist
-            variables = {
-                input: {
-                    name: playlistName,
-                    observation: playlistObservation,
-                    restrictionId: playlistRestrictionId,
-                    entries: entries,
-                }
-            }
-        }
-
         try {
             const graphQLClient = new GraphQLClient(apiEndpoint);
-            await graphQLClient.request(playlist.id ? updatePlaylist : createPlaylist, variables);
+            
+            if (playlist.id) {
+                // Update existing playlist
+                const updateVariables = {
+                    input: {
+                        id: playlist.id,
+                        name: playlistName,
+                        observation: playlistObservation,
+                        restrictionId: playlistRestrictionId,
+                        entries: entries,
+                    }
+                };
+                await graphQLClient.request(updatePlaylist, updateVariables);
+            } else {
+                // Create new playlist
+                const createVariables = {
+                    input: {
+                        name: playlistName,
+                        observation: playlistObservation,
+                        restrictionId: playlistRestrictionId,
+                        entries: entries,
+                    }
+                };
+                await graphQLClient.request(createPlaylist, createVariables);
+            }
         } catch (error) {
             console.error(error);
         }

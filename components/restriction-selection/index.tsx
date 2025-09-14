@@ -6,7 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 import Restriction, { getRestrictions, getRestrictionById } from '@/lib/restriction';
 import { forEach } from 'lodash';
-import { RestrictionSelection } from '@/components/types/RestrictionSelectionProps';
+import type { RestrictionSelection } from '@/components/types/RestrictionSelectionProps';
 
 const RestrictionSelection = ({
     id,

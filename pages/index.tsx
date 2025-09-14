@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react';
 import styles from '@/styles/general.module.css';
 import 'swiper/css';
 import "swiper/css/navigation";
-import { Navigation } from "swiper";
+import { Navigation } from "swiper/modules";
 import { scrollToPageTop } from '@/lib/utils';
 import { autoPageScrollDownStop } from '@/lib/utils';
 import { useConfigurationState } from '@/lib/configuration-store';

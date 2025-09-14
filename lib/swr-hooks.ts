@@ -13,7 +13,7 @@ import {
 export const useSongs = () => {
   const { data, error } = useSWRImmutable(songsQuery, query => request('/api/get-songs', query));
   return {
-    songs: data ? data.songs : [],
+    songs: data ? (data as any).songs : [],
     isLoadingSongs: !error && !data,
     isErrorLoadingSongs: error,
   }
@@ -22,7 +22,7 @@ export const useSongs = () => {
 export const useBandsSongs = () => {
   const { data, error } = useSWRImmutable(bandsSongsQuery, query => request('/api/get-bands-songs', query));
   return {
-    bandsSongs: data ? data.bandsSongs : [],
+    bandsSongs: data ? (data as any).bandsSongs : [],
     isLoadingBandsSongs: !error && !data,
     isErrorLoadingBandsSongs: error,
   }
@@ -31,7 +31,7 @@ export const useBandsSongs = () => {
 export const useSong = (id: number) => {
   const { data, error } = useSWRImmutable(songQuery, query => request('/api/get-song', query, { id }));
   return {
-    song: data ? data.song : null,
+    song: data ? (data as any).song : null,
     isLoadingSong: !error && !data,
     isErrorLoadingSong: error,
   }
@@ -40,7 +40,7 @@ export const useSong = (id: number) => {
 export const usePlaylists = () => {
   const { data, error } = useSWRImmutable(playlistsQuery, query => request('/api/get-playlists', query));
   return {
-    playlists: data ? data.playlists : [],
+    playlists: data ? (data as any).playlists : [],
     isLoadingPlaylists: !error && !data,
     isErrorLoadingPlaylists: error,
   }
@@ -49,7 +49,7 @@ export const usePlaylists = () => {
 export const usePlaylist = (id: number) => {
   const { data, error } = useSWRImmutable(playlistQuery, query => request('/api/get-playlist', query, { id }));
   return {
-    playlist: data ? data.playlist : null,
+    playlist: data ? (data as any).playlist : null,
     isLoadingPlaylist: !error && !data,
     isErrorLoadingPlaylist: error,
   }
@@ -58,7 +58,7 @@ export const usePlaylist = (id: number) => {
 export const useUserBands = () => {
   const { data, error } = useSWRImmutable(bandsQuery, query => request('/api/get-user-bands', query));
   return {
-    bands: data ? data.bands : [],
+    bands: data ? (data as any).bands : [],
     isLoadingBands: !error && !data,
     isErrorLoadingBands: error,
   }
@@ -67,7 +67,7 @@ export const useUserBands = () => {
 export const useUserInvitationBands = () => {
   const { data, error } = useSWRImmutable(userInvitationBandsQuery, query => request('/api/get-user-invitation-bands', query));
   return {
-    userInvitationBands: data ? data.userInvitationBands : [],
+    userInvitationBands: data ? (data as any).userInvitationBands : [],
     isLoadingUserInvitationBands: !error && !data,
     isErrorLoadingUserInvitationBands: error,
   }
