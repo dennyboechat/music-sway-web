@@ -100,16 +100,11 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req, res }) => {
-    // Try the newer Next.js 15 compatible method first
     let session = null;
     try {
       session = await getServerSession(req, res, authOptions);
-      console.log('Session from getServerSession:', session);
     } catch (error) {
-      console.log('getServerSession failed, trying fallback:', error.message);
-      // Fallback to the old method
       session = await getSession({ req });
-      console.log('Session from getSession fallback:', session);
     }
     return { session };
   },

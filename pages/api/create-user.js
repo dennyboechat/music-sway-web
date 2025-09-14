@@ -1,7 +1,9 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '@/graphQl/type-definitions';
 import { query } from '@/lib/db';
+import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
+import { authOptions } from './auth/[...nextauth]';
 
 const resolvers = {
     Mutation: {

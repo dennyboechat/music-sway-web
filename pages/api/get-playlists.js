@@ -2,7 +2,9 @@ import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db'
 import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getServerSession } from 'next-auth/next';
 import { getSession } from 'next-auth/react';
+import { authOptions } from './auth/[...nextauth]';
 import { getUserByEmail } from '@/lib/utils';
 
 const resolvers = {
@@ -156,8 +158,13 @@ export const config = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
-    const session = await getSession({ req });
+  context: async ({ req, res }) => {
+    let session = null;
+    try {
+      session = await getServerSession(req, res, authOptions);
+    } catch (error) {
+      session = await getSession({ req });
+    }
     return { session };
   },
 });
