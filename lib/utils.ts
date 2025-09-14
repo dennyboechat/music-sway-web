@@ -169,56 +169,25 @@ export const focusLastElement = ({ rootElemRef, elementRef }: { rootElemRef: str
 }
 
 export const getUserByEmail = async ({ context, query }: { context: Context, query: Query }): Promise<User | null> => {
-    // Enhanced debugging for production
-    if (!context) {
-        console.error('No context provided to getUserByEmail');
-        return null;
-    }
-    
-    if (!context.session) {
-        console.error('No session in context:', { 
-            hasContext: !!context,
-            contextKeys: Object.keys(context || {})
-        });
-        return null;
-    }
-    
-    if (!context.session.user) {
-        console.error('No user in session:', {
-            hasSession: !!context.session,
-            sessionKeys: Object.keys(context.session || {})
-        });
+    if (!context || !context.session || !context.session.user) {
+        console.error('User not authenticate.');
         return null;
     }
 
-    const email = context.session.user.email;
-    if (!email) {
-        console.error('No email in session user:', {
-            user: context.session.user
-        });
+    const userResult = await query(`
+        SELECT 
+          id,
+          email 
+        FROM 
+          "user" 
+        WHERE 
+          email = $1
+      `, [context.session.user.email]
+    );
+
+    if (!userResult || !userResult.length) {
+        console.error('User not authenticate.');
         return null;
     }
-
-    try {
-        const userResult = await query(`
-            SELECT 
-              id,
-              email 
-            FROM 
-              "user" 
-            WHERE 
-              email = $1
-          `, [email]
-        );
-
-        if (!userResult || !userResult.length) {
-            console.error('User not found in database:', { email });
-            return null;
-        }
-        
-        return userResult[0];
-    } catch (error) {
-        console.error('Database error in getUserByEmail:', error);
-        return null;
-    }
+    return userResult[0];
 }
