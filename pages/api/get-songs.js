@@ -85,17 +85,44 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
-    const session = await getSession({ req });
-    return { session };
+    try {
+      // In production, we need to handle session differently
+      const session = await getSession({ req });
+      
+      // Debug logging for production issues
+      if (process.env.NODE_ENV === 'production' && !session) {
+        console.log('No session found in production context');
+      }
+      
+      return { session };
+    } catch (error) {
+      console.error('Error getting session:', error);
+      return { session: null };
+    }
   },
+  // Disable introspection and playground in production for security
+  introspection: process.env.NODE_ENV !== 'production',
+  debug: process.env.NODE_ENV !== 'production',
 });
 
 export default async function graphqlHandler(req, res) {
+    // Ensure server is started before handling requests
     if (!server.startedPromise) {
         server.startedPromise = server.start();
     }
     await server.startedPromise;
     
-    const handler = server.createHandler({ path: '/api/get-songs' });
+    // Create handler with proper configuration for production
+    const handler = server.createHandler({ 
+        path: '/api/get-songs',
+        disableHealthCheck: true 
+    });
+    
+    // Handle CORS for production
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+    
     return handler(req, res);
 }
