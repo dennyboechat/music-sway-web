@@ -89,8 +89,13 @@ export const config = {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req }) => {
-        const session = await getSession({ req });
+    context: async ({ req, res }) => {
+        let session = null;
+        try {
+            session = await getServerSession(req, res, authOptions);
+        } catch (error) {
+            session = await getSession({ req });
+        }
         return { session };
     },
 });
