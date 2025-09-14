@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { query } from '@/lib/db';
-import { forEach } from 'lodash';
 import { typeDefs } from '@/graphQl/type-definitions';
+import { getSession } from 'next-auth/react';
 
 const resolvers = {
     Query: {
@@ -57,7 +57,14 @@ export const config = {
     },
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        const session = await getSession({ req });
+        return { session };
+    },
+});
 
 export default async function graphqlHandler(req, res) {
     if (!server.startedPromise) {
