@@ -20,7 +20,7 @@
     "@mui/material": "^5.16.15",
     "@tinymce/tinymce-react": "^6.3.0",
     "@vercel/postgres": "^0.10.0",
-    "apollo-server-micro": "^3.13.0",
+    "apollo-server-micro": "^2.26.2",
     "dotenv": "^16.4.7",
     "graphql": "^16.11.0",
     "graphql-request": "^6.1.0",
