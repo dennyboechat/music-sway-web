@@ -8,7 +8,7 @@ const AlertMessage = () => {
         return null;
     }
 
-    const onCloseSnackbar = (e: any, reason: string) => {
+    const onCloseSnackbar = (e: React.SyntheticEvent | Event, reason: string) => {
         if (reason === 'clickaway') {
             return;
         }

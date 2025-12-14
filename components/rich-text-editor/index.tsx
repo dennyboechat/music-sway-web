@@ -16,7 +16,7 @@ export const RichTextEditor = ({ id, value, onChange, className }: RichTextEdito
                 id={id}
                 apiKey='k3b0j7q1x0idx8wn23lnultfh5fruhyftlj60f0bydzj2rkc'
                 initialValue={value}
-                onBlur={(e) => onChange(e.target.getContent())}
+                onBlur={(e: any) => onChange(e.target.getContent())}
                 init={{
                     menubar: false,
                     branding: false,

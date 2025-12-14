@@ -97,7 +97,7 @@ const SongEntryForm = ({
                         freeSolo
                         options={entryTitles}
                         inputValue={entry.title}
-                        onInputChange={(e, value) => onValueChanged({ field: 'title', value, entry })}
+                        onInputChange={(e: React.SyntheticEvent, value: string) => onValueChanged({ field: 'title', value, entry })}
                         fullWidth
                         className="default_bottom_margin"
                         renderInput={(params) => (

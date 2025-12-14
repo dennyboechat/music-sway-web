@@ -66,7 +66,7 @@ const RestrictionSelection = ({
             color="primary"
             value={restrictionName}
             exclusive
-            onChange={(e, value) => onChange(value)}
+            onChange={(e: React.MouseEvent<HTMLElement>, value: string) => onChange(value)}
         >
             {restrictions}
         </ToggleButtonGroup>

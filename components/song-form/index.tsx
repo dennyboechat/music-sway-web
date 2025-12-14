@@ -247,7 +247,7 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
                             id="songTitle"
                             label="Song Title"
                             value={songTitle}
-                            onChange={e => setSongTitle(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSongTitle(e.target.value)}
                             required
                             fullWidth
                             autoFocus
@@ -273,7 +273,7 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
                         freeSolo
                         options={artists}
                         inputValue={songArtist || ''}
-                        onInputChange={(e, value) => setSongArtist(value)}
+                        onInputChange={(e: React.SyntheticEvent, value: string) => setSongArtist(value)}
                         fullWidth
                         className="default_bottom_margin"
                         renderInput={(params) => (
@@ -295,7 +295,7 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
                         freeSolo
                         options={categories}
                         inputValue={songCategory || ''}
-                        onInputChange={(e, value) => setSongCategory(value)}
+                        onInputChange={(e: React.SyntheticEvent, value: string) => setSongCategory(value)}
                         fullWidth
                         className="default_bottom_margin"
                         renderInput={(params) => (
@@ -316,7 +316,7 @@ const SongForm = ({ song, apiEndpoint }: { song: Song, apiEndpoint: string }) =>
                         id="songObservation"
                         label="Observation"
                         value={songObservation}
-                        onChange={e => setSongObservation(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSongObservation(e.target.value)}
                         fullWidth
                         multiline
                         autoComplete="off"

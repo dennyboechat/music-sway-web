@@ -220,7 +220,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoi
                             id="playlistName"
                             label="Playlist Name"
                             value={playlistName || ''}
-                            onChange={e => setPlaylistName(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlaylistName(e.target.value)}
                             required
                             fullWidth
                             autoFocus
@@ -245,7 +245,7 @@ const PlaylistForm = ({ playlist, apiEndpoint }: { playlist: Playlist, apiEndpoi
                         id="playlistObservation"
                         label="Observation"
                         value={playlistObservation || ''}
-                        onChange={e => setPlaylistObservation(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlaylistObservation(e.target.value)}
                         fullWidth
                         multiline
                         autoComplete="off"
