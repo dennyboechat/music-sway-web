@@ -149,7 +149,7 @@ const migrate = async () => {
     `);
 
     console.log('Migration ran successfully.');
-  } catch (e) {
+  } catch (e: unknown) {
     console.error('Could not run migration.', e);
     process.exit(1);
   }
